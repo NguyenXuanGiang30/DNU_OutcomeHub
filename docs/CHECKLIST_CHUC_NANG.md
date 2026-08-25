@@ -15,16 +15,16 @@
 | STT | Phân hệ (Mục BRD) | Mã | Số lượng FR | Hoàn thành | Tỷ lệ |
 | :---: | :--- | :---: | :---: | :---: | :---: |
 | 1 | **Dashboard và điều hướng** (Mục 8.1) | `FR-DSH` | 5 | 0/5 | 0% |
-| 2 | **Cơ cấu, CTĐT và chuẩn đầu ra** (Mục 8.2) | `FR-CTD` | 25 | 8/25 | 32% |
-| 3 | **Sinh viên, giảng viên và phân công** (Mục 8.3) | `FR-PEO` | 6 | 6/6 | 100% |
+| 2 | **Cơ cấu, CTĐT và chuẩn đầu ra** (Mục 8.2) | `FR-CTD` | 25 | 9/25 | 36.0% |
+| 3 | **Sinh viên, giảng viên và phân công** (Mục 8.3) | `FR-PEO` | 6 | 6/6 | 100.0% |
 | 4 | **Đề cương, đề thi/bài đánh giá và rubric** (Mục 8.4) | `FR-PRT` | 21 | 6/21 | 28.6% |
-| 5 | **Đợt đo lường, nhập điểm và tính kết quả** (Mục 8.5) | `FR-MEA` | 20 | 12/20 | 60% |
-| 6 | **Kết quả, phân tích và xuất báo cáo** (Mục 8.6) | `FR-RES` | 14 | 1/14 | 7.1% |
+| 5 | **Đợt đo lường, nhập điểm và tính kết quả** (Mục 8.5) | `FR-MEA` | 20 | 20/20 | 100.0% |
+| 6 | **Kết quả, phân tích và xuất báo cáo** (Mục 8.6) | `FR-RES` | 14 | 10/14 | 71.4% |
 | 7 | **Cải tiến chất lượng (CQI)** (Mục 8.7) | `FR-CQI` | 6 | 0/6 | 0% |
 | 8 | **Chatbot và AI** (Mục 8.8) | `FR-AI` | 8 | 0/8 | 0% |
 | 9 | **Người dùng, quyền và cấu hình** (Mục 8.9) | `FR-ADM` | 8 | 0/8 | 0% |
 | 10 | **Tích hợp và API** (Mục 8.10) | `FR-INT` | 8 | 1/8 | 12.5% |
-| | **TỔNG CỘNG** | | **121** | **34 / 121** | **28.1%** |
+| | **TỔNG CỘNG** | | **121** | **52 / 121** | **43.0%** |
 
 ---
 
