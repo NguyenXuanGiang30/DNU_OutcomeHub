@@ -32,4 +32,47 @@ public sealed class RemeasurementEvaluation
     public OutcomeHub.Domain.Entities.Result.ResultBatch BeforeBatch { get; private set; } = null!;
     public OutcomeHub.Domain.Entities.Result.ResultBatch AfterBatch { get; private set; } = null!;
     public OutcomeHub.Domain.Entities.Iam.Principal VerifiedByPrincipal { get; private set; } = null!;
+
+    /// <summary>
+    /// Creates a remeasurement evaluation linking before and after batches.
+    /// Automatically computes delta = afterValue - baselineValue.
+    /// </summary>
+    public static RemeasurementEvaluation Create(
+        Guid id,
+        Guid improvementPlanId,
+        Guid beforeBatchId,
+        Guid afterBatchId,
+        string comparabilityStatus,
+        decimal? baselineValue,
+        decimal? afterValue,
+        string conclusion,
+        Guid verifiedBy,
+        DateTimeOffset verifiedAt)
+    {
+        if (beforeBatchId == afterBatchId)
+        {
+            throw new ArgumentException("Before and after batches must be different.", nameof(afterBatchId));
+        }
+
+        decimal? deltaValue = null;
+        if (baselineValue.HasValue && afterValue.HasValue)
+        {
+            deltaValue = afterValue.Value - baselineValue.Value;
+        }
+
+        return new RemeasurementEvaluation
+        {
+            Id = id,
+            ImprovementPlanId = improvementPlanId,
+            BeforeBatchId = beforeBatchId,
+            AfterBatchId = afterBatchId,
+            ComparabilityStatus = comparabilityStatus,
+            BaselineValue = baselineValue,
+            AfterValue = afterValue,
+            DeltaValue = deltaValue,
+            Conclusion = conclusion,
+            VerifiedBy = verifiedBy,
+            VerifiedAt = verifiedAt
+        };
+    }
 }

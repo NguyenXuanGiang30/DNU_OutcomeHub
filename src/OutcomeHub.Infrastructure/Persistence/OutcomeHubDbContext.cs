@@ -60,6 +60,13 @@ public sealed class OutcomeHubDbContext(DbContextOptions<OutcomeHubDbContext> op
     public DbSet<RoleAssignment> RoleAssignments => Set<RoleAssignment>();
     public DbSet<AccessScope> AccessScopes => Set<AccessScope>();
 
+    // Quality DbSets
+    public DbSet<OutcomeHub.Domain.Entities.Quality.ImprovementPlan> ImprovementPlans => Set<OutcomeHub.Domain.Entities.Quality.ImprovementPlan>();
+    public DbSet<OutcomeHub.Domain.Entities.Quality.ImprovementAction> ImprovementActions => Set<OutcomeHub.Domain.Entities.Quality.ImprovementAction>();
+    public DbSet<OutcomeHub.Domain.Entities.Quality.ImprovementFinding> ImprovementFindings => Set<OutcomeHub.Domain.Entities.Quality.ImprovementFinding>();
+    public DbSet<OutcomeHub.Domain.Entities.Quality.ImprovementEvidence> ImprovementEvidences => Set<OutcomeHub.Domain.Entities.Quality.ImprovementEvidence>();
+    public DbSet<OutcomeHub.Domain.Entities.Quality.RemeasurementEvaluation> RemeasurementEvaluations => Set<OutcomeHub.Domain.Entities.Quality.RemeasurementEvaluation>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

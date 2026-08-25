@@ -173,6 +173,20 @@
       "postcondition_checksum": "37c9740da0a887883eeb339548eeed7a0daad37e9683ba34730dd407c1933152",
       "timeout_seconds": 120,
       "retry_policy": "ATOMIC"
+    },
+    {
+      "sequence": 13,
+      "id": "90000000-0000-7000-8000-000000000013",
+      "migration_name": "0013_cqi_improvement_grants",
+      "transaction_mode": "TRANSACTIONAL",
+      "script": "transactional/0013_cqi_improvement_grants.sql",
+      "precondition": "checks/0013_cqi_improvement_grants_pre.sql",
+      "postcondition": "checks/0013_cqi_improvement_grants_post.sql",
+      "script_checksum": "6cbb804c107ba31f9776eb9cc454ce058f2445d54c50925220be837a86be2085",
+      "precondition_checksum": "8094cdbef42273b8ea89d60cdfb8db1cb4e8f032dbee02c5e2b5eb7723cc630a",
+      "postcondition_checksum": "2c3f845c76032e106012111aa275fc066f34cf601aa6205cfecef57dd05cb0ce",
+      "timeout_seconds": 120,
+      "retry_policy": "ATOMIC"
     }
   ]
 }

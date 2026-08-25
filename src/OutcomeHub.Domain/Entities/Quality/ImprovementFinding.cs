@@ -27,4 +27,55 @@ public sealed class ImprovementFinding
     public ImprovementPlan ImprovementPlan { get; private set; } = null!;
     public OutcomeHub.Domain.Entities.Result.CohortOutcomeResult? CohortOutcomeResult { get; private set; }
     public OutcomeHub.Domain.Entities.Result.ResultAlert? ResultAlert { get; private set; }
+
+    /// <summary>
+    /// Creates a finding linked to a CohortOutcomeResult (PLO/PI not attained).
+    /// </summary>
+    public static ImprovementFinding CreateFromCohortResult(
+        Guid id,
+        Guid improvementPlanId,
+        string findingType,
+        short academicYearStart,
+        Guid cohortOutcomeResultId,
+        string? description,
+        string? sourceChecksum,
+        DateTimeOffset createdAt)
+    {
+        return new ImprovementFinding
+        {
+            Id = id,
+            ImprovementPlanId = improvementPlanId,
+            FindingType = findingType,
+            AcademicYearStart = academicYearStart,
+            CohortOutcomeResultId = cohortOutcomeResultId,
+            ResultAlertId = null,
+            Description = description,
+            SourceChecksum = sourceChecksum,
+            CreatedAt = createdAt
+        };
+    }
+
+    /// <summary>
+    /// Creates a finding from a qualitative/manual observation (no result link).
+    /// </summary>
+    public static ImprovementFinding CreateFromDescription(
+        Guid id,
+        Guid improvementPlanId,
+        string findingType,
+        string description,
+        DateTimeOffset createdAt)
+    {
+        return new ImprovementFinding
+        {
+            Id = id,
+            ImprovementPlanId = improvementPlanId,
+            FindingType = findingType,
+            AcademicYearStart = null,
+            CohortOutcomeResultId = null,
+            ResultAlertId = null,
+            Description = description,
+            SourceChecksum = null,
+            CreatedAt = createdAt
+        };
+    }
 }

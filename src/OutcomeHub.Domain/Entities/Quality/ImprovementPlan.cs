@@ -48,4 +48,104 @@ public sealed class ImprovementPlan
     public OutcomeHub.Domain.Entities.Iam.Principal OwnerPrincipal { get; private set; } = null!;
     public OutcomeHub.Domain.Entities.Workflow.WorkflowInstance WorkflowInstance { get; private set; } = null!;
     public OutcomeHub.Domain.Entities.Iam.Principal CreatedByPrincipal { get; private set; } = null!;
+
+    /// <summary>
+    /// Creates a new ImprovementPlan in DRAFT status.
+    /// </summary>
+    public static ImprovementPlan Create(
+        Guid id,
+        Guid governedResourceId,
+        string code,
+        Guid orgUnitId,
+        Guid programVersionId,
+        string title,
+        string problemStatement,
+        string? rootCauseSummary,
+        decimal? baselineValue,
+        decimal? targetValue,
+        string kpiDefinition,
+        Guid ownerPrincipalId,
+        DateOnly dueDate,
+        Guid workflowInstanceId,
+        Guid createdBy,
+        DateTimeOffset createdAt)
+    {
+        return new ImprovementPlan
+        {
+            Id = id,
+            GovernedResourceId = governedResourceId,
+            Code = code,
+            OrgUnitId = orgUnitId,
+            ProgramVersionId = programVersionId,
+            Title = title,
+            ProblemStatement = problemStatement,
+            RootCauseSummary = rootCauseSummary,
+            BaselineValue = baselineValue,
+            TargetValue = targetValue,
+            KpiDefinition = kpiDefinition,
+            OwnerPrincipalId = ownerPrincipalId,
+            DueDate = dueDate,
+            WorkflowInstanceId = workflowInstanceId,
+            Status = "DRAFT",
+            CreatedBy = createdBy,
+            CreatedAt = createdAt,
+            RowVersion = 1
+        };
+    }
+
+    /// <summary>
+    /// Updates plan details (problem, root cause, KPI, target, due date).
+    /// Only allowed when plan is in DRAFT or REOPENED status.
+    /// </summary>
+    public void UpdateDetails(
+        string title,
+        string problemStatement,
+        string? rootCauseSummary,
+        decimal? baselineValue,
+        decimal? targetValue,
+        string kpiDefinition,
+        DateOnly dueDate)
+    {
+        if (Status != "DRAFT" && Status != "REOPENED")
+        {
+            throw new InvalidOperationException(
+                $"Cannot update ImprovementPlan in status '{Status}'. Only DRAFT or REOPENED plans can be updated.");
+        }
+
+        Title = title;
+        ProblemStatement = problemStatement;
+        RootCauseSummary = rootCauseSummary;
+        BaselineValue = baselineValue;
+        TargetValue = targetValue;
+        KpiDefinition = kpiDefinition;
+        DueDate = dueDate;
+    }
+
+    /// <summary>
+    /// Transitions the plan status following the workflow:
+    /// DRAFT → IN_REVIEW → APPROVED → EXECUTING → VERIFYING → CLOSED
+    /// CLOSED/VERIFYING → REOPENED → EXECUTING
+    /// </summary>
+    public void TransitionStatus(string newStatus)
+    {
+        var validTransitions = new Dictionary<string, string[]>
+        {
+            ["DRAFT"] = ["IN_REVIEW"],
+            ["IN_REVIEW"] = ["APPROVED", "DRAFT"],
+            ["APPROVED"] = ["EXECUTING"],
+            ["EXECUTING"] = ["VERIFYING"],
+            ["VERIFYING"] = ["CLOSED", "REOPENED"],
+            ["CLOSED"] = ["REOPENED"],
+            ["REOPENED"] = ["EXECUTING"]
+        };
+
+        if (!validTransitions.TryGetValue(Status, out var allowed) ||
+            !allowed.Contains(newStatus))
+        {
+            throw new InvalidOperationException(
+                $"Invalid status transition from '{Status}' to '{newStatus}'.");
+        }
+
+        Status = newStatus;
+    }
 }

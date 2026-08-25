@@ -33,10 +33,10 @@ public sealed class DatabaseBaselineTests
             concurrentRunner.RunAsync(cancellationToken));
         MigrationRunResult noOpResult = await firstRunner.RunAsync(cancellationToken);
 
-        Assert.Equal(12, concurrentResults.Sum(result => result.AppliedCount));
-        Assert.Equal(12, concurrentResults.Sum(result => result.SkippedCount));
+        Assert.Equal(13, concurrentResults.Sum(result => result.AppliedCount));
+        Assert.Equal(13, concurrentResults.Sum(result => result.SkippedCount));
         Assert.Equal(0, noOpResult.AppliedCount);
-        Assert.Equal(12, noOpResult.SkippedCount);
+        Assert.Equal(13, noOpResult.SkippedCount);
 
         await RunCourseRlsSmokeTestAsync(ownerConnectionString, cancellationToken);
         await RunDatabaseHardeningSmokeTestAsync(ownerConnectionString, cancellationToken);
@@ -301,7 +301,7 @@ public sealed class DatabaseBaselineTests
         Assert.Equal(0L, reader.GetInt64(0));
         Assert.Equal(4L, reader.GetInt64(1));
         Assert.True(reader.GetBoolean(2));
-        Assert.Equal(12L, reader.GetInt64(3));
+        Assert.Equal(13L, reader.GetInt64(3));
         Assert.True(reader.GetBoolean(4));
         Assert.Equal(8L, reader.GetInt64(5));
         Assert.Equal(30L, reader.GetInt64(6));
