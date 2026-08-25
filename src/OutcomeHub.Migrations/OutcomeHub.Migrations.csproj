@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>OutcomeHub.Migrations</RootNamespace>
+    <AssemblyName>OutcomeHub.Migrations</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Npgsql" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Sql/**/*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+</Project>

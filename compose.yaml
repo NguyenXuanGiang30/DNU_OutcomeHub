@@ -1,0 +1,36 @@
+name: outcomehub
+
+services:
+  database:
+    image: postgres:18
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${OUTCOMEHUB_DB_NAME:-outcomehub}
+      POSTGRES_USER: ${OUTCOMEHUB_DB_USER:-outcomehub}
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+      PGDATA: /var/lib/postgresql/18/docker
+    ports:
+      - "${OUTCOMEHUB_DB_PORT:-5432}:5432"
+    volumes:
+      - outcomehub_postgres_data:/var/lib/postgresql
+    secrets:
+      - postgres_password
+      - app_password
+      - migrator_password
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+
+volumes:
+  outcomehub_postgres_data:
+
+secrets:
+  postgres_password:
+    file: ${OUTCOMEHUB_DB_PASSWORD_FILE:-.secrets/postgres_password}
+  app_password:
+    file: ${OUTCOMEHUB_APP_PASSWORD_FILE:-.secrets/app_password}
+  migrator_password:
+    file: ${OUTCOMEHUB_MIGRATOR_PASSWORD_FILE:-.secrets/migrator_password}

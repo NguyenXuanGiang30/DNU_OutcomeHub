@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>OutcomeHub.Domain</RootNamespace>
+    <AssemblyName>OutcomeHub.Domain</AssemblyName>
+  </PropertyGroup>
+</Project>

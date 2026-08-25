@@ -1,0 +1,55 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>OutcomeHub.DatabaseTests</RootNamespace>
+    <AssemblyName>OutcomeHub.DatabaseTests</AssemblyName>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../src/OutcomeHub.Migrations/OutcomeHub.Migrations.csproj" />
+    <ProjectReference Include="../../src/OutcomeHub.Infrastructure/OutcomeHub.Infrastructure.csproj" />
+    <ProjectReference Include="../../src/OutcomeHub.Application/OutcomeHub.Application.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="Npgsql" />
+    <PackageReference Include="Testcontainers.PostgreSql" />
+    <PackageReference Include="xunit.runner.visualstudio">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="xunit.v3" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="../../database/development/seed_development_dataset.sql"
+          Link="DatabaseScripts/seed_development_dataset.sql"
+          CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../database/tests/course_rls_smoke.sql"
+          Link="DatabaseScripts/course_rls_smoke.sql"
+          CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../database/tests/database_hardening_smoke.sql"
+          Link="DatabaseScripts/database_hardening_smoke.sql"
+          CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../database/tests/critical_business_invariants_smoke.sql"
+          Link="DatabaseScripts/critical_business_invariants_smoke.sql"
+          CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../database/tests/org_owned_roots_rls_smoke.sql"
+          Link="DatabaseScripts/org_owned_roots_rls_smoke.sql"
+          CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../database/tests/score_record_rls_smoke.sql"
+          Link="DatabaseScripts/score_record_rls_smoke.sql"
+          CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../database/tests/snapshot_result_immutability_smoke.sql"
+          Link="DatabaseScripts/snapshot_result_immutability_smoke.sql"
+          CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../database/tests/syllabus_offering_rls_smoke.sql"
+          Link="DatabaseScripts/syllabus_offering_rls_smoke.sql"
+          CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../database/tests/result_and_student_self_rls_smoke.sql"
+          Link="DatabaseScripts/result_and_student_self_rls_smoke.sql"
+          CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../src/OutcomeHub.Migrations/Sql/**/*"
+          Link="MigrationSql/%(RecursiveDir)%(Filename)%(Extension)"
+          CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

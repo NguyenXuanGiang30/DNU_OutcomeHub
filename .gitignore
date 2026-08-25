@@ -1,0 +1,28 @@
+# Build results
+[Bb]in/
+[Oo]bj/
+TestResults/
+[Dd]ebug/
+[Rr]elease/
+
+# Visual Studio / Rider / VS Code
+.vs/
+.idea/
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.DotSettings.user
+
+# Environment and Secrets
+.env
+.env.*
+!.env.example
+.secrets/
+.backups/
+appsettings.*.local.json
+
+# OS generated files
+.DS_Store
+Thumbs.db

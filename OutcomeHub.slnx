@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/OutcomeHub.Api/OutcomeHub.Api.csproj" />
+    <Project Path="src/OutcomeHub.Application/OutcomeHub.Application.csproj" />
+    <Project Path="src/OutcomeHub.Domain/OutcomeHub.Domain.csproj" />
+    <Project Path="src/OutcomeHub.Infrastructure/OutcomeHub.Infrastructure.csproj" />
+    <Project Path="src/OutcomeHub.Migrations/OutcomeHub.Migrations.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/OutcomeHub.DatabaseTests/OutcomeHub.DatabaseTests.csproj" />
+  </Folder>
+</Solution>
