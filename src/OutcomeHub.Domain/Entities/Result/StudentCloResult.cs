@@ -55,4 +55,49 @@ public sealed class StudentCloResult
     public OutcomeHub.Domain.Entities.Academic.Course Course { get; private set; } = null!;
     public OutcomeHub.Domain.Entities.Academic.CourseOffering CourseOffering { get; private set; } = null!;
     public OutcomeHub.Domain.Entities.Portfolio.Clo Clo { get; private set; } = null!;
+
+    public static StudentCloResult Create(
+        short academicYearStart,
+        Guid id,
+        Guid batchId,
+        Guid orgUnitId,
+        Guid programId,
+        Guid programVersionId,
+        Guid measurementPeriodId,
+        Guid cohortId,
+        Guid curriculumPathId,
+        Guid studentId,
+        Guid courseId,
+        Guid courseOfferingId,
+        Guid cloId,
+        decimal? score,
+        decimal thetaInd,
+        string attainmentStatus,
+        string dataStatus,
+        decimal? numerator = null,
+        decimal? denominator = null)
+    {
+        return new StudentCloResult
+        {
+            AcademicYearStart = academicYearStart,
+            Id = id,
+            BatchId = batchId,
+            OrgUnitId = orgUnitId,
+            ProgramId = programId,
+            ProgramVersionId = programVersionId,
+            MeasurementPeriodId = measurementPeriodId,
+            CohortId = cohortId,
+            CurriculumPathId = curriculumPathId,
+            StudentId = studentId,
+            CourseId = courseId,
+            CourseOfferingId = courseOfferingId,
+            CloId = cloId,
+            Score = score,
+            ThetaInd = thetaInd,
+            AttainmentStatus = attainmentStatus,
+            DataStatus = dataStatus,
+            Numerator = numerator,
+            Denominator = denominator
+        };
+    }
 }

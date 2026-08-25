@@ -36,7 +36,7 @@ public sealed class AcademicApiIntegrationTests
         string migrationRoot = Path.Combine(AppContext.BaseDirectory, "MigrationSql");
         var runner = new SqlMigrationRunner(migrationConnectionString, migrationRoot);
         var migrationResult = await runner.RunAsync(cancellationToken);
-        Assert.Equal(11, migrationResult.AppliedCount);
+        Assert.Equal(12, migrationResult.AppliedCount);
 
         // Run development seed dataset
         await DatabaseBaselineTests.RunDatabaseScriptAsync(

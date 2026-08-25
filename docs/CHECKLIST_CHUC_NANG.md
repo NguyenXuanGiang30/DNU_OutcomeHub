@@ -114,28 +114,28 @@
 - [x] `[M]` **FR-MEA-10:** Đối soát mã SV/lớp/học phần, StudentPath, thang điểm, tỷ trọng criterion PI=100%, trọng số nguồn=100%, tối đa 2 nguồn, rubric tương đương và mapping đã duyệt.
 - [x] `[M]` **FR-MEA-11:** Điểm nhóm chỉ dùng kết luận cá nhân khi có thành phần cá nhân hoặc quy tắc phân bổ được duyệt.
 - [x] `[M]` **FR-MEA-12:** Xử lý vắng/rút/hoãn/học lại/cải thiện/chuyển ngành/công nhận theo CalculationPolicy.
-- [ ] `[M]` **FR-MEA-13:** Tạo InputSnapshot bất biến trước khi tính; lưu checksum và liên kết về điểm nguồn.
-- [ ] `[M]` **FR-MEA-14:** Chạy CalculationBatch nền, có tiến độ, log, test vector và khả năng hủy an toàn trước công bố.
-- [ ] `[M]` **FR-MEA-15:** Lưu ResultBatch có phiên bản; cùng snapshot + policy cho kết quả tái lập.
-- [ ] `[M]` **FR-MEA-16:** Theo dõi trạng thái từng học phần: chưa phân công/đang nhập/đủ dữ liệu/đã chốt/đã duyệt.
-- [ ] `[M]` **FR-MEA-17:** Mở lại bắt buộc lý do và phê duyệt; giữ kết quả cũ, tạo delta và lần tính mới.
-- [ ] `[S]` **FR-MEA-18:** Thu thập khảo sát/đánh giá gián tiếp, chuẩn hóa thang và báo cáo tách khỏi direct.
-- [ ] `[M]` **FR-MEA-19:** Engine tính hai tầng: PI trong từng học phần A theo tỷ trọng bảng 8.3.2, rồi PI chung theo trọng số nguồn của StudentPath; lưu từng đóng góp và không tự suy tỷ trọng.
-- [ ] `[M]` **FR-MEA-20:** Áp dụng cổng không bù trừ cho tiêu chí rubric cốt lõi và PI cốt lõi khi kết luận PI/PLO; báo cáo rõ nguyên nhân không đạt.
+- [x] `[M]` **FR-MEA-13:** Tạo InputSnapshot bất biến trước khi tính; lưu checksum và liên kết về điểm nguồn.
+- [x] `[M]` **FR-MEA-14:** Chạy CalculationBatch nền, có tiến độ, log, test vector và khả năng hủy an toàn trước công bố.
+- [x] `[M]` **FR-MEA-15:** Lưu ResultBatch có phiên bản; cùng snapshot + policy cho kết quả tái lập.
+- [x] `[M]` **FR-MEA-16:** Theo dõi trạng thái từng học phần: chưa phân công/đang nhập/đủ dữ liệu/đã chốt/đã duyệt.
+- [x] `[M]` **FR-MEA-17:** Mở lại bắt buộc lý do và phê duyệt; giữ kết quả cũ, tạo delta và lần tính mới.
+- [x] `[S]` **FR-MEA-18:** Thu thập khảo sát/đánh giá gián tiếp, chuẩn hóa thang và báo cáo tách khỏi direct.
+- [x] `[M]` **FR-MEA-19:** Engine tính hai tầng: PI trong từng học phần A theo tỷ trọng bảng 8.3.2, rồi PI chung theo trọng số nguồn của StudentPath; lưu từng đóng góp và không tự suy tỷ trọng.
+- [x] `[M]` **FR-MEA-20:** Áp dụng cổng không bù trừ cho tiêu chí rubric cốt lõi và PI cốt lõi khi kết luận PI/PLO; báo cáo rõ nguyên nhân không đạt.
 
 ---
 
 ## 8.6. Kết quả, phân tích và xuất báo cáo (14 Yêu cầu)
 - [x] `[M]` **FR-RES-01:** Danh sách đợt đo với thời gian, scope, mục tiêu, trạng thái, tiến độ và quyền xem.
-- [ ] `[M]` **FR-RES-02:** Dashboard chương trình theo Khoa–CTĐT–Khóa–Đợt, hiển thị tiến độ PI/PLO.
-- [ ] `[M]` **FR-RES-03:** Báo cáo học phần: lượt SV–CLO, đạt/chưa đạt, tỷ lệ, minh chứng và người phụ trách.
-- [ ] `[M]` **FR-RES-04:** Báo cáo PLO: nội dung, PI con, lượt đạt/tổng, ngưỡng, tỷ lệ, trạng thái và CQI.
-- [ ] `[M]` **FR-RES-05:** Báo cáo PI: PLO cha, StudentPath, học phần A, điểm PI từng học phần, trọng số A/đóng góp, neo, nguồn CLO/tiêu chí, ngưỡng và biện pháp.
-- [ ] `[M]` **FR-RES-06:** Báo cáo CLO: học phần, miền/Bloom, điểm, lượt đạt/tổng, tỷ lệ và drill-down rubric.
-- [ ] `[M]` **FR-RES-07:** Báo cáo sinh viên: tiến độ CLO/PI/PLO, dữ liệu thiếu và cảnh báo; chỉ theo đúng scope.
-- [ ] `[M]` **FR-RES-08:** Tổng hợp theo lớp, học kỳ, khóa, CTĐT, Khoa và Trường; hỗ trợ so sánh các nhóm hợp lệ.
-- [ ] `[M]` **FR-RES-09:** Hiển thị direct/indirect riêng; kết quả kết hợp phải chỉ rõ $\alpha$ và policy.
-- [ ] `[M]` **FR-RES-10:** Mọi tỷ lệ hiển thị tử số, mẫu số, số loại trừ/thiếu, cỡ mẫu, thời điểm và batch.
+- [x] `[M]` **FR-RES-02:** Dashboard chương trình theo Khoa–CTĐT–Khóa–Đợt, hiển thị tiến độ PI/PLO.
+- [x] `[M]` **FR-RES-03:** Báo cáo học phần: lượt SV–CLO, đạt/chưa đạt, tỷ lệ, minh chứng và người phụ trách.
+- [x] `[M]` **FR-RES-04:** Báo cáo PLO: nội dung, PI con, lượt đạt/tổng, ngưỡng, tỷ lệ, trạng thái và CQI.
+- [x] `[M]` **FR-RES-05:** Báo cáo PI: PLO cha, StudentPath, học phần A, điểm PI từng học phần, trọng số A/đóng góp, neo, nguồn CLO/tiêu chí, ngưỡng và biện pháp.
+- [x] `[M]` **FR-RES-06:** Báo cáo CLO: học phần, miền/Bloom, điểm, lượt đạt/tổng, tỷ lệ và drill-down rubric.
+- [x] `[M]` **FR-RES-07:** Báo cáo sinh viên: tiến độ CLO/PI/PLO, dữ liệu thiếu và cảnh báo; chỉ theo đúng scope.
+- [x] `[M]` **FR-RES-08:** Tổng hợp theo lớp, học kỳ, khóa, CTĐT, Khoa và Trường; hỗ trợ so sánh các nhóm hợp lệ.
+- [x] `[M]` **FR-RES-09:** Hiển thị direct/indirect riêng; kết quả kết hợp phải chỉ rõ $\alpha$ và policy.
+- [x] `[M]` **FR-RES-10:** Mọi tỷ lệ hiển thị tử số, mẫu số, số loại trừ/thiếu, cỡ mẫu, thời điểm và batch.
 - [ ] `[S]` **FR-RES-11:** So sánh kỳ/khóa có cảnh báo khác công thức, ngưỡng, quần thể, mapping hoặc nguồn minh chứng.
 - [ ] `[S]` **FR-RES-12:** Cảnh báo sớm theo PLO/PI/CLO/SV: đỏ/vàng, lý do, mức thiếu mục tiêu và hành động.
 - [ ] `[M]` **FR-RES-13:** Xuất Excel/PDF/Word và gói kiểm định; áp dụng phân quyền, watermark, checksum và audit.

@@ -22,6 +22,7 @@ public sealed class OutcomeHubDbContext(DbContextOptions<OutcomeHubDbContext> op
     public DbSet<Cohort> Cohorts => Set<Cohort>();
     public DbSet<Student> Students => Set<Student>();
     public DbSet<StudentPath> StudentPaths => Set<StudentPath>();
+    public DbSet<CurriculumPath> CurriculumPaths => Set<CurriculumPath>();
     public DbSet<Staff> Staff => Set<Staff>();
     public DbSet<Person> Persons => Set<Person>();
     public DbSet<CourseOffering> CourseOfferings => Set<CourseOffering>();

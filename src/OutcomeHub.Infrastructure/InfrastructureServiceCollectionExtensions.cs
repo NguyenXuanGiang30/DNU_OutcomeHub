@@ -33,6 +33,8 @@ public static class InfrastructureServiceCollectionExtensions
         services.AddScoped<IMeasurementPeriodRepository, Persistence.Repositories.Measurement.MeasurementPeriodRepository>();
         services.AddScoped<IEnrollmentRepository, Persistence.Repositories.Measurement.EnrollmentRepository>();
         services.AddScoped<IScoreRepository, Persistence.Repositories.Measurement.ScoreRepository>();
+        services.AddScoped<IResultRepository, Persistence.Repositories.Result.ResultRepository>();
+        services.AddScoped<Application.Interfaces.Services.IOutcomeCalculationService, Services.OutcomeCalculationService>();
 
         services.AddDbContext<OutcomeHubDbContext>((serviceProvider, options) =>
         {

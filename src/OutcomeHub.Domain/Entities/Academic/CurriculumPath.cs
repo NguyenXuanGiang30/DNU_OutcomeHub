@@ -18,4 +18,29 @@ public sealed class CurriculumPath
 
     public ProgramVersion ProgramVersion { get; private set; } = null!;
     public WorkflowInstance WorkflowInstance { get; private set; } = null!;
+
+    public static CurriculumPath Create(
+        Guid id,
+        Guid programVersionId,
+        string code,
+        string name,
+        string pathType,
+        DateOnly effectiveFrom,
+        DateOnly? effectiveTo,
+        bool isDefault,
+        Guid workflowInstanceId)
+    {
+        return new CurriculumPath
+        {
+            Id = id,
+            ProgramVersionId = programVersionId,
+            Code = code,
+            Name = name,
+            PathType = pathType,
+            EffectiveFrom = effectiveFrom,
+            EffectiveTo = effectiveTo,
+            IsDefault = isDefault,
+            WorkflowInstanceId = workflowInstanceId
+        };
+    }
 }

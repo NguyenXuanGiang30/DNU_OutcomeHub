@@ -58,4 +58,55 @@ public sealed class InputSnapshot
     public InputSnapshot? ParentSnapshot { get; private set; }
     public OutcomeHub.Domain.Entities.Iam.Principal Creator { get; private set; } = null!;
     public OutcomeHub.Domain.Entities.Iam.Principal? Sealer { get; private set; }
+
+    public static InputSnapshot CreateBuilding(
+        Guid id,
+        Guid governedResourceId,
+        Guid measurementPeriodId,
+        Guid orgUnitId,
+        int snapshotNo,
+        Guid policyVersionId,
+        Guid programPolicyBindingId,
+        Guid institutionTemplateVersionId,
+        Guid programVersionId,
+        short academicYearStart,
+        string schemaVersion,
+        string hashAlgorithm,
+        long populationCount,
+        long scoreCount,
+        Guid createdBy,
+        DateTimeOffset createdAt)
+    {
+        return new InputSnapshot
+        {
+            Id = id,
+            GovernedResourceId = governedResourceId,
+            MeasurementPeriodId = measurementPeriodId,
+            OrgUnitId = orgUnitId,
+            SnapshotNo = snapshotNo,
+            PolicyVersionId = policyVersionId,
+            ProgramPolicyBindingId = programPolicyBindingId,
+            InstitutionTemplateVersionId = institutionTemplateVersionId,
+            ProgramVersionId = programVersionId,
+            AcademicYearStart = academicYearStart,
+            Status = "BUILDING",
+            SchemaVersion = schemaVersion,
+            HashAlgorithm = hashAlgorithm,
+            ManifestChecksum = null,
+            PopulationCount = populationCount,
+            ScoreCount = scoreCount,
+            CreatedBy = createdBy,
+            CreatedAt = createdAt,
+            SealedBy = null,
+            SealedAt = null
+        };
+    }
+
+    public void Seal(string manifestChecksum, Guid sealedBy, DateTimeOffset sealedAt)
+    {
+        ManifestChecksum = manifestChecksum;
+        SealedBy = sealedBy;
+        SealedAt = sealedAt;
+        Status = "SEALED";
+    }
 }

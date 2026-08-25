@@ -68,4 +68,63 @@ public sealed class CohortOutcomeResult
     public OutcomeHub.Domain.Entities.Portfolio.Clo? Clo { get; private set; }
     public OutcomeHub.Domain.Entities.Academic.ProgramPi? ProgramPi { get; private set; }
     public OutcomeHub.Domain.Entities.Academic.ProgramPlo? ProgramPlo { get; private set; }
+
+    public static CohortOutcomeResult Create(
+        short academicYearStart,
+        Guid id,
+        Guid batchId,
+        Guid orgUnitId,
+        Guid programId,
+        Guid programVersionId,
+        Guid measurementPeriodId,
+        Guid cohortId,
+        Guid curriculumPathId,
+        string outcomeLevel,
+        Guid? cloId,
+        Guid? programPiId,
+        Guid? programPloId,
+        string method,
+        long populationCount,
+        long denominatorCount,
+        long attainedCount,
+        long notAttainedObservedCount,
+        long notAttainedCount,
+        decimal? attainmentRate,
+        decimal thetaCoh,
+        string outcomeStatus,
+        long missingInDenominatorCount = 0,
+        long missingExcludedCount = 0,
+        long policyExcludedCount = 0,
+        bool privacySuppressed = false)
+    {
+        return new CohortOutcomeResult
+        {
+            AcademicYearStart = academicYearStart,
+            Id = id,
+            BatchId = batchId,
+            OrgUnitId = orgUnitId,
+            ProgramId = programId,
+            ProgramVersionId = programVersionId,
+            MeasurementPeriodId = measurementPeriodId,
+            CohortId = cohortId,
+            CurriculumPathId = curriculumPathId,
+            OutcomeLevel = outcomeLevel,
+            CloId = cloId,
+            ProgramPiId = programPiId,
+            ProgramPloId = programPloId,
+            Method = method,
+            PopulationCount = populationCount,
+            DenominatorCount = denominatorCount,
+            AttainedCount = attainedCount,
+            NotAttainedObservedCount = notAttainedObservedCount,
+            NotAttainedCount = notAttainedCount,
+            AttainmentRate = attainmentRate,
+            ThetaCoh = thetaCoh,
+            OutcomeStatus = outcomeStatus,
+            MissingInDenominatorCount = missingInDenominatorCount,
+            MissingExcludedCount = missingExcludedCount,
+            PolicyExcludedCount = policyExcludedCount,
+            PrivacySuppressed = privacySuppressed
+        };
+    }
 }

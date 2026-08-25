@@ -159,6 +159,20 @@
       "postcondition_checksum": "3edc5624e7e3f2367a88234fd5624c4b2c7eb6c796e8a3dc53c124a6e6ca5391",
       "timeout_seconds": 120,
       "retry_policy": "ATOMIC"
+    },
+    {
+      "sequence": 12,
+      "id": "90000000-0000-7000-8000-000000000012",
+      "migration_name": "0012_result_calculation_grants",
+      "transaction_mode": "TRANSACTIONAL",
+      "script": "transactional/0012_result_calculation_grants.sql",
+      "precondition": "checks/0012_result_calculation_grants_pre.sql",
+      "postcondition": "checks/0012_result_calculation_grants_post.sql",
+      "script_checksum": "67508f1830f9e30ac3672a2cabca94d9eee08f9268f64e9cfa42509963cfe4c1",
+      "precondition_checksum": "03a4ac77a7824e855a1ccaac803d87c077228cdb42977e1f49ddd6046d4b72d3",
+      "postcondition_checksum": "37c9740da0a887883eeb339548eeed7a0daad37e9683ba34730dd407c1933152",
+      "timeout_seconds": 120,
+      "retry_policy": "ATOMIC"
     }
   ]
 }

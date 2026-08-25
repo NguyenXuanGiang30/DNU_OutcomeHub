@@ -54,4 +54,49 @@ public sealed class StudentPiResult
     public OutcomeHub.Domain.Entities.Academic.Student Student { get; private set; } = null!;
     public OutcomeHub.Domain.Entities.Academic.StudentPath StudentPath { get; private set; } = null!;
     public OutcomeHub.Domain.Entities.Academic.ProgramPi ProgramPi { get; private set; } = null!;
+
+    public static StudentPiResult Create(
+        short academicYearStart,
+        Guid id,
+        Guid batchId,
+        Guid orgUnitId,
+        Guid programId,
+        Guid programVersionId,
+        Guid measurementPeriodId,
+        Guid cohortId,
+        Guid curriculumPathId,
+        Guid studentId,
+        Guid studentPathId,
+        Guid programPiId,
+        string method,
+        decimal? score,
+        decimal thetaInd,
+        string attainmentStatus,
+        string coreGateStatus,
+        string dataStatus,
+        decimal? alpha = null)
+    {
+        return new StudentPiResult
+        {
+            AcademicYearStart = academicYearStart,
+            Id = id,
+            BatchId = batchId,
+            OrgUnitId = orgUnitId,
+            ProgramId = programId,
+            ProgramVersionId = programVersionId,
+            MeasurementPeriodId = measurementPeriodId,
+            CohortId = cohortId,
+            CurriculumPathId = curriculumPathId,
+            StudentId = studentId,
+            StudentPathId = studentPathId,
+            ProgramPiId = programPiId,
+            Method = method,
+            Score = score,
+            ThetaInd = thetaInd,
+            AttainmentStatus = attainmentStatus,
+            CoreGateStatus = coreGateStatus,
+            DataStatus = dataStatus,
+            Alpha = alpha
+        };
+    }
 }

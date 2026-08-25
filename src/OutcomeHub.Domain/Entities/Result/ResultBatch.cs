@@ -64,4 +64,56 @@ public sealed class ResultBatch
     public ResultBatch? RecalculatesBatch { get; private set; }
     public OutcomeHub.Domain.Entities.Workflow.WorkflowInstance WorkflowInstance { get; private set; } = null!;
     public OutcomeHub.Domain.Entities.Iam.SodPolicyVersion SodPolicyVersion { get; private set; } = null!;
+
+    public static ResultBatch CreateRunning(
+        Guid id,
+        Guid governedResourceId,
+        Guid measurementPeriodId,
+        Guid inputSnapshotId,
+        Guid policyVersionId,
+        Guid programPolicyBindingId,
+        Guid orgUnitId,
+        Guid programVersionId,
+        short academicYearStart,
+        int batchNo,
+        string engineVersion,
+        string sourceCommit,
+        string idempotencyKey,
+        string requestChecksum,
+        Guid workflowInstanceId,
+        Guid sodPolicyVersionId,
+        DateTimeOffset startedAt)
+    {
+        return new ResultBatch
+        {
+            Id = id,
+            GovernedResourceId = governedResourceId,
+            MeasurementPeriodId = measurementPeriodId,
+            InputSnapshotId = inputSnapshotId,
+            PolicyVersionId = policyVersionId,
+            ProgramPolicyBindingId = programPolicyBindingId,
+            OrgUnitId = orgUnitId,
+            ProgramVersionId = programVersionId,
+            AcademicYearStart = academicYearStart,
+            BatchNo = batchNo,
+            EngineVersion = engineVersion,
+            SourceCommit = sourceCommit,
+            Status = "RUNNING",
+            IdempotencyKey = idempotencyKey,
+            RequestChecksum = requestChecksum,
+            WorkflowInstanceId = workflowInstanceId,
+            SodPolicyVersionId = sodPolicyVersionId,
+            ResultChecksum = null,
+            StartedAt = startedAt,
+            CompletedAt = null,
+            PublishedAt = null
+        };
+    }
+
+    public void Complete(string resultChecksum, DateTimeOffset completedAt)
+    {
+        ResultChecksum = resultChecksum;
+        CompletedAt = completedAt;
+        Status = "CALCULATED";
+    }
 }
