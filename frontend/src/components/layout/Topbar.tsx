@@ -8,6 +8,8 @@ import {
   ChevronDown,
   Building2,
   GraduationCap,
+  Calendar,
+  Layers,
 } from 'lucide-react';
 import { getUserContext, setUserContext, UserContext } from '../../api/apiClient';
 
@@ -19,6 +21,8 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleAiDrawer }) => {
   const [context, setContext] = useState<UserContext>(getUserContext());
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
   const [roleDropdownOpen, setRoleDropdownOpen] = useState(false);
+  const [selectedCohort, setSelectedCohort] = useState('K17 (2023 - 2027)');
+  const [selectedProgram, setSelectedProgram] = useState('Kỹ thuật Phần mềm (v2023 - ABET)');
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -28,12 +32,12 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleAiDrawer }) => {
     setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
   };
 
-  const handleRoleChange = (role: string, name: string) => {
+  const handleRoleChange = (role: string) => {
     const updated = { ...context, roleName: role };
     setUserContext(updated);
     setContext(updated);
     setRoleDropdownOpen(false);
-    window.location.reload(); // Refresh data under new role
+    window.location.reload();
   };
 
   return (
@@ -50,51 +54,75 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleAiDrawer }) => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '0 2rem',
+        padding: '0 1.5rem',
         zIndex: 30,
       }}
     >
-      {/* Scope Info & Search */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-secondary)', fontSize: '0.8125rem' }}>
-          <Building2 size={16} className="text-primary-400" />
-          <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{context.facultyName}</span>
-          <span>/</span>
-          <GraduationCap size={16} />
-          <span>{context.programName}</span>
+      {/* Scope Selector: Faculty, Program, Cohort */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+        {/* Faculty & Program Selector */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', backgroundColor: 'var(--bg-surface-elevated)', padding: '0.35rem 0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)', fontSize: '0.78rem' }}>
+          <Building2 size={15} style={{ color: 'var(--primary-400)' }} />
+          <span style={{ fontWeight: 700, color: 'var(--text-primary)' }}>Khoa CNTT</span>
+          <span style={{ color: 'var(--text-muted)' }}>|</span>
+          <GraduationCap size={15} style={{ color: 'var(--cyan-400)' }} />
+          <select
+            value={selectedProgram}
+            onChange={(e) => setSelectedProgram(e.target.value)}
+            style={{
+              backgroundColor: 'transparent',
+              color: 'var(--text-primary)',
+              border: 'none',
+              fontSize: '0.78rem',
+              fontWeight: 600,
+              cursor: 'pointer',
+              outline: 'none',
+            }}
+          >
+            <option value="Kỹ thuật Phần mềm (v2023 - ABET)" style={{ backgroundColor: 'var(--bg-surface)' }}>Kỹ thuật Phần mềm (v2023)</option>
+            <option value="Khoa học Máy tính (v2022)" style={{ backgroundColor: 'var(--bg-surface)' }}>Khoa học Máy tính (v2022)</option>
+            <option value="Quản trị Kinh doanh (v2023)" style={{ backgroundColor: 'var(--bg-surface)' }}>Quản trị Kinh doanh (v2023)</option>
+          </select>
         </div>
 
-        <div style={{ position: 'relative' }}>
-          <Search size={16} style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
-          <input
-            type="text"
-            placeholder="Tìm kiếm CĐR, PLO, học phần, báo cáo..."
+        {/* Cohort Selector */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', backgroundColor: 'var(--bg-surface-elevated)', padding: '0.35rem 0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)', fontSize: '0.78rem' }}>
+          <Calendar size={15} style={{ color: 'var(--emerald-400)' }} />
+          <span style={{ color: 'var(--text-muted)' }}>Khóa:</span>
+          <select
+            value={selectedCohort}
+            onChange={(e) => setSelectedCohort(e.target.value)}
             style={{
-              padding: '0.45rem 1rem 0.45rem 2.25rem',
-              borderRadius: 'var(--radius-full)',
-              border: '1px solid var(--border-medium)',
-              backgroundColor: 'var(--bg-surface-elevated)',
-              color: 'var(--text-primary)',
-              fontSize: '0.8125rem',
-              width: '280px',
+              backgroundColor: 'transparent',
+              color: 'var(--emerald-400)',
+              border: 'none',
+              fontSize: '0.78rem',
+              fontWeight: 700,
+              cursor: 'pointer',
+              outline: 'none',
             }}
-          />
+          >
+            <option value="K17 (2023 - 2027)" style={{ backgroundColor: 'var(--bg-surface)' }}>Khóa K17 (2023 - 2027)</option>
+            <option value="K16 (2022 - 2026)" style={{ backgroundColor: 'var(--bg-surface)' }}>Khóa K16 (2022 - 2026)</option>
+            <option value="K15 (2021 - 2025)" style={{ backgroundColor: 'var(--bg-surface)' }}>Khóa K15 (2021 - 2025)</option>
+            <option value="K18 (2024 - 2028)" style={{ backgroundColor: 'var(--bg-surface)' }}>Khóa K18 (2024 - 2028)</option>
+          </select>
         </div>
       </div>
 
       {/* Action Controls */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.875rem' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
         {/* Floating AI Button Trigger */}
         <button
           onClick={onToggleAiDrawer}
           className="btn btn-primary"
           style={{
-            padding: '0.45rem 1rem',
-            fontSize: '0.8125rem',
+            padding: '0.4rem 0.875rem',
+            fontSize: '0.78rem',
             borderRadius: 'var(--radius-full)',
           }}
         >
-          <Sparkles size={16} />
+          <Sparkles size={15} />
           <span>Trợ Lý AI OBE</span>
         </button>
 
@@ -103,13 +131,14 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleAiDrawer }) => {
           onClick={toggleTheme}
           className="btn btn-secondary btn-icon"
           title="Chuyển đổi giao diện Sáng/Tối"
+          style={{ padding: '0.5rem' }}
         >
-          {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+          {theme === 'dark' ? <Sun size={17} /> : <Moon size={17} />}
         </button>
 
         {/* Notification Bell */}
-        <button className="btn btn-secondary btn-icon" title="Thông báo hệ thống">
-          <Bell size={18} />
+        <button className="btn btn-secondary btn-icon" title="Thông báo hệ thống" style={{ padding: '0.5rem' }}>
+          <Bell size={17} />
         </button>
 
         {/* Role Switcher Dropdown */}
@@ -117,7 +146,7 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleAiDrawer }) => {
           <button
             onClick={() => setRoleDropdownOpen(!roleDropdownOpen)}
             className="btn btn-secondary"
-            style={{ padding: '0.45rem 0.875rem', fontSize: '0.8125rem' }}
+            style={{ padding: '0.4rem 0.75rem', fontSize: '0.78rem' }}
           >
             <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--primary-400)' }} />
             <span>Vai trò: <strong>{context.roleName}</strong></span>
@@ -147,7 +176,7 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleAiDrawer }) => {
               ].map((item) => (
                 <button
                   key={item.role}
-                  onClick={() => handleRoleChange(item.role, item.label)}
+                  onClick={() => handleRoleChange(item.role)}
                   style={{
                     width: '100%',
                     textAlign: 'left',

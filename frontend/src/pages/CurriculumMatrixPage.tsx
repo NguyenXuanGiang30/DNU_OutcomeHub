@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import {
   Network,
   GitBranch,
@@ -8,6 +9,12 @@ import {
   Sparkles,
   Download,
   Share2,
+  BookOpen,
+  Target,
+  Award,
+  Hash,
+  Scale,
+  FileCheck2,
 } from 'lucide-react';
 
 interface MatrixCell {
@@ -18,7 +25,20 @@ interface MatrixCell {
 }
 
 export const CurriculumMatrixPage: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'matrix' | 'coverage' | 'prerequisites' | 'bloom'>('matrix');
+  const location = useLocation();
+
+  const getSubSection = () => {
+    if (location.pathname.includes('/curriculum/programs')) return 'programs';
+    if (location.pathname.includes('/curriculum/versions')) return 'versions';
+    if (location.pathname.includes('/curriculum/pos')) return 'pos';
+    if (location.pathname.includes('/curriculum/plos')) return 'plos';
+    if (location.pathname.includes('/curriculum/pis')) return 'pis';
+    if (location.pathname.includes('/curriculum/weight-a')) return 'weight-a';
+    if (location.pathname.includes('/curriculum/clos')) return 'clos';
+    return 'matrix';
+  };
+
+  const [activeTab, setActiveTab] = useState<string>(getSubSection());
 
   // Matrix Sample Dataset
   const matrixData: MatrixCell[] = [
@@ -37,10 +57,10 @@ export const CurriculumMatrixPage: React.FC = () => {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
         <div>
           <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
-            Ma Trận Chuẩn Đầu Ra & Cấu Trúc CTĐT (Mục 8.2)
+            Chương Trình Đào Tạo & Chuẩn Đầu Ra (Mục 8.2)
           </h2>
           <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', marginTop: '0.25rem' }}>
-            Quản lý ma trận 2 chiều (I/R/M/A), phân tích độ phủ StudentPath và sơ đồ tiên quyết theo chuẩn ABET / AUN-QA.
+            Quản lý cấu trúc PO, PLO, PI, Trọng số A, CLO và Ma trận 2 chiều I/R/M/A theo từng phiên bản CTĐT & Khóa.
           </p>
         </div>
 
@@ -51,22 +71,26 @@ export const CurriculumMatrixPage: React.FC = () => {
           </button>
           <button className="btn btn-primary">
             <Sparkles size={16} />
-            <span>AI Kiểm Tra Mâu Thuẫn Bloom</span>
+            <span>AI Chẩn Đoán Ma Trận</span>
           </button>
         </div>
       </div>
 
-      {/* Navigation Tabs */}
-      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', borderBottom: '1px solid var(--border-medium)', paddingBottom: '0.5rem' }}>
+      {/* Navigation Sub-Tabs */}
+      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', borderBottom: '1px solid var(--border-medium)', paddingBottom: '0.5rem', overflowX: 'auto' }}>
         {[
-          { key: 'matrix', label: 'Ma Trận Học Phần - PLO (I/R/M/A)', icon: Network },
-          { key: 'coverage', label: 'Phân Tích Độ Phủ StudentPath', icon: CheckCircle },
-          { key: 'prerequisites', label: 'Sơ Đồ Môn Tiên Quyết (DAG)', icon: GitBranch },
-          { key: 'bloom', label: 'Lộ Trình Năng Lực Bloom', icon: Layers },
+          { key: 'matrix', label: 'Ma Trận Liên Kết (I/R/M/A)', icon: Network },
+          { key: 'versions', label: 'Phiên Bản CTĐT', icon: BookOpen },
+          { key: 'pos', label: 'Mục Tiêu Đào Tạo (PO)', icon: Target },
+          { key: 'plos', label: 'Chuẩn Đầu Ra (PLO1 - PLO9)', icon: Award },
+          { key: 'pis', label: 'Chỉ Báo Thực Hiện (PI)', icon: Hash },
+          { key: 'weight-a', label: 'Trọng Số Đo Trực Tiếp A', icon: Scale },
+          { key: 'clos', label: 'Chuẩn Đầu Ra Học Phần (CLO)', icon: FileCheck2 },
+          { key: 'prerequisites', label: 'Cây Tiên Quyết (DAG)', icon: GitBranch },
         ].map((tab) => (
           <button
             key={tab.key}
-            onClick={() => setActiveTab(tab.key as any)}
+            onClick={() => setActiveTab(tab.key)}
             className={`btn ${activeTab === tab.key ? 'btn-primary' : 'btn-secondary'}`}
             style={{ fontSize: '0.8125rem' }}
           >
@@ -76,14 +100,41 @@ export const CurriculumMatrixPage: React.FC = () => {
         ))}
       </div>
 
-      {/* TAB 1: 2D MATRIX (I/R/M/A) */}
+      {/* Scope Selector Bar */}
+      <div className="glass-card" style={{ marginBottom: '1.25rem', padding: '0.875rem 1.25rem' }}>
+        <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
+          <div>
+            <span className="form-label">Ngành Đào Tạo</span>
+            <select className="form-select" style={{ width: '220px', marginTop: '0.25rem' }}>
+              <option>Kỹ thuật Phần mềm (7480201)</option>
+              <option>Khoa học Máy tính (7480101)</option>
+            </select>
+          </div>
+          <div>
+            <span className="form-label">Phiên Bản CTĐT</span>
+            <select className="form-select" style={{ width: '240px', marginTop: '0.25rem' }}>
+              <option>KTPM v2023 - Áp dụng K17 (9 PLO ABET)</option>
+              <option>KTPM v2022 - Áp dụng K16 (6 PLO)</option>
+              <option>KTPM v2021 - Áp dụng K15 (6 PLO)</option>
+            </select>
+          </div>
+          <div>
+            <span className="form-label">Trạng Thái CTĐT</span>
+            <div style={{ marginTop: '0.5rem' }}>
+              <span className="badge badge-success">ĐANG ÁP DỤNG (ACTIVE & LOCKED)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* TAB 1: MA TRẬN 2D (I/R/M/A) */}
       {activeTab === 'matrix' && (
         <div className="glass-card">
           <div className="glass-card-header">
             <div>
               <h3 className="glass-card-title">Ma Trận Đóng Góp CĐR Của Các Học Phần (CTĐT K17 - 145 Tín chỉ)</h3>
               <p className="glass-card-subtitle">
-                Quy ước: <strong>I</strong> = Introduce (Giới thiệu), <strong>R</strong> = Reinforce (Củng cố), <strong>M</strong> = Master (Thuần thục), <strong>A</strong> = Direct Assessment (Đo trực tiếp)
+                Quy ước: <strong>I</strong> = Introduce, <strong>R</strong> = Reinforce, <strong>M</strong> = Master, <strong>A</strong> = Direct Assessment (Đo trực tiếp)
               </p>
             </div>
             <div style={{ display: 'flex', gap: '0.5rem' }}>
@@ -143,117 +194,325 @@ export const CurriculumMatrixPage: React.FC = () => {
         </div>
       )}
 
-      {/* TAB 2: STUDENT PATH COVERAGE (FR-CTD-10) */}
-      {activeTab === 'coverage' && (
+      {/* TAB 2: PHIÊN BẢN CTĐT */}
+      {activeTab === 'versions' && (
         <div className="glass-card">
           <div className="glass-card-header">
             <div>
-              <h3 className="glass-card-title">
-                <CheckCircle size={20} className="text-emerald-400" />
-                Phân Tích Độ Phủ CĐR Theo Từng StudentPath (FR-CTD-10)
-              </h3>
-              <p className="glass-card-subtitle">
-                Đảm bảo mọi sinh viên theo học bất kỳ lộ trình nào (Chuyên ngành, Tự chọn) đều được phủ 100% CĐR
-              </p>
+              <h3 className="glass-card-title">Quản Lý Lịch Sử Các Phiên Bản CTĐT Ngành KTPM</h3>
+              <p className="glass-card-subtitle">Hỗ trợ áp dụng độc lập cho từng Khóa mà không bị xung đột</p>
             </div>
-            <span className="badge badge-success">Độ phủ: 100.0%</span>
+            <button className="btn btn-sm btn-primary">+ Tạo Phiên Bản CTĐT Mới</button>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.25rem' }}>
+          <div className="table-container">
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>Mã Phiên Bản</th>
+                  <th>Khóa Áp Dụng</th>
+                  <th>Số Tín Chỉ</th>
+                  <th>Khung CĐR</th>
+                  <th>Ngày Ban Hành</th>
+                  <th>Trạng Thái</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>KTPM_2024_v3</strong></td>
+                  <td>Khóa 18 (2024 - 2028)</td>
+                  <td>145 TC</td>
+                  <td><span className="badge badge-primary">9 PLO (ABET CAC)</span></td>
+                  <td>15/08/2024</td>
+                  <td><span className="badge badge-success">ACTIVE (ĐANG DÙNG)</span></td>
+                </tr>
+                <tr>
+                  <td><strong>KTPM_2023_v2</strong></td>
+                  <td>Khóa 17 (2023 - 2027)</td>
+                  <td>145 TC</td>
+                  <td><span className="badge badge-primary">9 PLO (ABET CAC)</span></td>
+                  <td>10/08/2023</td>
+                  <td><span className="badge badge-success">ACTIVE & LOCKED</span></td>
+                </tr>
+                <tr>
+                  <td><strong>KTPM_2021_v1</strong></td>
+                  <td>Khóa 15, Khóa 16</td>
+                  <td>140 TC</td>
+                  <td><span className="badge badge-secondary">6 PLO (AUN-QA)</span></td>
+                  <td>05/08/2021</td>
+                  <td><span className="badge badge-secondary">LOCKED</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* TAB 3: MỤC TIÊU ĐÀO TẠO (PO) */}
+      {activeTab === 'pos' && (
+        <div className="glass-card">
+          <div className="glass-card-header">
+            <div>
+              <h3 className="glass-card-title">Mục Tiêu Đào Tạo (Program Objectives - PO)</h3>
+              <p className="glass-card-subtitle">Định hướng năng lực sinh viên sau 3 - 5 năm tốt nghiệp</p>
+            </div>
+            <button className="btn btn-sm btn-primary">+ Thêm Mục Tiêu PO</button>
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             {[
-              { path: 'Lộ trình 1: Kỹ Thuật Phần Mềm Web', status: 'HỢP LỆ (100%)', plos: 6, pis: 18, aSources: 'Đầy đủ nguồn A' },
-              { path: 'Lộ trình 2: Kỹ Thuật Phần Mềm Di Động', status: 'HỢP LỆ (100%)', plos: 6, pis: 18, aSources: 'Đầy đủ nguồn A' },
-              { path: 'Lộ trình 3: Trí Tuệ Nhân Tạo & Dữ Liệu', status: 'HỢP LỆ (100%)', plos: 6, pis: 18, aSources: 'Đầy đủ nguồn A' },
-            ].map((p, idx) => (
-              <div key={idx} style={{ padding: '1.25rem', backgroundColor: 'var(--bg-surface-elevated)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-medium)' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-                  <strong style={{ color: 'var(--text-primary)' }}>{p.path}</strong>
-                  <span className="badge badge-success">{p.status}</span>
+              { code: 'PO1', title: 'Năng Lực Chuyên Môn & Kỹ Thuật', desc: 'Có khả năng phân tích, thiết kế, hiện thực hóa và kiểm thử các hệ thống phần mềm phức tạp trong môi trường công nghiệp.' },
+              { code: 'PO2', title: 'Khả Năng Lãnh Đạo & Làm Việc Nhóm', desc: 'Có kỹ năng giao tiếp hiệu quả, làm việc nhóm đa văn hóa, và đảm nhiệm vai trò quản lý dự án phần mềm.' },
+              { code: 'PO3', title: 'Học Tập Suốt Đời & Trách Nhiệm Xã Hội', desc: 'Có tinh thần tự học, thích ứng với công nghệ mới (AI, Cloud), tuân thủ đạo đức nghề nghiệp và pháp luật.' },
+            ].map((po) => (
+              <div key={po.code} style={{ padding: '1.25rem', backgroundColor: 'var(--bg-surface-elevated)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-medium)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.35rem' }}>
+                  <strong style={{ color: 'var(--primary-400)', fontSize: '1rem' }}>{po.code}: {po.title}</strong>
+                  <span className="badge badge-primary">Mục tiêu cấp ngành</span>
                 </div>
-                <div style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-                  <div>• Độ phủ: <strong>{p.plos}/6 PLO</strong> ({p.pis} chỉ số PI)</div>
-                  <div>• Nguồn đo trực tiếp: <strong style={{ color: 'var(--emerald-400)' }}>{p.aSources}</strong></div>
-                  <div>• Kiểm tra mức M: Đạt yêu cầu thuần thục trước khi tốt nghiệp</div>
-                </div>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{po.desc}</p>
               </div>
             ))}
           </div>
         </div>
       )}
 
-      {/* TAB 3: PREREQUISITES GRAPH (FR-CTD-21) */}
+      {/* TAB 4: CHUẨN ĐẦU RA (PLO1 - PLO9) */}
+      {activeTab === 'plos' && (
+        <div className="glass-card">
+          <div className="glass-card-header">
+            <div>
+              <h3 className="glass-card-title">Hệ Thống Chuẩn Đầu Ra (PLO1 – PLO4 Cấp Trường, PLO5 – PLO9 Cấp Ngành)</h3>
+              <p className="glass-card-subtitle">Tuân thủ nghiêm ngặt theo Khung chuẩn đầu ra ĐH Đại Nam và chuẩn kiểm định ABET</p>
+            </div>
+          </div>
+
+          <div className="table-container">
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>Mã PLO</th>
+                  <th>Phân Cấp</th>
+                  <th>Mô Tả Năng Lực Chuẩn Đầu Ra</th>
+                  <th>Mức Bloom</th>
+                  <th>Liên Kết PO</th>
+                  <th>Ngưỡng Đạt</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { code: 'PLO1', scope: 'CẤP TRƯỜNG', desc: 'Áp dụng kiến thức toán học, khoa học cơ bản và công nghệ thông tin vào thực tiễn', bloom: 'APPLY (Mức 3)', po: 'PO1', target: '80%' },
+                  { code: 'PLO2', scope: 'CẤP TRƯỜNG', desc: 'Phân tích vấn đề kỹ thuật phức tạp và áp dụng nguyên lý công nghệ để giải quyết', bloom: 'ANALYZE (Mức 4)', po: 'PO1', target: '80%' },
+                  { code: 'PLO3', scope: 'CẤP TRƯỜNG', desc: 'Thiết kế, hiện thực hóa và đánh giá giải pháp phần mềm đáp ứng yêu cầu', bloom: 'CREATE (Mức 6)', po: 'PO1', target: '80%' },
+                  { code: 'PLO4', scope: 'CẤP TRƯỜNG', desc: 'Giao tiếp hiệu quả trong môi trường chuyên môn bằng lời nói và văn bản', bloom: 'APPLY (Mức 3)', po: 'PO2', target: '80%' },
+                  { code: 'PLO5', scope: 'CẤP NGÀNH', desc: 'Thực hiện kiểm thử phần mềm, đảm bảo chất lượng và an toàn bảo mật hệ thống', bloom: 'EVALUATE (Mức 5)', po: 'PO1', target: '80%' },
+                  { code: 'PLO6', scope: 'CẤP NGÀNH', desc: 'Thể hiện trách nhiệm nghề nghiệp và đưa ra quyết định dựa trên đạo đức, pháp luật', bloom: 'EVALUATE (Mức 5)', po: 'PO3', target: '80%' },
+                ].map((plo) => (
+                  <tr key={plo.code}>
+                    <td><strong className="badge badge-primary">{plo.code}</strong></td>
+                    <td><span className={`badge ${plo.scope === 'CẤP TRƯỜNG' ? 'badge-cyan' : 'badge-secondary'}`}>{plo.scope}</span></td>
+                    <td style={{ fontWeight: 600 }}>{plo.desc}</td>
+                    <td><span className="badge badge-bloom badge-cyan">{plo.bloom}</span></td>
+                    <td><code>{plo.po}</code></td>
+                    <td style={{ color: 'var(--emerald-400)', fontWeight: 700 }}>{plo.target}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* TAB 5: CHỈ BÁO THỰC HIỆN (PI) */}
+      {activeTab === 'pis' && (
+        <div className="glass-card">
+          <div className="glass-card-header">
+            <div>
+              <h3 className="glass-card-title">Danh Mục Chỉ Báo Thực Hiện (Performance Indicators - PI)</h3>
+              <p className="glass-card-subtitle">Mỗi PLO được phân rã thành các chỉ báo hành vi có thể đo lường trực tiếp</p>
+            </div>
+            <button className="btn btn-sm btn-primary">+ Thêm Chỉ Báo PI</button>
+          </div>
+
+          <div className="table-container">
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>Mã PI</th>
+                  <th>Thuộc PLO</th>
+                  <th>Mô Tả Hành Vi Đo Lường Cụ Thể</th>
+                  <th>Mức Bloom</th>
+                  <th>Học Phần Đảm Nhận Đo (A)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { pi: 'PI 1.1', plo: 'PLO1', desc: 'Vận dụng được kiến thức cấu trúc dữ liệu và giải thuật trong giải quyết bài toán', bloom: 'APPLY (3)', course: 'IT2102 Cấu trúc dữ liệu' },
+                  { pi: 'PI 2.1', plo: 'PLO2', desc: 'Phân tích và mô hình hóa yêu cầu hệ thống phần mềm bằng UML/BPMN', bloom: 'ANALYZE (4)', course: 'IT3202 Phân tích thiết kế' },
+                  { pi: 'PI 3.1', plo: 'PLO3', desc: 'Xây dựng được ứng dụng Web API hoàn chỉnh có tích hợp cơ sở dữ liệu', bloom: 'CREATE (6)', course: 'IT4101 Lập trình .NET' },
+                  { pi: 'PI 5.1', plo: 'PLO5', desc: 'Thiết kế Unit Test case và tự động hóa quy trình kiểm thử CI/CD', bloom: 'EVALUATE (5)', course: 'IT4101 & IT4205' },
+                ].map((item) => (
+                  <tr key={item.pi}>
+                    <td><strong className="badge badge-cyan">{item.pi}</strong></td>
+                    <td><code>{item.plo}</code></td>
+                    <td style={{ fontWeight: 600 }}>{item.desc}</td>
+                    <td><span className="badge badge-bloom badge-secondary">{item.bloom}</span></td>
+                    <td><span className="badge badge-danger">{item.course}</span></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* TAB 6: TRỌNG SỐ A */}
+      {activeTab === 'weight-a' && (
+        <div className="glass-card">
+          <div className="glass-card-header">
+            <div>
+              <h3 className="glass-card-title">Bảng Khai Báo Trọng Số Đo Trực Tiếp A Theo CTĐT</h3>
+              <p className="glass-card-subtitle">Tổng trọng số đo trực tiếp của các học phần cho mỗi PI phải đạt chuẩn 100%</p>
+            </div>
+            <span className="badge badge-success">Tổng kiểm tra: 100% Hợp lệ</span>
+          </div>
+
+          <div className="table-container">
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>Chỉ Số PI</th>
+                  <th>Học Phần Đảm Nhận Đo (A)</th>
+                  <th>Bài Đánh Giá Đo Lường</th>
+                  <th>Trọng Số Trong Học Phần</th>
+                  <th>Trọng Số Đóng Góp Vào PI</th>
+                  <th>Kiểm Tra Tổng PI</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td rowSpan={2} style={{ verticalAlign: 'middle', fontWeight: 800, color: 'var(--primary-400)' }}>PI 3.1</td>
+                  <td>IT4101: Lập trình .NET</td>
+                  <td>A2: Bài Thực Hành Web API</td>
+                  <td>40.0%</td>
+                  <td><strong>60.0%</strong></td>
+                  <td rowSpan={2} style={{ verticalAlign: 'middle', textAlign: 'center' }}>
+                    <span className="badge badge-success">Tổng: 100.0% ✓</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>IT4999: Khóa luận Tốt nghiệp</td>
+                  <td>A3: Báo cáo & Demo Đồ án</td>
+                  <td>50.0%</td>
+                  <td><strong>40.0%</strong></td>
+                </tr>
+
+                <tr>
+                  <td rowSpan={2} style={{ verticalAlign: 'middle', fontWeight: 800, color: 'var(--primary-400)' }}>PI 5.1</td>
+                  <td>IT4101: Lập trình .NET</td>
+                  <td>A2: Unit Testing Module</td>
+                  <td>50.0%</td>
+                  <td><strong>50.0%</strong></td>
+                  <td rowSpan={2} style={{ verticalAlign: 'middle', textAlign: 'center' }}>
+                    <span className="badge badge-success">Tổng: 100.0% ✓</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>IT4205: Kiểm thử Phần mềm</td>
+                  <td>A3: Báo cáo Kiểm thử Tự động</td>
+                  <td>50.0%</td>
+                  <td><strong>50.0%</strong></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* TAB 7: CHUẨN ĐẦU RA HỌC PHẦN (CLO) */}
+      {activeTab === 'clos' && (
+        <div className="glass-card">
+          <div className="glass-card-header">
+            <div>
+              <h3 className="glass-card-title">Danh Mục Chuẩn Đầu Ra Học Phần (CLO)</h3>
+              <p className="glass-card-subtitle">Ánh xạ từ CLO môn học lên chỉ số PI và PLO của chương trình</p>
+            </div>
+            <select className="form-select" style={{ width: '260px' }}>
+              <option>IT4101 - Lập trình .NET Nâng cao</option>
+              <option>IT2102 - Cấu trúc Dữ liệu & Giải thuật</option>
+            </select>
+          </div>
+
+          <div className="table-container">
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>Mã CLO</th>
+                  <th>Mô Tả Chuẩn Đầu Ra Môn Học</th>
+                  <th>Mức Bloom</th>
+                  <th>Ánh Xạ Tới Chỉ Số PI</th>
+                  <th>Bài Đánh Giá</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong className="badge badge-cyan">CLO1</strong></td>
+                  <td>Xây dựng RESTful API và xử lý dữ liệu với Entity Framework Core</td>
+                  <td><span className="badge badge-bloom badge-cyan">APPLY (Mức 3)</span></td>
+                  <td><strong>PI 3.1</strong></td>
+                  <td>Bài Thực Hành A2</td>
+                </tr>
+                <tr>
+                  <td><strong className="badge badge-cyan">CLO2</strong></td>
+                  <td>Áp dụng kiến trúc Clean Architecture và Dependency Injection</td>
+                  <td><span className="badge badge-bloom badge-cyan">ANALYZE (Mức 4)</span></td>
+                  <td><strong>PI 2.1</strong></td>
+                  <td>Đồ Án A3</td>
+                </tr>
+                <tr>
+                  <td><strong className="badge badge-cyan">CLO3</strong></td>
+                  <td>Viết Unit Test và kiểm thử bảo mật cho các API endpoint</td>
+                  <td><span className="badge badge-bloom badge-cyan">EVALUATE (Mức 5)</span></td>
+                  <td><strong>PI 5.1</strong></td>
+                  <td>Bài Thực Hành A2 & Đồ Án A3</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* TAB 8: CÂY TIÊN QUYẾT (DAG) */}
       {activeTab === 'prerequisites' && (
         <div className="glass-card">
           <div className="glass-card-header">
             <div>
-              <h3 className="glass-card-title">
-                <GitBranch size={20} className="text-primary-400" />
-                Sơ Đồ Đồ Thị Môn Tiên Quyết (Prerequisite DAG - FR-CTD-21)
-              </h3>
-              <p className="glass-card-subtitle">
-                Đường dẫn tới Khóa luận Tốt nghiệp và các điều kiện ràng buộc học phần
-              </p>
+              <h3 className="glass-card-title">Sơ Đồ Đồ Thị Tiên Quyết Học Phần (Prerequisite DAG)</h3>
+              <p className="glass-card-subtitle">Đường găng dẫn đến Khóa luận Tốt nghiệp</p>
             </div>
           </div>
 
-          <div style={{ padding: '2rem', backgroundColor: 'var(--bg-surface-elevated)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-medium)', display: 'flex', flexDirection: 'column', gap: '1.5rem', alignItems: 'center' }}>
-            <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
-              <div style={{ padding: '0.75rem 1.25rem', backgroundColor: 'rgba(99, 102, 241, 0.2)', border: '1px solid var(--primary-500)', borderRadius: 'var(--radius-md)', textAlign: 'center' }}>
-                <strong style={{ color: '#fff' }}>IT1101</strong>
-                <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Nhập môn Lập trình (HK1)</div>
+          <div style={{ padding: '2rem', backgroundColor: 'var(--bg-surface-elevated)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-medium)', textAlign: 'center' }}>
+            <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '1.5rem' }}>
+              <div style={{ padding: '0.75rem 1.25rem', backgroundColor: 'rgba(99, 102, 241, 0.2)', border: '1px solid var(--primary-500)', borderRadius: 'var(--radius-md)' }}>
+                <strong>IT1101</strong><br /><span style={{ fontSize: '0.75rem' }}>Nhập môn Lập trình</span>
               </div>
               <span style={{ color: 'var(--primary-400)', fontWeight: 800 }}>➔</span>
-              <div style={{ padding: '0.75rem 1.25rem', backgroundColor: 'rgba(6, 182, 212, 0.2)', border: '1px solid var(--cyan-500)', borderRadius: 'var(--radius-md)', textAlign: 'center' }}>
-                <strong style={{ color: '#fff' }}>IT2102</strong>
-                <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Cấu trúc Dữ liệu (HK2)</div>
+              <div style={{ padding: '0.75rem 1.25rem', backgroundColor: 'rgba(6, 182, 212, 0.2)', border: '1px solid var(--cyan-500)', borderRadius: 'var(--radius-md)' }}>
+                <strong>IT2102</strong><br /><span style={{ fontSize: '0.75rem' }}>Cấu trúc Dữ liệu</span>
               </div>
               <span style={{ color: 'var(--primary-400)', fontWeight: 800 }}>➔</span>
-              <div style={{ padding: '0.75rem 1.25rem', backgroundColor: 'rgba(16, 185, 129, 0.2)', border: '1px solid var(--emerald-500)', borderRadius: 'var(--radius-md)', textAlign: 'center' }}>
-                <strong style={{ color: '#fff' }}>IT4101</strong>
-                <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Lập trình .NET (HK5)</div>
+              <div style={{ padding: '0.75rem 1.25rem', backgroundColor: 'rgba(16, 185, 129, 0.2)', border: '1px solid var(--emerald-500)', borderRadius: 'var(--radius-md)' }}>
+                <strong>IT4101</strong><br /><span style={{ fontSize: '0.75rem' }}>Lập trình .NET</span>
               </div>
               <span style={{ color: 'var(--primary-400)', fontWeight: 800 }}>➔</span>
-              <div style={{ padding: '0.75rem 1.25rem', backgroundColor: 'rgba(244, 63, 94, 0.2)', border: '1px solid var(--rose-500)', borderRadius: 'var(--radius-md)', textAlign: 'center' }}>
-                <strong style={{ color: '#fff' }}>IT4999</strong>
-                <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Khóa luận Tốt nghiệp (HK8)</div>
+              <div style={{ padding: '0.75rem 1.25rem', backgroundColor: 'rgba(244, 63, 94, 0.2)', border: '1px solid var(--rose-500)', borderRadius: 'var(--radius-md)' }}>
+                <strong>IT4999</strong><br /><span style={{ fontSize: '0.75rem' }}>Khóa luận Tốt nghiệp</span>
               </div>
             </div>
-
-            <div style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)' }}>
-              Đường găng (Critical Path): <strong>IT1101 ➔ IT2102 ➔ IT4101 ➔ IT4999</strong> (Tổng 4 học kỳ tích lũy).
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* TAB 4: BLOOM PROGRESSION (FR-CTD-11) */}
-      {activeTab === 'bloom' && (
-        <div className="glass-card">
-          <div className="glass-card-header">
-            <div>
-              <h3 className="glass-card-title">
-                <Layers size={20} className="text-cyan-400" />
-                Lộ Trình Phát Triển Năng Lực Bloom 6 Cấp Độ Theo Học Kỳ
-              </h3>
-              <p className="glass-card-subtitle">
-                Đảm bảo sinh viên phát triển từ mức Nhận biết/Hiểu (Năm 1-2) lên Phân tích/Đánh giá/Sáng tạo (Năm 3-4)
-              </p>
-            </div>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem' }}>
-            {[
-              { year: 'Năm 1 (HK 1 - 2)', bloom: 'REMEMBER & UNDERSTAND (Mức 1-2)', desc: 'Tiếp thu kiến thức cơ bản, cú pháp ngôn ngữ và toán tin.' },
-              { year: 'Năm 2 (HK 3 - 4)', bloom: 'APPLY (Mức 3)', desc: 'Vận dụng kiến thức cơ sở dữ liệu và thuật toán vào bài tập thực hành.' },
-              { year: 'Năm 3 (HK 5 - 6)', bloom: 'ANALYZE & EVALUATE (Mức 4-5)', desc: 'Phân tích kiến trúc hệ thống, kiểm thử phần mềm và đánh giá giải pháp.' },
-              { year: 'Năm 4 (HK 7 - 8)', bloom: 'CREATE (Mức 6)', desc: 'Sáng tạo và hoàn thiện sản phẩm đồ án, khóa luận tốt nghiệp thực tế.' },
-            ].map((b, i) => (
-              <div key={i} style={{ padding: '1.25rem', backgroundColor: 'var(--bg-surface-elevated)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-medium)' }}>
-                <h4 style={{ color: 'var(--primary-400)', fontSize: '0.95rem', marginBottom: '0.5rem' }}>{b.year}</h4>
-                <span className="badge badge-bloom badge-cyan" style={{ marginBottom: '0.5rem', display: 'inline-block' }}>{b.bloom}</span>
-                <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', lineHeight: '1.4' }}>{b.desc}</p>
-              </div>
-            ))}
+            <p style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)' }}>
+              Đường găng: <strong>IT1101 ➔ IT2102 ➔ IT4101 ➔ IT4999</strong> (Tổng 4 học kỳ tích lũy).
+            </p>
           </div>
         </div>
       )}
