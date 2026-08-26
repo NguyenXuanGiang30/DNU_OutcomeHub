@@ -11,4 +11,23 @@ public sealed class AssessmentQuestion
     public int SortOrder { get; private set; }
     public SyllabusVersion SyllabusVersion { get; private set; } = null!;
     public AssessmentItem AssessmentItem { get; private set; } = null!;
+
+    public static AssessmentQuestion Create(
+        Guid id,
+        Guid syllabusVersionId,
+        Guid assessmentItemId,
+        string questionCode,
+        decimal maxScore,
+        int sortOrder = 1)
+    {
+        return new AssessmentQuestion
+        {
+            Id = id == Guid.Empty ? Guid.NewGuid() : id,
+            SyllabusVersionId = syllabusVersionId,
+            AssessmentItemId = assessmentItemId,
+            QuestionCode = questionCode,
+            MaxScore = maxScore,
+            SortOrder = sortOrder
+        };
+    }
 }

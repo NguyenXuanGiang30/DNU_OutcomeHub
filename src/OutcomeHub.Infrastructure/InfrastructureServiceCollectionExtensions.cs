@@ -46,6 +46,8 @@ public static class InfrastructureServiceCollectionExtensions
         services.AddScoped<Application.Interfaces.Services.IAccreditationReportService, Services.AccreditationReportService>();
         services.AddScoped<ICurriculumMatrixRepository, Persistence.Repositories.Academic.CurriculumMatrixRepository>();
         services.AddScoped<Application.Interfaces.Services.ICurriculumMatrixService, Services.CurriculumMatrixService>();
+        services.AddScoped<IExamBlueprintRepository, Persistence.Repositories.Portfolio.ExamBlueprintRepository>();
+        services.AddScoped<Application.Interfaces.Services.IExamBlueprintService, Services.ExamBlueprintService>();
 
         services.AddDbContext<OutcomeHubDbContext>((serviceProvider, options) =>
         {

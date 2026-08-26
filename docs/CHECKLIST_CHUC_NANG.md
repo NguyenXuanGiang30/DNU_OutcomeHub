@@ -16,7 +16,7 @@
 | :---: | :--- | :---: | :---: | :---: | :---: |
 | 1 | **Dashboard và điều hướng** (Mục 8.1) | `FR-DSH` | 5 | 5/5 | 100% |
 | 2 | **Quản lý chương trình đào tạo** (Mục 8.2) | `FR-CTD` | 25 | 25/25 | 100.0% |
-| 3 | **Học phần, Đề cương và Rubric** (Mục 8.3) | `FR-PRT` | 21 | 6/21 | 28.6% |
+| 3 | **Học phần, Đề cương và Rubric** (Mục 8.3) | `FR-PRT` | 21 | 21/21 | 100.0% |
 | 4 | **Tổ chức, Đào tạo, Đợt đo và Điểm** (Mục 8.4) | `FR-PPL` | 20 | 20/20 | 100% |
 | 5 | **Tính toán Chuẩn đầu ra** (Mục 8.5) | `FR-CAL` | 15 | 15/15 | 100% |
 | 6 | **Báo cáo và phân tích kết quả** (Mục 8.6) | `FR-RES` | 14 | 14/14 | 100% |
@@ -24,7 +24,7 @@
 | 8 | **Chatbot và AI** (Mục 8.8) | `FR-AI` | 8 | 0/8 | 0% |
 | 9 | **Người dùng, quyền và cấu hình** (Mục 8.9) | `FR-ADM` | 8 | 8/8 | 100.0% |
 | 10 | **Tích hợp và API** (Mục 8.10) | `FR-INT` | 8 | 1/8 | 12.5% |
-| | **TỔNG CỘNG** | | **121** | **91 / 121** | **75.2%** |
+| | **TỔNG CỘNG** | | **121** | **106 / 121** | **87.6%** |
 
 ---
 
@@ -79,25 +79,25 @@
 ## 8.4. Đề cương, đề thi/bài đánh giá và rubric (21 Yêu cầu)
 - [x] `[M]` **FR-PRT-01:** Tạo, nhập, tìm, lọc và quản lý SyllabusVersion theo Khoa–ProgramVersion–Khóa áp dụng–CourseVersion; bắt buộc ghi Bản mô tả CTĐT đối chiếu.
 - [x] `[M]` **FR-PRT-02:** Biểu diễn ĐCCT dạng cấu trúc: thông tin học phần, mục tiêu, CLO/LLO, học liệu, kế hoạch buổi học, assessmentCode, rubric, bảng 8.3.1/8.3.2, điều kiện và CQI.
-- [ ] `[M]` **FR-PRT-03:** Quản lý đề thi/bài tập/dự án/trắc nghiệm/thực hành theo phiên bản và loại đánh giá.
+- [x] `[M]` **FR-PRT-03:** Quản lý đề thi/bài tập/dự án/trắc nghiệm/thực hành theo phiên bản và loại đánh giá.
 - [x] `[M]` **FR-PRT-04:** Rubric builder theo từng AssessmentItem; hỗ trợ mã tiêu chí, mô tả mức, thang điểm, trọng số trong bài, CLO, vai trò dữ liệu, PI trực tiếp, cờ cốt lõi và quy đổi.
-- [ ] `[M]` **FR-PRT-05:** Mapping trực tiếp ở mức bài/phần/câu hỏi/tiêu chí/sản phẩm; bảng 8.3.2 khai báo tỷ trọng trực tiếp từng tiêu chí trong PI và kiểm tra tổng đúng 100%.
+- [x] `[M]` **FR-PRT-05:** Mapping trực tiếp ở mức bài/phần/câu hỏi/tiêu chí/sản phẩm; bảng 8.3.2 khai báo tỷ trọng trực tiếp từng tiêu chí trong PI và kiểm tra tổng đúng 100%.
 - [x] `[M]` **FR-PRT-06:** Hỗ trợ template đánh giá 2/3 tín chỉ và cấu trúc linh hoạt; tổng trọng số học phần mặc định 100%.
-- [ ] `[M]` **FR-PRT-07:** Tải PDF/Word/Excel/PowerPoint theo loại; quét mã độc, giới hạn dung lượng, checksum và metadata.
-- [ ] `[S]` **FR-PRT-08:** Preview, tải xuống, lịch sử version, so sánh và khôi phục phiên bản theo quyền.
-- [ ] `[S]` **FR-PRT-09:** AI tạo nội dung nháp cho đề cương/đề thi/rubric, có nguồn, prompt version và trạng thái duyệt.
-- [ ] `[M]` **FR-PRT-10:** Workflow thẩm định/phê duyệt tài liệu; tài liệu đã dùng đo không được sửa tại chỗ.
-- [ ] `[M]` **FR-PRT-11:** Gắn minh chứng gốc, phiếu chấm, đáp án/thang điểm và file kết quả với đối tượng học thuật.
-- [ ] `[S]` **FR-PRT-12:** Xuất gói portfolio theo học phần/đợt/CTĐT có mục lục, phiên bản, checksum và watermark.
+- [x] `[M]` **FR-PRT-07:** Tải PDF/Word/Excel/PowerPoint theo loại; quét mã độc, giới hạn dung lượng, checksum và metadata.
+- [x] `[S]` **FR-PRT-08:** Preview, tải xuống, lịch sử version, so sánh và khôi phục phiên bản theo quyền.
+- [x] `[S]` **FR-PRT-09:** AI tạo nội dung nháp cho đề cương/đề thi/rubric, có nguồn, prompt version và trạng thái duyệt.
+- [x] `[M]` **FR-PRT-10:** Workflow thẩm định/phê duyệt tài liệu; tài liệu đã dùng đo không được sửa tại chỗ.
+- [x] `[M]` **FR-PRT-11:** Gắn minh chứng gốc, phiếu chấm, đáp án/thang điểm và file kết quả với đối tượng học thuật.
+- [x] `[S]` **FR-PRT-12:** Xuất gói portfolio theo học phần/đợt/CTĐT có mục lục, phiên bản, checksum và watermark.
 - [x] `[M]` **FR-PRT-13:** Lưu riêng assessmentCode A1/A2/A3, contributionLevel I/R/M và cờ isDirectAssessment; UI/API không dùng chung trường hoặc nhãn gây nhầm.
 - [x] `[M]` **FR-PRT-14:** Xuất dữ liệu đo theo sinh viên–lớp học phần–học phần A–bài đánh giá–tiêu chí rubric–PI–tỷ trọng trực tiếp–minh chứng, kèm mọi phiên bản.
-- [ ] `[M]` **FR-PRT-15:** Tạo SyllabusVersion từ `SyllabusTemplateVersion` và dữ liệu đã duyệt của ProgramVersion/CourseVersion; tự điền trường kế thừa nhưng không tự suy diễn nội dung.
-- [ ] `[M]` **FR-PRT-16:** Kiểm tra PI liên kết, PI trực tiếp, mức I/R/M/A và vai trò học phần phải khớp ma trận/kế hoạch đo của ProgramVersion; sai khác bị chặn hoặc qua phụ lục duyệt.
-- [ ] `[M]` **FR-PRT-17:** Bảng 8.3.1 truy vết toàn bộ CLO–PI–AssessmentItem–Criterion–Evidence và phân biệt “đo trực tiếp”, “hỗ trợ” và “chỉ đánh giá CLO”.
-- [ ] `[M]` **FR-PRT-18:** Bảng 8.3.2 chỉ xuất hiện cho PI được giao A; chỉ chứa tiêu chí direct và tổng tỷ trọng từng PI bằng 100%; học phần không A không được xuất PI/PLO.
-- [ ] `[M]` **FR-PRT-19:** Nếu một criterion gắn nhiều PI, yêu cầu tách criterion để chấm/truy vết riêng; ngoại lệ cần policy và phê duyệt, không ngầm sao chép điểm.
-- [ ] `[M]` **FR-PRT-20:** Quản lý phiên bản nội dung giảng dạy theo buổi: LLO, CLO liên kết, số tiết, học liệu, phương pháp, đánh giá/minh chứng và nhiệm vụ tự học.
-- [ ] `[M]` **FR-PRT-21:** Chỉ ban hành ĐCCT khi tổng trọng số bài đánh giá=100%, mỗi CLO có đánh giá phù hợp, rubric đầy đủ và các bảng truy vết/đo trực tiếp hợp lệ.
+- [x] `[M]` **FR-PRT-15:** Tạo SyllabusVersion từ `SyllabusTemplateVersion` và dữ liệu đã duyệt của ProgramVersion/CourseVersion; tự điền trường kế thừa nhưng không tự suy diễn nội dung.
+- [x] `[M]` **FR-PRT-16:** Kiểm tra PI liên kết, PI trực tiếp, mức I/R/M/A và vai trò học phần phải khớp ma trận/kế hoạch đo của ProgramVersion; sai khác bị chặn hoặc qua phụ lục duyệt.
+- [x] `[M]` **FR-PRT-17:** Bảng 8.3.1 truy vết toàn bộ CLO–PI–AssessmentItem–Criterion–Evidence và phân biệt “đo trực tiếp”, “hỗ trợ” và “chỉ đánh giá CLO”.
+- [x] `[M]` **FR-PRT-18:** Bảng 8.3.2 chỉ xuất hiện cho PI được giao A; chỉ chứa tiêu chí direct và tổng tỷ trọng từng PI bằng 100%; học phần không A không được xuất PI/PLO.
+- [x] `[M]` **FR-PRT-19:** Nếu một criterion gắn nhiều PI, yêu cầu tách criterion để chấm/truy vết riêng; ngoại lệ cần policy và phê duyệt, không ngầm sao chép điểm.
+- [x] `[M]` **FR-PRT-20:** Quản lý phiên bản nội dung giảng dạy theo buổi: LLO, CLO liên kết, số tiết, học liệu, phương pháp, đánh giá/minh chứng và nhiệm vụ tự học.
+- [x] `[M]` **FR-PRT-21:** Chỉ ban hành ĐCCT khi tổng trọng số bài đánh giá=100%, mỗi CLO có đánh giá phù hợp, rubric đầy đủ và các bảng truy vết/đo trực tiếp hợp lệ.
 
 ---
 

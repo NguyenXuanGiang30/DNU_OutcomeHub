@@ -34,7 +34,10 @@ public sealed class OutcomeHubDbContext(DbContextOptions<OutcomeHubDbContext> op
     public DbSet<Syllabus> Syllabuses => Set<Syllabus>();
     public DbSet<SyllabusVersion> SyllabusVersions => Set<SyllabusVersion>();
     public DbSet<AssessmentItem> AssessmentItems => Set<AssessmentItem>();
+    public DbSet<Rubric> Rubrics => Set<Rubric>();
     public DbSet<RubricCriterion> RubricCriteria => Set<RubricCriterion>();
+    public DbSet<AssessmentQuestion> AssessmentQuestions => Set<AssessmentQuestion>();
+    public DbSet<TeachingSession> TeachingSessions => Set<TeachingSession>();
     public DbSet<Clo> Clos => Set<Clo>();
 
     // Measurement DbSets

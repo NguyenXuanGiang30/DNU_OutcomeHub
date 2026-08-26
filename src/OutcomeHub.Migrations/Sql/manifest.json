@@ -229,6 +229,20 @@
       "postcondition_checksum": "d0735162dc93bbda0613d3ac821a5829e643edb3c522aac65ab473bc850f05ef",
       "timeout_seconds": 120,
       "retry_policy": "ATOMIC"
+    },
+    {
+      "sequence": 17,
+      "id": "90000000-0000-7000-8000-000000000017",
+      "migration_name": "0017_exam_blueprint_and_portfolio_grants",
+      "transaction_mode": "TRANSACTIONAL",
+      "script": "transactional/0017_exam_blueprint_and_portfolio_grants.sql",
+      "precondition": "checks/0017_exam_blueprint_and_portfolio_grants_pre.sql",
+      "postcondition": "checks/0017_exam_blueprint_and_portfolio_grants_post.sql",
+      "script_checksum": "83f2f4648a62331e20f4c2d06d3f00217de6935e081fddb851a397158ab6a548",
+      "precondition_checksum": "5ba2cd5667ac17c4f458bab4b013c918baef207ff8021c2d6efe6219726079aa",
+      "postcondition_checksum": "984dcfb060a74808ed75f026e7dd0fefac8a759f8a1e92b43dc20962c81f9a94",
+      "timeout_seconds": 120,
+      "retry_policy": "ATOMIC"
     }
   ]
 }
