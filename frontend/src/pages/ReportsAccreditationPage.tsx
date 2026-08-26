@@ -1,26 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
-  FileBarChart,
   Download,
-  Award,
-  TrendingUp,
-  FileCheck2,
-  CheckCircle,
   FileText,
-  AlertTriangle,
-  Layers,
+  CheckCircle,
 } from 'lucide-react';
-import {
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  CartesianGrid,
-  Legend,
-} from 'recharts';
+import { EmptyState } from '../components/common/EmptyState';
 
 export const ReportsAccreditationPage: React.FC = () => {
   const location = useLocation();
@@ -35,31 +20,16 @@ export const ReportsAccreditationPage: React.FC = () => {
   };
 
   const [activeTab, setActiveTab] = useState<string>(getSubSection());
-  const [selectedStandard, setSelectedStandard] = useState<'AUN-QA' | 'ABET' | 'MOET'>('AUN-QA');
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   useEffect(() => {
     setActiveTab(getSubSection());
   }, [location.pathname]);
 
-  const handleTabClick = (key: string) => {
-    setActiveTab(key);
-    navigate(`/results/${key}`);
-  };
-
   const handleExport = (type: string) => {
-    setToastMessage(`✓ Đang xuất ${type}... File sẽ được tải xuống tự động.`);
+    setToastMessage(`✓ Đang xuất ${type}...`);
     setTimeout(() => setToastMessage(null), 3000);
   };
-
-  const cohortTrendData = [
-    { ploCode: 'PLO1', k15: 82.0, k16: 85.5, k17: 88.5 },
-    { ploCode: 'PLO2', k15: 76.0, k16: 79.0, k17: 82.0 },
-    { ploCode: 'PLO3', k15: 84.0, k16: 86.5, k17: 89.2 },
-    { ploCode: 'PLO4', k15: 88.0, k16: 89.5, k17: 91.0 },
-    { ploCode: 'PLO5', k15: 68.0, k16: 71.0, k17: 74.5 },
-    { ploCode: 'PLO6', k15: 90.0, k16: 92.5, k17: 94.0 },
-  ];
 
   return (
     <div className="animate-fade-in">
@@ -78,8 +48,8 @@ export const ReportsAccreditationPage: React.FC = () => {
             Kết Quả & Cải Tiến
           </div>
           <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
-            {activeTab === 'summary-reports' && 'Báo Cáo Tổng Hợp & Hồ Sơ Tự Đánh Giá (AUN-QA / ABET)'}
-            {activeTab === 'plo' && 'Kết Quả Đạt Chuẩn Đầu Ra (PLO1 – PLO9)'}
+            {activeTab === 'summary-reports' && 'Báo Cáo Tổng Hợp & Hồ Sơ Tự Đánh Giá'}
+            {activeTab === 'plo' && 'Kết Quả Đạt Chuẩn Đầu Ra (PLO)'}
             {activeTab === 'pi' && 'Kết Quả Đạt Từng Chỉ Báo Thực Hiện (PI)'}
             {activeTab === 'clo' && 'Kết Quả Đạt Chuẩn Đầu Ra Học Phần (CLO)'}
             {activeTab === 'warnings' && 'Danh Sách Cảnh Báo Sinh Viên Chưa Đạt Chuẩn'}
@@ -87,236 +57,72 @@ export const ReportsAccreditationPage: React.FC = () => {
         </div>
 
         <div style={{ display: 'flex', gap: '0.75rem' }}>
-          <button onClick={() => handleExport('Gói Hồ Sơ Minh Chứng (.ZIP)')} className="btn btn-secondary">
+          <button onClick={() => handleExport('Hồ Sơ (.ZIP)')} className="btn btn-secondary">
             <Download size={16} />
-            <span>Xuất Hồ Sơ Minh Chứng (.ZIP)</span>
+            <span>Xuất Minh Chứng (.ZIP)</span>
           </button>
-          <button onClick={() => handleExport('Báo Cáo Tự Đánh Giá (PDF)')} className="btn btn-primary">
+          <button onClick={() => handleExport('Báo Cáo (PDF)')} className="btn btn-primary">
             <FileText size={16} />
-            <span>Xuất Báo Cáo Tự Đánh Giá (PDF)</span>
+            <span>Xuất Báo Cáo (PDF)</span>
           </button>
         </div>
       </div>
 
-      {/* TAB: BÁO CÁO TỔNG HỢP */}
+      {/* TAB: SUMMARY */}
       {activeTab === 'summary-reports' && (
-        <>
-          <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1.25rem' }}>
-            {(['AUN-QA', 'ABET', 'MOET'] as const).map((std) => (
-              <button
-                key={std}
-                onClick={() => setSelectedStandard(std)}
-                className={`btn ${selectedStandard === std ? 'btn-primary' : 'btn-secondary'}`}
-                style={{ fontSize: '0.875rem' }}
-              >
-                <Award size={16} />
-                <span>Tiêu Chuẩn {std}</span>
-              </button>
-            ))}
-          </div>
-
-          <div className="grid-cols-3">
-            <div className="glass-card">
-              <span className="form-label">Mức Độ Tuân Thủ Tiêu Chuẩn {selectedStandard}</span>
-              <span className="kpi-value" style={{ background: 'var(--emerald-gradient)', WebkitBackgroundClip: 'text' }}>94.5%</span>
-              <div className="kpi-trend positive"><CheckCircle size={14} /><span>Đạt 5.2/7.0 điểm kiểm định</span></div>
-            </div>
-            <div className="glass-card">
-              <span className="form-label">CĐR Đạt Ngưỡng Mục Tiêu (80%)</span>
-              <span className="kpi-value">5 / 6 PLO</span>
-              <div className="kpi-trend positive"><span>83.3% số lượng CĐR vượt ngưỡng</span></div>
-            </div>
-            <div className="glass-card">
-              <span className="form-label">Vòng CQI Hoàn Thành Khép Kín</span>
-              <span className="kpi-value" style={{ background: 'var(--cyan-gradient)', WebkitBackgroundClip: 'text' }}>4 Chu Kỳ</span>
-              <div className="kpi-trend positive"><span>Đã đo lại & nghiệm thu đóng</span></div>
-            </div>
-          </div>
-
-          <div className="glass-card" style={{ marginTop: '1.5rem' }}>
-            <div className="glass-card-header">
-              <div>
-                <h3 className="glass-card-title"><TrendingUp size={20} className="text-primary-400" /> Đối Sánh Tiến Trình Đạt CĐR Qua 3 Khóa (K15 - K16 - K17)</h3>
-                <p className="glass-card-subtitle">Đánh giá hiệu quả của các hành động cải tiến chất lượng CQI</p>
-              </div>
-            </div>
-            <div style={{ width: '100%', height: '340px' }}>
-              <ResponsiveContainer>
-                <BarChart data={cohortTrendData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255, 255, 255, 0.08)" />
-                  <XAxis dataKey="ploCode" stroke="var(--text-secondary)" tick={{ fill: 'var(--text-primary)', fontWeight: 700 }} />
-                  <YAxis domain={[0, 100]} stroke="var(--text-muted)" />
-                  <Tooltip contentStyle={{ backgroundColor: 'var(--bg-surface-elevated)', borderColor: 'var(--border-strong)', borderRadius: '8px', color: '#fff' }} />
-                  <Legend wrapperStyle={{ paddingTop: '10px' }} />
-                  <Bar dataKey="k15" name="Khóa K15" fill="#64748b" radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="k16" name="Khóa K16" fill="#06b6d4" radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="k17" name="Khóa K17" fill="#6366f1" radius={[4, 4, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-        </>
+        <div className="glass-card">
+          <EmptyState
+            title="Chưa có Dữ liệu kết quả đợt đo"
+            description="Vui lòng hoàn tất nhập điểm Rubric và chạy tính toán CĐR để xem báo cáo tổng hợp tự đánh giá chuẩn AUN-QA / ABET."
+            actionLabel="Đi Tới Màn Hình Tính Toán CĐR"
+            onAction={() => navigate('/measurement/calculation')}
+          />
+        </div>
       )}
 
-      {/* TAB: KẾT QUẢ PLO */}
+      {/* TAB: PLO */}
       {activeTab === 'plo' && (
         <div className="glass-card">
-          <div className="glass-card-header">
-            <div>
-              <h3 className="glass-card-title">Bảng Tổng Kết Kết Quả Đạt Chuẩn Đầu Ra (PLO1 – PLO6) - Khóa K17</h3>
-              <p className="glass-card-subtitle">Tổng hợp từ 28 học phần đo lường</p>
-            </div>
-          </div>
-          <div className="table-container">
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>Mã PLO</th>
-                  <th>Tên Chuẩn Đầu Ra</th>
-                  <th>Mức Bloom</th>
-                  <th>Ngưỡng Mục Tiêu</th>
-                  <th>Tỷ Lệ Đạt Thực Tế</th>
-                  <th>Đánh Giá</th>
-                </tr>
-              </thead>
-              <tbody>
-                {[
-                  { code: 'PLO1', name: 'Kiến thức cơ bản & cơ sở ngành', bloom: 'APPLY (3)', target: '80%', actual: '88.5%', met: true },
-                  { code: 'PLO2', name: 'Phân tích & thiết kế hệ thống', bloom: 'ANALYZE (4)', target: '80%', actual: '82.0%', met: true },
-                  { code: 'PLO3', name: 'Lập trình & hiện thực hóa giải pháp', bloom: 'CREATE (6)', target: '80%', actual: '89.2%', met: true },
-                  { code: 'PLO4', name: 'Làm việc nhóm & Giao tiếp', bloom: 'APPLY (3)', target: '80%', actual: '91.0%', met: true },
-                  { code: 'PLO5', name: 'Kiểm thử & Đảm bảo chất lượng', bloom: 'EVALUATE (5)', target: '80%', actual: '74.5%', met: false },
-                  { code: 'PLO6', name: 'Đạo đức nghề nghiệp & Pháp luật', bloom: 'EVALUATE (5)', target: '80%', actual: '94.0%', met: true },
-                ].map((row) => (
-                  <tr key={row.code}>
-                    <td><strong className="badge badge-primary">{row.code}</strong></td>
-                    <td style={{ fontWeight: 600 }}>{row.name}</td>
-                    <td><span className="badge badge-bloom badge-cyan">{row.bloom}</span></td>
-                    <td>{row.target}</td>
-                    <td><strong style={{ color: row.met ? 'var(--emerald-400)' : 'var(--rose-400)' }}>{row.actual}</strong></td>
-                    <td><span className={`badge ${row.met ? 'badge-success' : 'badge-danger'}`}>{row.met ? 'ĐẠT CHUẨN' : 'CHƯA ĐẠT'}</span></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <EmptyState
+            title="Chưa có Kết quả PLO"
+            description="Chưa có kết quả tính toán chuẩn đầu ra PLO nào trong hệ thống."
+            actionLabel="Đi Tới Chấm Điểm Rubric"
+            onAction={() => navigate('/measurement/rubric-scoring')}
+          />
         </div>
       )}
 
-      {/* TAB: KẾT QUẢ PI */}
+      {/* TAB: PI */}
       {activeTab === 'pi' && (
         <div className="glass-card">
-          <div className="glass-card-header">
-            <div>
-              <h3 className="glass-card-title">Kết Quả Đạt Từng Chỉ Báo Thực Hiện (Performance Indicators - PI)</h3>
-              <p className="glass-card-subtitle">Chi tiết mức độ thành thạo của sinh viên ở từng năng lực cụ thể</p>
-            </div>
-          </div>
-          <div className="table-container">
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>Mã PI</th>
-                  <th>Thuộc PLO</th>
-                  <th>Nội Dung Năng Lực</th>
-                  <th>Số SV Tham Gia Đo</th>
-                  <th>Tỷ Lệ Đạt (≥ 6.0)</th>
-                  <th>Trạng Thái</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><strong className="badge badge-cyan">PI 3.1</strong></td>
-                  <td><code>PLO3</code></td>
-                  <td>Hiện thực hóa Web API & Database</td>
-                  <td>120 SV</td>
-                  <td><strong style={{ color: 'var(--emerald-400)' }}>89.2%</strong></td>
-                  <td><span className="badge badge-success">ĐẠT CHUẨN</span></td>
-                </tr>
-                <tr>
-                  <td><strong className="badge badge-cyan">PI 5.1</strong></td>
-                  <td><code>PLO5</code></td>
-                  <td>Viết Unit Test & CI/CD</td>
-                  <td>120 SV</td>
-                  <td><strong style={{ color: 'var(--rose-400)' }}>74.5%</strong></td>
-                  <td><span className="badge badge-danger">CHƯA ĐẠT (CẦN CQI)</span></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          <EmptyState
+            title="Chưa có Kết quả Chỉ báo PI"
+            description="Chưa có kết quả tính toán chỉ báo thực hiện PI nào."
+            actionLabel="Đi Tới Chấm Điểm Rubric"
+            onAction={() => navigate('/measurement/rubric-scoring')}
+          />
         </div>
       )}
 
-      {/* TAB: KẾT QUẢ CLO */}
+      {/* TAB: CLO */}
       {activeTab === 'clo' && (
         <div className="glass-card">
-          <div className="glass-card-header">
-            <div>
-              <h3 className="glass-card-title">Kết Quả Đạt Chuẩn Đầu Ra Học Phần (CLO)</h3>
-              <p className="glass-card-subtitle">Học phần: <strong>IT4101 - Lập trình .NET Nâng cao</strong></p>
-            </div>
-          </div>
-          <div className="table-container">
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>Mã CLO</th>
-                  <th>Nội Dung Chuẩn Đầu Ra Môn</th>
-                  <th>Tỷ Lệ Đạt Lớp 17IT01</th>
-                  <th>Tỷ Lệ Đạt Lớp 17IT02</th>
-                  <th>Đánh Giá Môn</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><strong className="badge badge-cyan">CLO1</strong></td>
-                  <td>Xây dựng RESTful Web API</td>
-                  <td>92.5%</td>
-                  <td>88.0%</td>
-                  <td><span className="badge badge-success">ĐẠT TỐT</span></td>
-                </tr>
-                <tr>
-                  <td><strong className="badge badge-cyan">CLO2</strong></td>
-                  <td>Kiến trúc Clean Architecture</td>
-                  <td>85.0%</td>
-                  <td>81.5%</td>
-                  <td><span className="badge badge-success">ĐẠT</span></td>
-                </tr>
-                <tr>
-                  <td><strong className="badge badge-cyan">CLO3</strong></td>
-                  <td>Kiểm thử Unit Test</td>
-                  <td>75.0%</td>
-                  <td>71.0%</td>
-                  <td><span className="badge badge-warning">CẦN CẢI TIẾN</span></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          <EmptyState
+            title="Chưa có Kết quả Môn học CLO"
+            description="Chưa có kết quả đạt chuẩn đầu ra học phần nào."
+            actionLabel="Đi Tới Chấm Điểm Rubric"
+            onAction={() => navigate('/measurement/rubric-scoring')}
+          />
         </div>
       )}
 
-      {/* TAB: CẢNH BÁO CHƯA ĐẠT */}
+      {/* TAB: WARNINGS */}
       {activeTab === 'warnings' && (
         <div className="glass-card">
-          <div className="glass-card-header">
-            <div>
-              <h3 className="glass-card-title"><AlertTriangle size={20} className="text-amber-400" /> Danh Sách Cảnh Báo Sinh Viên Chưa Đạt Chuẩn Đầu Ra</h3>
-              <p className="glass-card-subtitle">Cần can thiệp phụ đạo học vụ và mở kế hoạch cải tiến CQI</p>
-            </div>
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            <div style={{ padding: '1.25rem', backgroundColor: 'var(--bg-surface-elevated)', borderRadius: 'var(--radius-md)', border: '1px solid var(--rose-500)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-                <strong style={{ color: 'var(--rose-400)' }}>Cảnh báo mức cao: Lớp 17IT01 - Môn Lập trình .NET</strong>
-                <span className="badge badge-danger">6 Sinh Viên Chưa Đạt PI 5.1</span>
-              </div>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>• Nguyên nhân: Điểm bài thực hành Unit Test dưới 6.0/10.</p>
-              <div style={{ marginTop: '0.75rem', display: 'flex', gap: '0.5rem' }}>
-                <button onClick={() => navigate('/cqi/action-plans')} className="btn btn-sm btn-primary">Khởi Tạo Kế Hoạch CQI Cho Lớp</button>
-                <button className="btn btn-sm btn-secondary">Xem Danh Sách 6 Sinh Viên</button>
-              </div>
-            </div>
-          </div>
+          <EmptyState
+            title="Không có Cảnh báo chưa đạt"
+            description="Hệ thống hiện tại không ghi nhận cảnh báo nguy cơ sinh viên chưa đạt nào."
+          />
         </div>
       )}
     </div>
