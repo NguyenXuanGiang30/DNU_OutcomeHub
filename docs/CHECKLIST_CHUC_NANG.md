@@ -15,7 +15,7 @@
 | STT | Phân hệ (Mục BRD) | Mã | Số lượng FR | Hoàn thành | Tỷ lệ |
 | :---: | :--- | :---: | :---: | :---: | :---: |
 | 1 | **Dashboard và điều hướng** (Mục 8.1) | `FR-DSH` | 5 | 5/5 | 100% |
-| 2 | **Quản lý chương trình đào tạo** (Mục 8.2) | `FR-CTD` | 25 | 9/25 | 36% |
+| 2 | **Quản lý chương trình đào tạo** (Mục 8.2) | `FR-CTD` | 25 | 25/25 | 100.0% |
 | 3 | **Học phần, Đề cương và Rubric** (Mục 8.3) | `FR-PRT` | 21 | 6/21 | 28.6% |
 | 4 | **Tổ chức, Đào tạo, Đợt đo và Điểm** (Mục 8.4) | `FR-PPL` | 20 | 20/20 | 100% |
 | 5 | **Tính toán Chuẩn đầu ra** (Mục 8.5) | `FR-CAL` | 15 | 15/15 | 100% |
@@ -24,7 +24,7 @@
 | 8 | **Chatbot và AI** (Mục 8.8) | `FR-AI` | 8 | 0/8 | 0% |
 | 9 | **Người dùng, quyền và cấu hình** (Mục 8.9) | `FR-ADM` | 8 | 8/8 | 100.0% |
 | 10 | **Tích hợp và API** (Mục 8.10) | `FR-INT` | 8 | 1/8 | 12.5% |
-| | **TỔNG CỘNG** | | **121** | **75 / 121** | **62.0%** |
+| | **TỔNG CỘNG** | | **121** | **91 / 121** | **75.2%** |
 
 ---
 
@@ -47,22 +47,22 @@
 - [x] `[M]` **FR-CTD-07:** Kế thừa PI chung của PLO1–PLO4 ở trạng thái khóa; quản lý PI ngành của PLO5–PLO9, mặc định theo cấu trúc khung và cho điều chỉnh số PI ngành khi được phê duyệt.
 - [x] `[M]` **FR-CTD-08:** Quản lý CLO/LLO có phiên bản theo học phần, CTĐT, khóa và thời gian hiệu lực.
 - [x] `[M]` **FR-CTD-09:** Tạo ma trận CLO–PI/PLO và học phần–PI/PLO có căn cứ; lưu riêng mức I/R/M và cờ A; hiển thị A/RA/MA, cảnh báo IA và không dùng assessmentCode làm cờ A.
-- [ ] `[M]` **FR-CTD-10:** Phân tích độ phủ theo từng StudentPath: PLO/PI thiếu học phần/CLO, PI không có học phần A, thiếu mức M, chồng chéo và đường tự chọn thiếu phủ.
-- [ ] `[S]` **FR-CTD-11:** Hiển thị lộ trình phát triển CĐR theo học kỳ/khóa/định hướng và so sánh các đường học.
-- [ ] `[M]` **FR-CTD-12:** Workflow Nháp–Thẩm định–Đã duyệt–Áp dụng–Hết hiệu lực; giữ ý kiến, biên bản và người phê duyệt.
-- [ ] `[M]` **FR-CTD-13:** Nhập/xuất Excel/CSV có template, preview, kiểm tra lỗi và không ghi đè cấu hình đã duyệt.
-- [ ] `[S]` **FR-CTD-14:** So sánh hai ProgramVersion, chỉ ra thêm/bỏ/sửa và quản lý crosswalk PLO/PI/học phần.
-- [ ] `[M]` **FR-CTD-15:** Quản lý DirectMeasurementPlan theo PI/StudentPath: ưu tiên 1, tối đa 2 nguồn A, học kỳ và owner, trọng số nguồn tổng 100%, nguồn chính thức/đối sánh, neo, version/phê duyệt.
-- [ ] `[M]` **FR-CTD-16:** Kiểm tra mỗi PI có nguồn A trên mọi lộ trình thực tế, số nguồn không vượt policy, giới hạn M/A theo loại học phần và workflow ngoại lệ có thẩm quyền.
-- [ ] `[M]` **FR-CTD-17:** Quản lý học phần dùng chung bằng CourseVersion/phần lõi dùng chung và mapping do Trường quản trị; đơn vị không được tự sửa, phụ lục khác biệt phải được duyệt.
-- [ ] `[M]` **FR-CTD-18:** Quản lý `InstitutionTemplateVersion`: biểu mẫu Bản mô tả CTĐT/ĐCCT, trường bắt buộc, nội dung khóa/mở, quyết định, hiệu lực và trạng thái.
-- [ ] `[M]` **FR-CTD-19:** Tạo ProgramVersion mới từ khung đang hiệu lực hoặc sao chép phiên bản trước; ghi nguồn kế thừa và không liên kết sửa đè dữ liệu cũ.
-- [ ] `[M]` **FR-CTD-20:** Quản lý PO, Khung năng lực Tầng 1–3 và ma trận PO–PLO–năng lực L/M/H có kiểm tra độ phủ.
-- [ ] `[M]` **FR-CTD-21:** Quản lý đầy đủ cấu trúc CTĐT: thông tin tổng quát, đối sánh, khối kiến thức, học phần, tín chỉ, tiên quyết, học kỳ và tổng tín chỉ.
-- [ ] `[M]` **FR-CTD-22:** Quản lý CurriculumPath cho hướng chuyên ngành, nhóm tự chọn và từng phương án tốt nghiệp; kiểm tra cơ hội học và đo PI tương đương.
-- [ ] `[S]` **FR-CTD-23:** So sánh ProgramVersion với phiên bản khung mới, hiển thị tác động và tạo đề nghị nâng cấp; không tự cập nhật phiên bản đã ban hành.
-- [ ] `[M]` **FR-CTD-24:** Sinh/nhập/xuất Bản mô tả CTĐT đúng biểu mẫu từ dữ liệu cấu trúc; giữ số quyết định, khóa áp dụng, phiên bản và checksum.
-- [ ] `[M]` **FR-CTD-25:** Chỉ cho ban hành ProgramVersion khi hoàn thành checklist: PLO/PI, chương trình học, mọi StudentPath, ma trận, nguồn A, trọng số và chủ thể phụ trách.
+- [x] `[M]` **FR-CTD-10:** Phân tích độ phủ theo từng StudentPath: PLO/PI thiếu học phần/CLO, PI không có học phần A, thiếu mức M, chồng chéo và đường tự chọn thiếu phủ.
+- [x] `[S]` **FR-CTD-11:** Hiển thị lộ trình phát triển CĐR theo học kỳ/khóa/định hướng và so sánh các đường học.
+- [x] `[M]` **FR-CTD-12:** Workflow Nháp–Thẩm định–Đã duyệt–Áp dụng–Hết hiệu lực; giữ ý kiến, biên bản và người phê duyệt.
+- [x] `[M]` **FR-CTD-13:** Nhập/xuất Excel/CSV có template, preview, kiểm tra lỗi và không ghi đè cấu hình đã duyệt.
+- [x] `[S]` **FR-CTD-14:** So sánh hai ProgramVersion, chỉ ra thêm/bỏ/sửa và quản lý crosswalk PLO/PI/học phần.
+- [x] `[M]` **FR-CTD-15:** Quản lý DirectMeasurementPlan theo PI/StudentPath: ưu tiên 1, tối đa 2 nguồn A, học kỳ và owner, trọng số nguồn tổng 100%, nguồn chính thức/đối sánh, neo, version/phê duyệt.
+- [x] `[M]` **FR-CTD-16:** Kiểm tra mỗi PI có nguồn A trên mọi lộ trình thực tế, số nguồn không vượt policy, giới hạn M/A theo loại học phần và workflow ngoại lệ có thẩm quyền.
+- [x] `[M]` **FR-CTD-17:** Quản lý học phần dùng chung bằng CourseVersion/phần lõi dùng chung và mapping do Trường quản trị; đơn vị không được tự sửa, phụ lục khác biệt phải được duyệt.
+- [x] `[M]` **FR-CTD-18:** Quản lý `InstitutionTemplateVersion`: biểu mẫu Bản mô tả CTĐT/ĐCCT, trường bắt buộc, nội dung khóa/mở, quyết định, hiệu lực và trạng thái.
+- [x] `[M]` **FR-CTD-19:** Tạo ProgramVersion mới từ khung đang hiệu lực hoặc sao chép phiên bản trước; ghi nguồn kế thừa và không liên kết sửa đè dữ liệu cũ.
+- [x] `[M]` **FR-CTD-20:** Quản lý PO, Khung năng lực Tầng 1–3 và ma trận PO–PLO–năng lực L/M/H có kiểm tra độ phủ.
+- [x] `[M]` **FR-CTD-21:** Quản lý đầy đủ cấu trúc CTĐT: thông tin tổng quát, đối sánh, khối kiến thức, học phần, tín chỉ, tiên quyết, học kỳ và tổng tín chỉ.
+- [x] `[M]` **FR-CTD-22:** Quản lý CurriculumPath cho hướng chuyên ngành, nhóm tự chọn và từng phương án tốt nghiệp; kiểm tra cơ hội học và đo PI tương đương.
+- [x] `[S]` **FR-CTD-23:** So sánh ProgramVersion với phiên bản khung mới, hiển thị tác động và tạo đề nghị nâng cấp; không tự cập nhật phiên bản đã ban hành.
+- [x] `[M]` **FR-CTD-24:** Sinh/nhập/xuất Bản mô tả CTĐT đúng biểu mẫu từ dữ liệu cấu trúc; giữ số quyết định, khóa áp dụng, phiên bản và checksum.
+- [x] `[M]` **FR-CTD-25:** Chỉ cho ban hành ProgramVersion khi hoàn thành checklist: PLO/PI, chương trình học, mọi StudentPath, ma trận, nguồn A, trọng số và chủ thể phụ trách.
 
 ---
 

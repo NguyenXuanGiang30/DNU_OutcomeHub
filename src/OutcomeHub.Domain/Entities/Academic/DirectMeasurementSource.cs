@@ -22,4 +22,33 @@ public sealed class DirectMeasurementSource
     public ProgramPi ProgramPi { get; private set; } = null!;
     public CoursePiMapping CoursePiMapping { get; private set; } = null!;
     public OrgUnit OwnerOrgUnit { get; private set; } = null!;
+
+    public static DirectMeasurementSource Create(
+        Guid id,
+        Guid directMeasurementPlanId,
+        Guid programVersionId,
+        Guid curriculumPathId,
+        Guid programPiId,
+        Guid coursePiMappingId,
+        Guid ownerOrgUnitId,
+        decimal sourceWeightRatio,
+        string sourceRole = "PRIMARY",
+        int? plannedTerm = null,
+        int sortOrder = 1)
+    {
+        return new DirectMeasurementSource
+        {
+            Id = id == Guid.Empty ? Guid.NewGuid() : id,
+            DirectMeasurementPlanId = directMeasurementPlanId,
+            ProgramVersionId = programVersionId,
+            CurriculumPathId = curriculumPathId,
+            ProgramPiId = programPiId,
+            CoursePiMappingId = coursePiMappingId,
+            OwnerOrgUnitId = ownerOrgUnitId,
+            SourceWeightRatio = sourceWeightRatio,
+            SourceRole = string.IsNullOrWhiteSpace(sourceRole) ? "PRIMARY" : sourceRole.Trim().ToUpperInvariant(),
+            PlannedTerm = plannedTerm,
+            SortOrder = sortOrder
+        };
+    }
 }

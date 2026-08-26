@@ -38,7 +38,7 @@ public sealed class DashboardAndAccreditationIntegrationTests
         string migrationRoot = Path.Combine(AppContext.BaseDirectory, "MigrationSql");
         var runner = new SqlMigrationRunner(migrationConnectionString, migrationRoot);
         var migrationResult = await runner.RunAsync(cancellationToken);
-        Assert.Equal(15, migrationResult.AppliedCount);
+        Assert.Equal(16, migrationResult.AppliedCount);
 
         // ── Step 2: Seed development dataset ──
         await DatabaseBaselineTests.RunDatabaseScriptAsync(

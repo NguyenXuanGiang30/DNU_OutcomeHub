@@ -215,6 +215,20 @@
       "postcondition_checksum": "abca0ffc5950c9afda81b3fc16479c603276323bcc7695d3036a28a27a35310b",
       "timeout_seconds": 120,
       "retry_policy": "ATOMIC"
+    },
+    {
+      "sequence": 16,
+      "id": "90000000-0000-7000-8000-000000000016",
+      "migration_name": "0016_curriculum_matrix_advanced_grants",
+      "transaction_mode": "TRANSACTIONAL",
+      "script": "transactional/0016_curriculum_matrix_advanced_grants.sql",
+      "precondition": "checks/0016_curriculum_matrix_advanced_grants_pre.sql",
+      "postcondition": "checks/0016_curriculum_matrix_advanced_grants_post.sql",
+      "script_checksum": "b508f78bf2e4afd2267cf8b326a80349a9fa08a5f531e48b2a7c4f006782f963",
+      "precondition_checksum": "06936e86da8c73bef83c831cca26023a83cd525945ade406d5eeca41840590af",
+      "postcondition_checksum": "d0735162dc93bbda0613d3ac821a5829e643edb3c522aac65ab473bc850f05ef",
+      "timeout_seconds": 120,
+      "retry_policy": "ATOMIC"
     }
   ]
 }
