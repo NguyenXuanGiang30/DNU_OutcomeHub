@@ -2,14 +2,12 @@ import React, { useState, useEffect } from 'react';
 import {
   Sun,
   Moon,
-  Search,
   Bell,
   Sparkles,
   ChevronDown,
   Building2,
   GraduationCap,
   Calendar,
-  Layers,
 } from 'lucide-react';
 import { getUserContext, setUserContext, UserContext } from '../../api/apiClient';
 
@@ -21,8 +19,9 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleAiDrawer }) => {
   const [context, setContext] = useState<UserContext>(getUserContext());
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
   const [roleDropdownOpen, setRoleDropdownOpen] = useState(false);
-  const [selectedCohort, setSelectedCohort] = useState('K17 (2023 - 2027)');
-  const [selectedProgram, setSelectedProgram] = useState('Kỹ thuật Phần mềm (v2023 - ABET)');
+  const [selectedCohort, setSelectedCohort] = useState('ALL');
+  const [selectedProgram, setSelectedProgram] = useState('ALL');
+  const [selectedOrgUnit, setSelectedOrgUnit] = useState('ALL');
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -63,7 +62,21 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleAiDrawer }) => {
         {/* Faculty & Program Selector */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', backgroundColor: 'var(--bg-surface-elevated)', padding: '0.35rem 0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)', fontSize: '0.78rem' }}>
           <Building2 size={15} style={{ color: 'var(--primary-400)' }} />
-          <span style={{ fontWeight: 700, color: 'var(--text-primary)' }}>Khoa CNTT</span>
+          <select
+            value={selectedOrgUnit}
+            onChange={(e) => setSelectedOrgUnit(e.target.value)}
+            style={{
+              backgroundColor: 'transparent',
+              color: 'var(--text-primary)',
+              border: 'none',
+              fontSize: '0.78rem',
+              fontWeight: 700,
+              cursor: 'pointer',
+              outline: 'none',
+            }}
+          >
+            <option value="ALL" style={{ backgroundColor: 'var(--bg-surface)' }}>Tất cả Đơn Vị / Khoa</option>
+          </select>
           <span style={{ color: 'var(--text-muted)' }}>|</span>
           <GraduationCap size={15} style={{ color: 'var(--cyan-400)' }} />
           <select
@@ -79,16 +92,13 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleAiDrawer }) => {
               outline: 'none',
             }}
           >
-            <option value="Kỹ thuật Phần mềm (v2023 - ABET)" style={{ backgroundColor: 'var(--bg-surface)' }}>Kỹ thuật Phần mềm (v2023)</option>
-            <option value="Khoa học Máy tính (v2022)" style={{ backgroundColor: 'var(--bg-surface)' }}>Khoa học Máy tính (v2022)</option>
-            <option value="Quản trị Kinh doanh (v2023)" style={{ backgroundColor: 'var(--bg-surface)' }}>Quản trị Kinh doanh (v2023)</option>
+            <option value="ALL" style={{ backgroundColor: 'var(--bg-surface)' }}>Tất cả Ngành Đào Tạo</option>
           </select>
         </div>
 
         {/* Cohort Selector */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', backgroundColor: 'var(--bg-surface-elevated)', padding: '0.35rem 0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)', fontSize: '0.78rem' }}>
           <Calendar size={15} style={{ color: 'var(--emerald-400)' }} />
-          <span style={{ color: 'var(--text-muted)' }}>Khóa:</span>
           <select
             value={selectedCohort}
             onChange={(e) => setSelectedCohort(e.target.value)}
@@ -102,10 +112,7 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleAiDrawer }) => {
               outline: 'none',
             }}
           >
-            <option value="K17 (2023 - 2027)" style={{ backgroundColor: 'var(--bg-surface)' }}>Khóa K17 (2023 - 2027)</option>
-            <option value="K16 (2022 - 2026)" style={{ backgroundColor: 'var(--bg-surface)' }}>Khóa K16 (2022 - 2026)</option>
-            <option value="K15 (2021 - 2025)" style={{ backgroundColor: 'var(--bg-surface)' }}>Khóa K15 (2021 - 2025)</option>
-            <option value="K18 (2024 - 2028)" style={{ backgroundColor: 'var(--bg-surface)' }}>Khóa K18 (2024 - 2028)</option>
+            <option value="ALL" style={{ backgroundColor: 'var(--bg-surface)' }}>Tất cả Khóa Tuyển Sinh</option>
           </select>
         </div>
       </div>

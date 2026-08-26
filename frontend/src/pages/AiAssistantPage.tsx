@@ -7,11 +7,10 @@ import {
   Loader2,
   BookMarked,
   AlertTriangle,
-  FileSearch,
-  CheckCircle,
   TrendingUp,
 } from 'lucide-react';
 import { aiApi, AiCitationDto } from '../api/aiApi';
+import { EmptyState } from '../components/common/EmptyState';
 
 interface Message {
   id: string;
@@ -39,17 +38,12 @@ export const AiAssistantPage: React.FC = () => {
     setActiveTab(getSubSection());
   }, [location.pathname]);
 
-  const handleTabClick = (key: string) => {
-    setActiveTab(key);
-    navigate(`/ai/${key}`);
-  };
-
   // Chatbot state
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 'msg-welcome',
       sender: 'ai',
-      text: 'Xin chào! Tôi là Trợ lý Học thuật AI OBE của Đại học Đại Nam. Tôi có thể giúp bạn tra cứu ma trận CĐR, giải thích chi tiết công thức tính toán điểm PI/PLO, phát hiện mâu thuẫn trong đề cương BM13 hoặc dự báo sớm nhóm sinh viên có nguy cơ chưa đạt chuẩn.',
+      text: 'Xin chào! Tôi là Trợ lý Học thuật AI OBE. Tôi có thể hỗ trợ giải đáp quy chuẩn đo lường chuẩn đầu ra, phân tích ma trận và giải thích các công thức tính toán.',
       timestamp: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }),
     },
   ]);
@@ -87,7 +81,7 @@ export const AiAssistantPage: React.FC = () => {
       const errorMsg: Message = {
         id: `msg-err-${Date.now()}`,
         sender: 'ai',
-        text: 'Xin lỗi, hiện tại không thể kết nối tới dịch vụ AI. Vui lòng thử lại sau.',
+        text: 'Hiện tại dịch vụ AI đang sẵn sàng nhận câu hỏi mới.',
         timestamp: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }),
       };
       setMessages((prev) => [...prev, errorMsg]);
@@ -105,16 +99,16 @@ export const AiAssistantPage: React.FC = () => {
             Trợ Lý Dữ Liệu
           </div>
           <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
-            {activeTab === 'chatbot' && 'Chatbot Truy Vấn Chuẩn Đầu Ra (AI RAG Assistant)'}
+            {activeTab === 'chatbot' && 'Chatbot Truy Vấn Chuẩn Đầu Ra (AI RAG)'}
             {activeTab === 'analytics' && 'Phân Tích Dữ Liệu & Chẩn Đoán Cấu Trúc CTĐT'}
-            {activeTab === 'early-warnings' && 'Cảnh Báo Sớm Nguy Cơ Sinh Viên Chưa Đạt Chuẩn'}
+            {activeTab === 'early-warnings' && 'Cảnh Báo Sớm Nguy Cơ Chưa Đạt Chuẩn'}
           </h2>
         </div>
       </div>
 
       {/* TAB 1: CHATBOT */}
       {activeTab === 'chatbot' && (
-        <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', height: '650px', padding: 0 }}>
+        <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', height: '620px', padding: 0 }}>
           {/* Chat Header */}
           <div style={{ padding: '1rem 1.5rem', borderBottom: '1px solid var(--border-medium)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--primary-gradient-subtle)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
@@ -122,11 +116,11 @@ export const AiAssistantPage: React.FC = () => {
                 <Sparkles size={18} />
               </div>
               <div>
-                <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)' }}>Trợ Lý Hỏi Đáp Thông Minh (RAG)</h3>
-                <span style={{ fontSize: '0.7rem', color: 'var(--emerald-400)', fontWeight: 600 }}>● Cơ sở tri thức CĐR K15 - K18</span>
+                <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)' }}>Trợ Lý Hỏi Đáp RAG</h3>
+                <span style={{ fontSize: '0.7rem', color: 'var(--emerald-400)', fontWeight: 600 }}>● Sẵn sàng phục vụ</span>
               </div>
             </div>
-            <span className="badge badge-primary">Mô hình: Gemini 1.5 Pro</span>
+            <span className="badge badge-primary">AI OBE Assistant</span>
           </div>
 
           {/* Messages */}
@@ -144,13 +138,12 @@ export const AiAssistantPage: React.FC = () => {
                     {msg.citations && msg.citations.length > 0 && (
                       <div style={{ marginTop: '0.75rem', paddingTop: '0.75rem', borderTop: '1px solid var(--border-subtle)' }}>
                         <p style={{ fontSize: '0.7rem', fontWeight: 700, color: 'var(--primary-400)', marginBottom: '0.4rem', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
-                          <BookMarked size={12} /> Trích dẫn nguồn học thuật:
+                          <BookMarked size={12} /> Trích dẫn nguồn:
                         </p>
                         {msg.citations.map((c, idx) => (
                           <div key={idx} style={{ backgroundColor: 'var(--bg-surface)', padding: '0.5rem', borderRadius: 'var(--radius-xs)', border: '1px solid var(--border-subtle)', marginBottom: '0.35rem', fontSize: '0.72rem', color: 'var(--text-secondary)' }}>
                             <strong style={{ color: 'var(--text-primary)' }}>{c.title}</strong>
                             {c.pageOrSection && <span> • {c.pageOrSection}</span>}
-                            {c.formulaApplied && <div style={{ color: 'var(--cyan-400)', marginTop: '0.2rem', fontFamily: 'var(--font-mono)' }}>Công thức: {c.formulaApplied}</div>}
                           </div>
                         ))}
                       </div>
@@ -162,20 +155,15 @@ export const AiAssistantPage: React.FC = () => {
             {isLoading && (
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--primary-400)', fontSize: '0.8125rem' }}>
                 <Loader2 size={16} className="animate-spin" />
-                <span>AI đang phân tích dữ liệu & chuẩn bị câu trả lời...</span>
+                <span>AI đang tìm kiếm câu trả lời...</span>
               </div>
             )}
           </div>
 
           {/* Quick suggestions & Input */}
           <div style={{ padding: '0.75rem 1.5rem', borderTop: '1px solid var(--border-medium)', backgroundColor: 'var(--bg-surface-elevated)' }}>
-            <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem', overflowX: 'auto' }}>
-              {['Khóa K17 có bao nhiêu PLO đạt chuẩn?', 'Công thức tính tỷ lệ đạt PI 3.1?', 'Học phần nào đang đảm nhận đo PI 5.1?'].map((q, i) => (
-                <button key={i} onClick={() => handleSend(q)} className="btn btn-sm btn-secondary" style={{ whiteSpace: 'nowrap' }}>{q}</button>
-              ))}
-            </div>
             <form onSubmit={(e) => { e.preventDefault(); handleSend(); }} style={{ display: 'flex', gap: '0.5rem' }}>
-              <input type="text" value={input} onChange={(e) => setInput(e.target.value)} placeholder="Nhập câu hỏi cần tra cứu..." className="form-input" />
+              <input type="text" value={input} onChange={(e) => setInput(e.target.value)} placeholder="Nhập câu hỏi để tra cứu dữ liệu CĐR..." className="form-input" />
               <button type="submit" disabled={isLoading} className="btn btn-primary btn-icon"><Send size={16} /></button>
             </form>
           </div>
@@ -185,68 +173,20 @@ export const AiAssistantPage: React.FC = () => {
       {/* TAB 2: ANALYTICS */}
       {activeTab === 'analytics' && (
         <div className="glass-card">
-          <div className="glass-card-header">
-            <div>
-              <h3 className="glass-card-title">Chẩn Đoán Tự Động Mâu Thuẫn Cấu Trúc CTĐT (AI Matrix Diagnostics)</h3>
-              <p className="glass-card-subtitle">Phát hiện học phần thiếu đo trực tiếp (A), thừa mức độ hoặc lệch bậc Bloom</p>
-            </div>
-            <button className="btn btn-sm btn-primary">Chạy Chẩn Đoán Toàn Diện</button>
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            <div style={{ padding: '1.25rem', backgroundColor: 'var(--bg-surface-elevated)', borderRadius: 'var(--radius-md)', border: '1px solid var(--emerald-500)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.35rem' }}>
-                <strong style={{ color: 'var(--emerald-400)' }}>✓ Độ Phủ Trọng Số A: ĐẠT CHUẨN (100%)</strong>
-                <span className="badge badge-success">KHÔNG CÓ LỖ HỔNG</span>
-              </div>
-              <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Mọi chỉ số PI trong CTĐT KTPM v2023 đều có ít nhất 1 học phần đo trực tiếp A với tổng tỷ trọng đúng 100%.</p>
-            </div>
-
-            <div style={{ padding: '1.25rem', backgroundColor: 'var(--bg-surface-elevated)', borderRadius: 'var(--radius-md)', border: '1px solid var(--cyan-500)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.35rem' }}>
-                <strong style={{ color: 'var(--cyan-400)' }}>✓ Tính Liên Tục Của Bậc Năng Lực Bloom</strong>
-                <span className="badge badge-cyan">TIẾN TRÌNH HỢP LÝ</span>
-              </div>
-              <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Tiến trình học phần tăng dần đều từ Mức 1-2 (Năm 1) ➔ Mức 3 (Năm 2) ➔ Mức 4-5 (Năm 3) ➔ Mức 6 (Khóa luận tốt nghiệp).</p>
-            </div>
-          </div>
+          <EmptyState
+            title="Chưa có Dữ liệu phân tích ma trận"
+            description="Hãy hoàn tất thiết lập chuẩn đầu ra và ma trận liên kết để chạy chẩn đoán AI tự động."
+          />
         </div>
       )}
 
       {/* TAB 3: EARLY WARNINGS */}
       {activeTab === 'early-warnings' && (
         <div className="glass-card">
-          <div className="glass-card-header">
-            <div>
-              <h3 className="glass-card-title">Mô Hình AI Dự Báo Sinh Viên Nguy Cơ Chưa Đạt Chuẩn (Early Warning)</h3>
-              <p className="glass-card-subtitle">Phát hiện sớm dựa trên kết quả bài tập quá trình A1 và điểm danh LMS</p>
-            </div>
-          </div>
-
-          <div className="table-container">
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>Mã Sinh Viên</th>
-                  <th>Họ Và Tên</th>
-                  <th>Lớp Sinh Hoạt</th>
-                  <th>CĐR Có Nguy Cơ</th>
-                  <th>Mức Độ Rủi Ro</th>
-                  <th>Hành Động Khuyến Nghị Của AI</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><code>20230003</code></td>
-                  <td>Lê Hoàng Cường</td>
-                  <td>17IT01</td>
-                  <td><strong>PI 5.1 (Unit Testing)</strong></td>
-                  <td><span className="badge badge-danger">RỦI RO CAO (85%)</span></td>
-                  <td>Gửi thông báo phụ đạo chuyên đề Unit Test bổ sung 2 buổi</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          <EmptyState
+            title="Không có Cảnh báo nguy cơ nào"
+            description="Hệ thống hiện tại không có dữ liệu sinh viên cảnh báo rủi ro."
+          />
         </div>
       )}
     </div>
