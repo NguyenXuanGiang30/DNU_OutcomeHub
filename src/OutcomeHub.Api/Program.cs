@@ -15,7 +15,9 @@ builder.Services.AddScoped<ICurrentUserContext, CurrentUserContext>();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
-// 3. Controllers & API Configuration
+// 3. Controllers, Authentication & API Configuration
+builder.Services.AddAuthentication();
+builder.Services.AddAuthorization();
 builder.Services.AddControllers();
 builder.Services.AddOutcomeHubSwagger();
 
@@ -23,6 +25,8 @@ var app = builder.Build();
 
 // 4. Global Exception & Security Middleware
 app.UseMiddleware<GlobalExceptionMiddleware>();
+app.UseAuthentication();
+app.UseAuthorization();
 
 // 5. Swagger UI
 app.UseSwagger();
