@@ -64,12 +64,16 @@ export const AcademicDataPage: React.FC = () => {
       {/* Page Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
         <div>
+          <div style={{ fontSize: '0.75rem', color: 'var(--primary-400)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.25rem' }}>
+            Dữ Liệu Đào Tạo
+          </div>
           <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
-            Quản Lý Dữ Liệu Đào Tạo Cơ Sở
+            {activeTab === 'org-units' && 'Đơn Vị – Khoa / Viện'}
+            {activeTab === 'programs' && 'Ngành Đào Tạo Trực Thuộc'}
+            {activeTab === 'cohorts' && 'Danh Sách Khóa Tuyển Sinh (K15 - K18)'}
+            {activeTab === 'students' && 'Hồ Sơ Sinh Viên & Định Tuyến CTĐT'}
+            {activeTab === 'courses' && 'Danh Mục Học Phần Toàn Trường'}
           </h2>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', marginTop: '0.25rem' }}>
-            Quản lý danh mục Khoa/Viện, Ngành đào tạo, Khóa tuyển sinh, Danh sách sinh viên và Học phần.
-          </p>
         </div>
 
         <div style={{ display: 'flex', gap: '0.75rem' }}>
@@ -82,27 +86,6 @@ export const AcademicDataPage: React.FC = () => {
             <span>+ Thêm Mới Dữ Liệu</span>
           </button>
         </div>
-      </div>
-
-      {/* Navigation Sub-Tabs */}
-      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', borderBottom: '1px solid var(--border-medium)', paddingBottom: '0.5rem', overflowX: 'auto' }}>
-        {[
-          { key: 'org-units', label: '1. Đơn Vị – Khoa / Viện', icon: Building2 },
-          { key: 'programs', label: '2. Ngành Đào Tạo', icon: GraduationCap },
-          { key: 'cohorts', label: '3. Khóa Tuyển Sinh (K15 - K18)', icon: Calendar },
-          { key: 'students', label: '4. Danh Sách Sinh Viên', icon: Users },
-          { key: 'courses', label: '5. Danh Mục Học Phần', icon: BookOpen },
-        ].map((tab) => (
-          <button
-            key={tab.key}
-            onClick={() => handleTabClick(tab.key)}
-            className={`btn ${activeTab === tab.key ? 'btn-primary' : 'btn-secondary'}`}
-            style={{ fontSize: '0.8125rem' }}
-          >
-            <tab.icon size={16} />
-            <span>{tab.label}</span>
-          </button>
-        ))}
       </div>
 
       {/* Filter / Search Bar */}

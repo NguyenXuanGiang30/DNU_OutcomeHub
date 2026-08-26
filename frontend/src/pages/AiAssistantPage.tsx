@@ -101,32 +101,15 @@ export const AiAssistantPage: React.FC = () => {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
         <div>
+          <div style={{ fontSize: '0.75rem', color: 'var(--primary-400)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.25rem' }}>
+            Trợ Lý Dữ Liệu
+          </div>
           <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
-            Trợ Lý Dữ Liệu Học Thuật & AI OBE
+            {activeTab === 'chatbot' && 'Chatbot Truy Vấn Chuẩn Đầu Ra (AI RAG Assistant)'}
+            {activeTab === 'analytics' && 'Phân Tích Dữ Liệu & Chẩn Đoán Cấu Trúc CTĐT'}
+            {activeTab === 'early-warnings' && 'Cảnh Báo Sớm Nguy Cơ Sinh Viên Chưa Đạt Chuẩn'}
           </h2>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', marginTop: '0.25rem' }}>
-            Trợ lý hỏi đáp RAG có trích dẫn nguồn, động cơ phân tích xu hướng học thuật và chẩn đoán mâu thuẫn ma trận CĐR.
-          </p>
         </div>
-      </div>
-
-      {/* Navigation Sub-Tabs */}
-      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', borderBottom: '1px solid var(--border-medium)', paddingBottom: '0.5rem', overflowX: 'auto' }}>
-        {[
-          { key: 'chatbot', label: '1. Chatbot Truy Vấn CĐR (RAG)', icon: Bot },
-          { key: 'analytics', label: '2. Phân Tích & Chẩn Đoán Dữ Liệu', icon: TrendingUp },
-          { key: 'early-warnings', label: '3. Cảnh Báo Sớm Nguy Cơ & Anomaly', icon: AlertTriangle },
-        ].map((tab) => (
-          <button
-            key={tab.key}
-            onClick={() => handleTabClick(tab.key)}
-            className={`btn ${activeTab === tab.key ? 'btn-primary' : 'btn-secondary'}`}
-            style={{ fontSize: '0.8125rem' }}
-          >
-            <tab.icon size={16} />
-            <span>{tab.label}</span>
-          </button>
-        ))}
       </div>
 
       {/* TAB 1: CHATBOT */}

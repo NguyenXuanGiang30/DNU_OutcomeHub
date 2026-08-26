@@ -86,12 +86,20 @@ export const CurriculumMatrixPage: React.FC = () => {
       {/* Header Banner */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
         <div>
+          <div style={{ fontSize: '0.75rem', color: 'var(--primary-400)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.25rem' }}>
+            Chương Trình & Chuẩn Đầu Ra
+          </div>
           <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
-            Chương Trình Đào Tạo & Chuẩn Đầu Ra
+            {activeTab === 'matrix' && 'Ma Trận Liên Kết CĐR (I/R/M/A)'}
+            {activeTab === 'programs' && 'Chương Trình Đào Tạo Trực Thuộc'}
+            {activeTab === 'versions' && 'Quản Lý Các Phiên Bản CTĐT'}
+            {activeTab === 'pos' && 'Mục Tiêu Đào Tạo (Program Objectives - PO)'}
+            {activeTab === 'plos' && 'Chuẩn Đầu Ra Chương Trình (PLO1 – PLO9)'}
+            {activeTab === 'pis' && 'Chỉ Báo Thực Hiện (Performance Indicators - PI)'}
+            {activeTab === 'weight-a' && 'Trọng Số Đo Trực Tiếp A Theo CTĐT (100%)'}
+            {activeTab === 'clos' && 'Chuẩn Đầu Ra Học Phần (CLO)'}
+            {activeTab === 'prerequisites' && 'Sơ Đồ Đồ Thị Tiên Quyết (DAG)'}
           </h2>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', marginTop: '0.25rem' }}>
-            Quản lý cấu trúc PO, PLO, PI, Trọng số A, CLO và Ma trận 2 chiều I/R/M/A theo từng phiên bản CTĐT & Khóa.
-          </p>
         </div>
 
         <div style={{ display: 'flex', gap: '0.75rem' }}>
@@ -104,30 +112,6 @@ export const CurriculumMatrixPage: React.FC = () => {
             <span>+ Tạo Mới / Cập Nhật CĐR</span>
           </button>
         </div>
-      </div>
-
-      {/* Navigation Sub-Tabs */}
-      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', borderBottom: '1px solid var(--border-medium)', paddingBottom: '0.5rem', overflowX: 'auto' }}>
-        {[
-          { key: 'matrix', label: '1. Ma Trận Liên Kết (I/R/M/A)', icon: Network },
-          { key: 'programs', label: '2. Chương Trình Đào Tạo', icon: BookOpen },
-          { key: 'versions', label: '3. Phiên Bản CTĐT', icon: BookOpen },
-          { key: 'pos', label: '4. Mục Tiêu Đào Tạo (PO)', icon: Target },
-          { key: 'plos', label: '5. Chuẩn Đầu Ra (PLO1 - PLO9)', icon: Award },
-          { key: 'pis', label: '6. Chỉ Báo Thực Hiện (PI)', icon: Hash },
-          { key: 'weight-a', label: '7. Trọng Số Đo Trực Tiếp A', icon: Scale },
-          { key: 'clos', label: '8. Chuẩn Đầu Ra Học Phần (CLO)', icon: FileCheck2 },
-        ].map((tab) => (
-          <button
-            key={tab.key}
-            onClick={() => handleTabClick(tab.key)}
-            className={`btn ${activeTab === tab.key ? 'btn-primary' : 'btn-secondary'}`}
-            style={{ fontSize: '0.8125rem' }}
-          >
-            <tab.icon size={16} />
-            <span>{tab.label}</span>
-          </button>
-        ))}
       </div>
 
       {/* Scope Selector Bar */}

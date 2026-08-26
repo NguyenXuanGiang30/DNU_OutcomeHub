@@ -63,40 +63,23 @@ export const GovernanceIamPage: React.FC = () => {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
         <div>
+          <div style={{ fontSize: '0.75rem', color: 'var(--primary-400)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.25rem' }}>
+            Quản Trị Hệ Thống
+          </div>
           <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
-            Quản Trị Hệ Thống, Phân Quyền & Audit Trail
+            {(activeTab === 'users') && 'Danh Sách Người Dùng & Trạng Thái Xác Thực'}
+            {(activeTab === 'roles' || activeTab === 'roles-scopes') && 'Vai Trò & Phân Quyền Ma Trận Scope'}
+            {(activeTab === 'sod') && 'Chính Sách Tách Biệt Nhiệm Vụ (Separation of Duties - SoD)'}
+            {(activeTab === 'integration' || activeTab === 'sis-lms-integration') && 'Tích Hợp Đồng Bộ Ngoại Vi (SIS / LMS) & Webhooks'}
+            {(activeTab === 'audit' || activeTab === 'audit-logs') && 'Chuỗi Nhật Ký Kiểm Toán Bất Biến (Immutable Hash Chain)'}
+            {(activeTab === 'config' || activeTab === 'system-config') && 'Cấu Hình Tham Số Hệ Thống & Thuật Toán OBE'}
           </h2>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', marginTop: '0.25rem' }}>
-            Quản lý tài khoản người dùng, phân quyền theo Scope, tích hợp SIS/LMS, kiểm toán bất biến và cấu hình tham số hệ thống.
-          </p>
         </div>
 
         <button onClick={() => setIsModalOpen(true)} className="btn btn-primary">
           <Key size={16} />
           <span>+ Gán Quyền Mới Theo Scope</span>
         </button>
-      </div>
-
-      {/* Navigation Sub-Tabs */}
-      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', borderBottom: '1px solid var(--border-medium)', paddingBottom: '0.5rem', overflowX: 'auto' }}>
-        {[
-          { key: 'users', label: '1. Người Dùng Hệ Thống', icon: Users },
-          { key: 'roles-scopes', label: '2. Vai Trò & Phân Quyền Scope', icon: UserCheck },
-          { key: 'sod', label: '3. Tách Biệt Nhiệm Vụ (SoD)', icon: Lock },
-          { key: 'sis-lms-integration', label: '4. Tích Hợp SIS/LMS & Webhook', icon: Zap },
-          { key: 'audit-logs', label: '5. Nhật Ký Kiểm Toán (Hash Chain)', icon: History, badge: 'SHA-256' },
-          { key: 'system-config', label: '6. Cấu Hình Hệ Thống', icon: Settings },
-        ].map((tab) => (
-          <button
-            key={tab.key}
-            onClick={() => handleTabClick(tab.key)}
-            className={`btn ${activeTab === tab.key || (activeTab === 'roles' && tab.key === 'roles-scopes') || (activeTab === 'integration' && tab.key === 'sis-lms-integration') || (activeTab === 'audit' && tab.key === 'audit-logs') || (activeTab === 'config' && tab.key === 'system-config') ? 'btn-primary' : 'btn-secondary'}`}
-            style={{ fontSize: '0.8125rem' }}
-          >
-            <tab.icon size={16} />
-            <span>{tab.label}</span>
-          </button>
-        ))}
       </div>
 
       {/* TAB 1: USERS */}

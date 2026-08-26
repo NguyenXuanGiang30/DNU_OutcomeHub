@@ -63,12 +63,17 @@ export const SyllabusPortfolioPage: React.FC = () => {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
         <div>
+          <div style={{ fontSize: '0.75rem', color: 'var(--primary-400)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.25rem' }}>
+            Đề Cương & Đánh Giá
+          </div>
           <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
-            Đề Cương & Đánh Giá Học Phần
+            {activeTab === 'bm13' && 'Đề Cương Chi Tiết Học Phần (Mẫu BM13)'}
+            {activeTab === 'plans' && 'Kế Hoạch Đánh Giá Học Phần (A1, A2, A3)'}
+            {activeTab === 'blueprints' && 'Ma Trận Đề Thi & Ngân Hàng Câu Hỏi (Exam Blueprint)'}
+            {activeTab === 'rubrics' && 'Tiêu Chí Chấm Điểm Rubric Định Lượng'}
+            {activeTab === 'approvals' && 'Quy Trình Ký Duyệt Số Hóa Đề Cương BM13'}
+            {activeTab === 'exam-approvals' && 'Phê Duyệt Đề Thi & Đáp Án Thang Điểm'}
           </h2>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', marginTop: '0.25rem' }}>
-            Quản lý Đề cương BM13, Kế hoạch đánh giá, Ma trận đề thi (Blueprint), Rubric và Quy trình phê duyệt số hóa.
-          </p>
         </div>
 
         <div style={{ display: 'flex', gap: '0.75rem' }}>
@@ -81,28 +86,6 @@ export const SyllabusPortfolioPage: React.FC = () => {
             <span>+ Thêm Mới / Cập Nhật</span>
           </button>
         </div>
-      </div>
-
-      {/* Navigation Sub-Tabs */}
-      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', borderBottom: '1px solid var(--border-medium)', paddingBottom: '0.5rem', overflowX: 'auto' }}>
-        {[
-          { key: 'bm13', label: '1. Đề Cương Chi Tiết (BM13)', icon: BookOpen },
-          { key: 'plans', label: '2. Kế Hoạch Đánh Giá (A1, A2, A3)', icon: ClipboardList },
-          { key: 'blueprints', label: '3. Đề Thi – Bài Đánh Giá (Blueprint)', icon: FileCheck },
-          { key: 'rubrics', label: '4. Tiêu Chí Chấm Rubric', icon: Layers },
-          { key: 'approvals', label: '5. Phê Duyệt Đề Cương', icon: UserCheck },
-          { key: 'exam-approvals', label: '6. Phê Duyệt Đề Thi', icon: ShieldCheck },
-        ].map((tab) => (
-          <button
-            key={tab.key}
-            onClick={() => handleTabClick(tab.key)}
-            className={`btn ${activeTab === tab.key ? 'btn-primary' : 'btn-secondary'}`}
-            style={{ fontSize: '0.8125rem' }}
-          >
-            <tab.icon size={16} />
-            <span>{tab.label}</span>
-          </button>
-        ))}
       </div>
 
       {/* Scope Selector */}

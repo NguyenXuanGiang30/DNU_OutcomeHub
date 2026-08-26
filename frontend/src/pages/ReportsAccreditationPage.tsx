@@ -74,12 +74,16 @@ export const ReportsAccreditationPage: React.FC = () => {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
         <div>
+          <div style={{ fontSize: '0.75rem', color: 'var(--primary-400)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.25rem' }}>
+            Kết Quả & Cải Tiến
+          </div>
           <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
-            Kết Quả Chuẩn Đầu Ra & Báo Cáo Kiểm Định
+            {activeTab === 'summary-reports' && 'Báo Cáo Tổng Hợp & Hồ Sơ Tự Đánh Giá (AUN-QA / ABET)'}
+            {activeTab === 'plo' && 'Kết Quả Đạt Chuẩn Đầu Ra (PLO1 – PLO9)'}
+            {activeTab === 'pi' && 'Kết Quả Đạt Từng Chỉ Báo Thực Hiện (PI)'}
+            {activeTab === 'clo' && 'Kết Quả Đạt Chuẩn Đầu Ra Học Phần (CLO)'}
+            {activeTab === 'warnings' && 'Danh Sách Cảnh Báo Sinh Viên Chưa Đạt Chuẩn'}
           </h2>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', marginTop: '0.25rem' }}>
-            Xem chi tiết kết quả CLO, PI, PLO, cảnh báo sinh viên chưa đạt và xuất báo cáo tự đánh giá AUN-QA / ABET / MOET.
-          </p>
         </div>
 
         <div style={{ display: 'flex', gap: '0.75rem' }}>
@@ -92,27 +96,6 @@ export const ReportsAccreditationPage: React.FC = () => {
             <span>Xuất Báo Cáo Tự Đánh Giá (PDF)</span>
           </button>
         </div>
-      </div>
-
-      {/* Navigation Sub-Tabs */}
-      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', borderBottom: '1px solid var(--border-medium)', paddingBottom: '0.5rem', overflowX: 'auto' }}>
-        {[
-          { key: 'summary-reports', label: '1. Báo Cáo Tổng Hợp Kiểm Định', icon: FileBarChart },
-          { key: 'plo', label: '2. Kết Quả CĐR (PLO)', icon: Award },
-          { key: 'pi', label: '3. Kết Quả Chỉ Báo (PI)', icon: Layers },
-          { key: 'clo', label: '4. Kết Quả Môn Học (CLO)', icon: FileCheck2 },
-          { key: 'warnings', label: '5. Cảnh Báo Chưa Đạt', icon: AlertTriangle },
-        ].map((tab) => (
-          <button
-            key={tab.key}
-            onClick={() => handleTabClick(tab.key)}
-            className={`btn ${activeTab === tab.key ? 'btn-primary' : 'btn-secondary'}`}
-            style={{ fontSize: '0.8125rem' }}
-          >
-            <tab.icon size={16} />
-            <span>{tab.label}</span>
-          </button>
-        ))}
       </div>
 
       {/* TAB: BÁO CÁO TỔNG HỢP */}

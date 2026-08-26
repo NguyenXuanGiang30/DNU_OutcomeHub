@@ -105,37 +105,18 @@ export const CqiImprovementPage: React.FC = () => {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
         <div>
+          <div style={{ fontSize: '0.75rem', color: 'var(--primary-400)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.25rem' }}>
+            Kết Quả & Cải Tiến
+          </div>
           <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
-            Cải Tiến Chất Lượng Liên Tục (CQI Management)
+            {activeTab === 'action-plans' && 'Kế Hoạch Cải Tiến Chất Lượng (Bảng Kanban CQI)'}
+            {activeTab === 'monitoring' && 'Theo Dõi Tiến Độ & Đo Lường Lại Nghiệm Thu'}
           </h2>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', marginTop: '0.25rem' }}>
-            Quản lý vòng lặp khép kín: Phát hiện vấn đề ➔ Phân tích nguyên nhân 5-Why ➔ Kế hoạch hành động ➔ Đo lường lại ➔ Nghiệm thu đóng.
-          </p>
         </div>
 
         <button onClick={() => setIsModalOpen(true)} className="btn btn-primary">
           <Plus size={16} />
           <span>+ Tạo Kế Hoạch CQI Mới</span>
-        </button>
-      </div>
-
-      {/* Sub Tabs */}
-      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', borderBottom: '1px solid var(--border-medium)', paddingBottom: '0.5rem' }}>
-        <button
-          onClick={() => handleTabClick('action-plans')}
-          className={`btn ${activeTab === 'action-plans' ? 'btn-primary' : 'btn-secondary'}`}
-          style={{ fontSize: '0.8125rem' }}
-        >
-          <RefreshCw size={16} />
-          <span>1. Bảng Kế Hoạch Cải Tiến (Kanban)</span>
-        </button>
-        <button
-          onClick={() => handleTabClick('monitoring')}
-          className={`btn ${activeTab === 'monitoring' ? 'btn-primary' : 'btn-secondary'}`}
-          style={{ fontSize: '0.8125rem' }}
-        >
-          <TrendingUp size={16} />
-          <span>2. Theo Dõi Tiến Độ & Đo Lường Lại</span>
         </button>
       </div>
 

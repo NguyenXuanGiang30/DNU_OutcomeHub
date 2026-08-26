@@ -100,12 +100,19 @@ export const MeasurementScoringPage: React.FC = () => {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
         <div>
-          <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
+          <div style={{ fontSize: '0.75rem', color: 'var(--primary-400)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.25rem' }}>
             Đo Lường Chuẩn Đầu Ra
+          </div>
+          <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
+            {activeTab === 'periods' && 'Danh Sách Các Đợt Đo Lường (Measurement Periods)'}
+            {activeTab === 'sources' && 'Nguồn Đo Trực Tiếp PI (A Sources)'}
+            {activeTab === 'assignments' && 'Phân Công Giảng Viên Chấm Điểm Rubric'}
+            {activeTab === 'sync-grades' && 'Nhập & Đồng Bộ Điểm Quá Trình (SIS / LMS)'}
+            {activeTab === 'rubric-scoring' && 'Bảng Điểm Rubric Chi Tiết Từng Tiêu Chí'}
+            {activeTab === 'data-validation' && 'Kiểm Tra Dữ Liệu Điểm Đo Lường'}
+            {activeTab === 'calculation' && 'Động Cơ Tính Toán Kết Quả Đạt CĐR'}
+            {activeTab === 'evidence' && 'Minh Chứng Đo Lường & Bài Làm Mẫu Sinh Viên'}
           </h2>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', marginTop: '0.25rem' }}>
-            Quản lý đợt đo, nguồn đo PI, phân công chấm, chấm Rubric theo tiêu chí, kiểm tra dữ liệu và tính toán CĐR.
-          </p>
         </div>
 
         <div style={{ display: 'flex', gap: '0.75rem' }}>
@@ -118,30 +125,6 @@ export const MeasurementScoringPage: React.FC = () => {
             <span>+ Tạo Đợt Đo / Nguồn Đo</span>
           </button>
         </div>
-      </div>
-
-      {/* Navigation Sub-Tabs */}
-      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', borderBottom: '1px solid var(--border-medium)', paddingBottom: '0.5rem', overflowX: 'auto' }}>
-        {[
-          { key: 'periods', label: '1. Đợt Đo Lường', icon: Calendar },
-          { key: 'sources', label: '2. Nguồn Đo PI (A)', icon: Layers },
-          { key: 'assignments', label: '3. Phân Công Giảng Viên', icon: UserCheck },
-          { key: 'sync-grades', label: '4. Nhập – Đồng Bộ Điểm', icon: RefreshCw },
-          { key: 'rubric-scoring', label: '5. Chấm Theo Rubric', icon: ClipboardCheck },
-          { key: 'data-validation', label: '6. Kiểm Tra Dữ Liệu', icon: FileCheck2 },
-          { key: 'calculation', label: '7. Tính Toán Kết Quả', icon: Calculator },
-          { key: 'evidence', label: '8. Minh Chứng Đo Lường', icon: FolderArchive },
-        ].map((tab) => (
-          <button
-            key={tab.key}
-            onClick={() => handleTabClick(tab.key)}
-            className={`btn ${activeTab === tab.key ? 'btn-primary' : 'btn-secondary'}`}
-            style={{ fontSize: '0.8125rem' }}
-          >
-            <tab.icon size={16} />
-            <span>{tab.label}</span>
-          </button>
-        ))}
       </div>
 
       {/* Scope Selector Bar */}
