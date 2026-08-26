@@ -20,4 +20,30 @@ public sealed class SodRule
     public Permission PermissionA { get; private set; } = null!;
     public Permission PermissionB { get; private set; } = null!;
     public IReadOnlyCollection<SodException> Exceptions => _exceptions;
+
+    public static SodRule Create(
+        Guid id,
+        Guid policyVersionId,
+        string resourceType,
+        Guid permissionAId,
+        Guid permissionBId,
+        string conflictMode,
+        string severity)
+    {
+        if (permissionAId == permissionBId)
+        {
+            throw new ArgumentException("PermissionA and PermissionB must be different.", nameof(permissionBId));
+        }
+
+        return new SodRule
+        {
+            Id = id,
+            PolicyVersionId = policyVersionId,
+            ResourceType = resourceType.Trim(),
+            PermissionAId = permissionAId,
+            PermissionBId = permissionBId,
+            ConflictMode = conflictMode,
+            Severity = severity
+        };
+    }
 }

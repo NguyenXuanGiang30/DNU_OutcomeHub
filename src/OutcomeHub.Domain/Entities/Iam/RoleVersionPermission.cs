@@ -18,4 +18,19 @@ public sealed class RoleVersionPermission
     public RoleVersion RoleVersion { get; private set; } = null!;
     public Permission Permission { get; private set; } = null!;
     public Principal GrantedByPrincipal { get; private set; } = null!;
+
+    public static RoleVersionPermission Create(
+        Guid roleVersionId,
+        Guid permissionId,
+        DateTimeOffset grantedAt,
+        Guid grantedBy)
+    {
+        return new RoleVersionPermission
+        {
+            RoleVersionId = roleVersionId,
+            PermissionId = permissionId,
+            GrantedAt = grantedAt,
+            GrantedBy = grantedBy
+        };
+    }
 }

@@ -29,4 +29,35 @@ public sealed class RoleVersion
     public DecisionRecord? Decision { get; private set; }
     public Principal CreatedByPrincipal { get; private set; } = null!;
     public IReadOnlyCollection<RoleVersionPermission> Permissions => _permissions;
+
+    public static RoleVersion Create(
+        Guid id,
+        Guid roleId,
+        int versionNo,
+        string status,
+        DateOnly effectiveFrom,
+        DateOnly? effectiveTo,
+        Guid workflowInstanceId,
+        Guid? decisionId,
+        string permissionSetChecksum,
+        string checksum,
+        Guid createdBy,
+        DateTimeOffset createdAt)
+    {
+        return new RoleVersion
+        {
+            Id = id,
+            RoleId = roleId,
+            VersionNo = versionNo,
+            Status = status,
+            EffectiveFrom = effectiveFrom,
+            EffectiveTo = effectiveTo,
+            WorkflowInstanceId = workflowInstanceId,
+            DecisionId = decisionId,
+            PermissionSetChecksum = permissionSetChecksum,
+            Checksum = checksum,
+            CreatedBy = createdBy,
+            CreatedAt = createdAt
+        };
+    }
 }

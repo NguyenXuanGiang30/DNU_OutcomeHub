@@ -39,4 +39,63 @@ public sealed class RoleAssignment
     public WorkflowInstance WorkflowInstance { get; private set; } = null!;
     public SodPolicyVersion SodPolicyVersion { get; private set; } = null!;
     public Principal RequestedByPrincipal { get; private set; } = null!;
+
+    public static RoleAssignment Create(
+        Guid id,
+        Guid principalId,
+        Guid roleId,
+        Guid roleVersionId,
+        Guid accessScopeId,
+        DateTimeOffset effectiveFrom,
+        DateTimeOffset effectiveTo,
+        string status,
+        string source,
+        string? sourceReference,
+        Guid grantedBy,
+        Guid? approvedBy,
+        Guid workflowInstanceId,
+        Guid sodPolicyVersionId,
+        string authorizationSnapshotChecksum,
+        Guid requestedBy,
+        DateTimeOffset requestedAt,
+        DateTimeOffset? approvedAt,
+        string reason)
+    {
+        if (effectiveTo <= effectiveFrom)
+        {
+            throw new ArgumentException("EffectiveTo must be after EffectiveFrom.", nameof(effectiveTo));
+        }
+
+        return new RoleAssignment
+        {
+            Id = id,
+            PrincipalId = principalId,
+            RoleId = roleId,
+            RoleVersionId = roleVersionId,
+            AccessScopeId = accessScopeId,
+            EffectiveFrom = effectiveFrom,
+            EffectiveTo = effectiveTo,
+            Status = status,
+            Source = source,
+            SourceReference = sourceReference,
+            GrantedBy = grantedBy,
+            ApprovedBy = approvedBy,
+            WorkflowInstanceId = workflowInstanceId,
+            SodPolicyVersionId = sodPolicyVersionId,
+            AuthorizationSnapshotChecksum = authorizationSnapshotChecksum,
+            RequestedBy = requestedBy,
+            RequestedAt = requestedAt,
+            ApprovedAt = approvedAt,
+            RevokedAt = null,
+            Reason = reason.Trim(),
+            RevokeReason = null
+        };
+    }
+
+    public void Revoke(string revokeReason, DateTimeOffset revokedAt)
+    {
+        Status = "REVOKED";
+        RevokeReason = revokeReason.Trim();
+        RevokedAt = revokedAt;
+    }
 }

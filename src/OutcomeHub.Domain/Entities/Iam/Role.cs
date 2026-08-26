@@ -16,4 +16,23 @@ public sealed class Role
     public DateTimeOffset CreatedAt { get; private set; }
 
     public IReadOnlyCollection<RoleVersion> Versions => _versions;
+
+    public static Role Create(
+        Guid id,
+        string code,
+        string name,
+        bool isSystem,
+        string status,
+        DateTimeOffset createdAt)
+    {
+        return new Role
+        {
+            Id = id,
+            Code = code.Trim(),
+            Name = name.Trim(),
+            IsSystem = isSystem,
+            Status = status,
+            CreatedAt = createdAt
+        };
+    }
 }

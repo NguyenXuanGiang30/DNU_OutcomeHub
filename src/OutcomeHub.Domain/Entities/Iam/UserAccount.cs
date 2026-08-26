@@ -17,4 +17,27 @@ public sealed class UserAccount
 
     public Principal Principal { get; private set; } = null!;
     public Person? Person { get; private set; }
+
+    public static UserAccount Create(
+        Guid principalId,
+        Guid? personId,
+        string? username,
+        byte[]? emailCiphertext,
+        string? emailLookupHash)
+    {
+        return new UserAccount
+        {
+            PrincipalId = principalId,
+            PersonId = personId,
+            Username = username?.Trim(),
+            EmailCiphertext = emailCiphertext,
+            EmailLookupHash = emailLookupHash,
+            LastLoginAt = null
+        };
+    }
+
+    public void RecordLogin(DateTimeOffset loginAt)
+    {
+        LastLoginAt = loginAt;
+    }
 }

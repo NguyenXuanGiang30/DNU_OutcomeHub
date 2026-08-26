@@ -1,4 +1,6 @@
 using System.Net;
+using System.Security.Cryptography;
+using System.Text;
 using OutcomeHub.Domain.Entities.Academic;
 using OutcomeHub.Domain.Entities.Iam;
 using OutcomeHub.Domain.Entities.Measurement;
@@ -59,4 +61,51 @@ public sealed class AuditEvent
     public CourseOffering? CourseOffering { get; private set; }
     public MeasurementPeriod? MeasurementPeriod { get; private set; }
     public Student? Student { get; private set; }
+
+    public static AuditEvent Create(
+        Guid id,
+        DateTimeOffset occurredAt,
+        Guid? requestId,
+        Guid? correlationId,
+        Guid? actorPrincipalId,
+        string actorKind,
+        string action,
+        string category,
+        string outcome,
+        string resourceType,
+        Guid? resourceId,
+        string? purpose,
+        string? reason,
+        string classification,
+        Guid chainId,
+        long chainSequence,
+        string? previousHash)
+    {
+        var raw = $"{occurredAt:O}|{id}|{actorPrincipalId}|{action}|{category}|{outcome}|{resourceType}|{resourceId}|{chainId}|{chainSequence}|{previousHash}";
+        var eventHash = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(raw))).ToLowerInvariant();
+
+        return new AuditEvent
+        {
+            Id = id,
+            OccurredAt = occurredAt,
+            RequestId = requestId,
+            CorrelationId = correlationId,
+            ActorPrincipalId = actorPrincipalId,
+            ActorKind = actorKind,
+            Action = action,
+            Category = category,
+            Outcome = outcome,
+            ResourceType = resourceType,
+            ResourceId = resourceId,
+            Purpose = purpose,
+            Reason = reason,
+            Classification = classification,
+            ChainId = chainId,
+            ChainSequence = chainSequence,
+            PreviousHash = previousHash,
+            EventHash = eventHash,
+            HashAlgorithm = "SHA-256",
+            CanonicalizationVersion = 1
+        };
+    }
 }

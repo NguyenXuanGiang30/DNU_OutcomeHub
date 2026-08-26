@@ -37,6 +37,9 @@ public static class InfrastructureServiceCollectionExtensions
         services.AddScoped<Application.Interfaces.Services.IOutcomeCalculationService, Services.OutcomeCalculationService>();
         services.AddScoped<IImprovementPlanRepository, Persistence.Repositories.Quality.ImprovementPlanRepository>();
         services.AddScoped<Application.Interfaces.Services.IImprovementPlanService, Services.ImprovementPlanService>();
+        services.AddScoped<IIamRepository, Persistence.Repositories.Iam.IamRepository>();
+        services.AddScoped<IAuditRepository, Persistence.Repositories.Audit.AuditRepository>();
+        services.AddScoped<Application.Interfaces.Services.IIamService, Services.IamService>();
 
         services.AddDbContext<OutcomeHubDbContext>((serviceProvider, options) =>
         {

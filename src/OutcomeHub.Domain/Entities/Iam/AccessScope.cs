@@ -1,3 +1,5 @@
+using System.Security.Cryptography;
+using System.Text;
 using OutcomeHub.Domain.Entities.Academic;
 using OutcomeHub.Domain.Entities.Measurement;
 
@@ -33,4 +35,41 @@ public sealed class AccessScope
     public CourseOffering? CourseOffering { get; private set; }
     public MeasurementPeriod? MeasurementPeriod { get; private set; }
     public Principal? SubjectPrincipal { get; private set; }
+
+    public static AccessScope Create(
+        Guid id,
+        string scopeType,
+        Guid? orgUnitId,
+        Guid? programId,
+        Guid? programVersionId,
+        Guid? cohortId,
+        Guid? curriculumPathId,
+        Guid? courseId,
+        Guid? courseOfferingId,
+        Guid? measurementPeriodId,
+        Guid? subjectPrincipalId,
+        bool includeDescendants,
+        DateTimeOffset createdAt)
+    {
+        var rawString = $"{scopeType}|{orgUnitId}|{programId}|{programVersionId}|{cohortId}|{curriculumPathId}|{courseId}|{courseOfferingId}|{measurementPeriodId}|{subjectPrincipalId}|{includeDescendants}";
+        var hash = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(rawString))).ToLowerInvariant();
+
+        return new AccessScope
+        {
+            Id = id,
+            ScopeType = scopeType,
+            OrgUnitId = orgUnitId,
+            ProgramId = programId,
+            ProgramVersionId = programVersionId,
+            CohortId = cohortId,
+            CurriculumPathId = curriculumPathId,
+            CourseId = courseId,
+            CourseOfferingId = courseOfferingId,
+            MeasurementPeriodId = measurementPeriodId,
+            SubjectPrincipalId = subjectPrincipalId,
+            IncludeDescendants = includeDescendants,
+            Checksum = hash,
+            CreatedAt = createdAt
+        };
+    }
 }

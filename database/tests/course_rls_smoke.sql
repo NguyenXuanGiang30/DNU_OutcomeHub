@@ -311,7 +311,7 @@ BEGIN
     END IF;
 
     BEGIN
-        PERFORM 1 FROM iam.role LIMIT 1;
+        PERFORM 1 FROM iam.database_principal_binding LIMIT 1;
         RAISE EXCEPTION 'Application role unexpectedly read IAM tables.';
     EXCEPTION
         WHEN insufficient_privilege THEN

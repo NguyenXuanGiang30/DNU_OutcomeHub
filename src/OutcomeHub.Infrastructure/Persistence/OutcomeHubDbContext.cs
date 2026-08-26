@@ -57,8 +57,24 @@ public sealed class OutcomeHubDbContext(DbContextOptions<OutcomeHubDbContext> op
     public DbSet<Principal> Principals => Set<Principal>();
     public DbSet<UserAccount> UserAccounts => Set<UserAccount>();
     public DbSet<Role> Roles => Set<Role>();
+    public DbSet<RoleVersion> RoleVersions => Set<RoleVersion>();
+    public DbSet<RoleVersionPermission> RoleVersionPermissions => Set<RoleVersionPermission>();
     public DbSet<RoleAssignment> RoleAssignments => Set<RoleAssignment>();
     public DbSet<AccessScope> AccessScopes => Set<AccessScope>();
+    public DbSet<Permission> Permissions => Set<Permission>();
+    public DbSet<SodPolicyVersion> SodPolicyVersions => Set<SodPolicyVersion>();
+    public DbSet<SodRule> SodRules => Set<SodRule>();
+    public DbSet<SodException> SodExceptions => Set<SodException>();
+    public DbSet<AuthSession> AuthSessions => Set<AuthSession>();
+    public DbSet<IdentityProvider> IdentityProviders => Set<IdentityProvider>();
+    public DbSet<ExternalIdentity> ExternalIdentities => Set<ExternalIdentity>();
+
+    // Audit DbSets
+    public DbSet<OutcomeHub.Domain.Entities.Audit.AuditEvent> AuditEvents => Set<OutcomeHub.Domain.Entities.Audit.AuditEvent>();
+
+    // Governance DbSets
+    public DbSet<OutcomeHub.Domain.Entities.Governance.LegalHold> LegalHolds => Set<OutcomeHub.Domain.Entities.Governance.LegalHold>();
+    public DbSet<OutcomeHub.Domain.Entities.Governance.LegalHoldItem> LegalHoldItems => Set<OutcomeHub.Domain.Entities.Governance.LegalHoldItem>();
 
     // Quality DbSets
     public DbSet<OutcomeHub.Domain.Entities.Quality.ImprovementPlan> ImprovementPlans => Set<OutcomeHub.Domain.Entities.Quality.ImprovementPlan>();

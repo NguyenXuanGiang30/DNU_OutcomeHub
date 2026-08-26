@@ -22,9 +22,9 @@
 | 6 | **Kết quả, phân tích và xuất báo cáo** (Mục 8.6) | `FR-RES` | 14 | 10/14 | 71.4% |
 | 7 | **Cải tiến chất lượng (CQI)** (Mục 8.7) | `FR-CQI` | 6 | 6/6 | 100.0% |
 | 8 | **Chatbot và AI** (Mục 8.8) | `FR-AI` | 8 | 0/8 | 0% |
-| 9 | **Người dùng, quyền và cấu hình** (Mục 8.9) | `FR-ADM` | 8 | 0/8 | 0% |
+| 9 | **Người dùng, quyền và cấu hình** (Mục 8.9) | `FR-ADM` | 8 | 8/8 | 100.0% |
 | 10 | **Tích hợp và API** (Mục 8.10) | `FR-INT` | 8 | 1/8 | 12.5% |
-| | **TỔNG CỘNG** | | **121** | **58 / 121** | **47.9%** |
+| | **TỔNG CỘNG** | | **121** | **66 / 121** | **54.5%** |
 
 ---
 
@@ -166,14 +166,14 @@
 ---
 
 ## 8.9. Người dùng, quyền và cấu hình (8 Yêu cầu)
-- [ ] `[M]` **FR-ADM-01:** SSO OIDC/SAML; ánh xạ danh tính tổ chức; xử lý khóa/nghỉ và phiên đăng nhập.
-- [ ] `[M]` **FR-ADM-02:** Quản lý Role/Permission và scope Khoa–CTĐT–Khóa–Học phần–Lớp–Đợt.
-- [ ] `[M]` **FR-ADM-03:** Gán vai trò có hiệu lực/thời hạn; hỗ trợ template và phê duyệt với vai trò nhạy cảm.
-- [ ] `[M]` **FR-ADM-04:** Separation of duties giữa nhập/chấm, kiểm tra, duyệt/công bố và quản trị hệ thống.
-- [ ] `[M]` **FR-ADM-05:** Audit bất biến cho đăng nhập, xem/xuất điểm, thay đổi cấu hình, tính, duyệt và mở khóa.
-- [ ] `[M]` **FR-ADM-06:** Quản lý từ điển, năm học/HK, ngưỡng mặc định, lịch đồng bộ và trạng thái dịch vụ.
-- [ ] `[M]` **FR-ADM-07:** Chính sách lưu trữ, xóa/ẩn danh, legal hold và xuất toàn bộ dữ liệu khi kết thúc hợp đồng.
-- [ ] `[M]` **FR-ADM-08:** Trang quản trị chỉ hiển thị chức năng được phép; API luôn kiểm tra quyền server-side, không tin UI.
+- [x] `[M]` **FR-ADM-01:** SSO OIDC/SAML; ánh xạ danh tính tổ chức; xử lý khóa/nghỉ và phiên đăng nhập.
+- [x] `[M]` **FR-ADM-02:** Quản lý Role/Permission và scope Khoa–CTĐT–Khóa–Học phần–Lớp–Đợt.
+- [x] `[M]` **FR-ADM-03:** Gán vai trò có hiệu lực/thời hạn; hỗ trợ template và phê duyệt với vai trò nhạy cảm.
+- [x] `[M]` **FR-ADM-04:** Separation of duties giữa nhập/chấm, kiểm tra, duyệt/công bố và quản trị hệ thống.
+- [x] `[M]` **FR-ADM-05:** Audit bất biến cho đăng nhập, xem/xuất điểm, thay đổi cấu hình, tính, duyệt và mở khóa.
+- [x] `[M]` **FR-ADM-06:** Quản lý từ điển, năm học/HK, ngưỡng mặc định, lịch đồng bộ và trạng thái dịch vụ.
+- [x] `[M]` **FR-ADM-07:** Chính sách lưu trữ, xóa/ẩn danh, legal hold và xuất toàn bộ dữ liệu khi kết thúc hợp đồng.
+- [x] `[M]` **FR-ADM-08:** Trang quản trị chỉ hiển thị chức năng được phép; API luôn kiểm tra quyền server-side, không tin UI.
 
 ---
 

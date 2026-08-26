@@ -17,4 +17,33 @@ public sealed class LegalHold
     public Principal Creator { get; private set; } = null!;
     public Principal? Approver { get; private set; }
     public ICollection<LegalHoldItem> Items { get; private set; } = new List<LegalHoldItem>();
+
+    public static LegalHold Create(
+        Guid id,
+        string code,
+        string title,
+        string reason,
+        DateTimeOffset effectiveFrom,
+        Guid createdBy,
+        Guid? approvedBy)
+    {
+        return new LegalHold
+        {
+            Id = id,
+            Code = code.Trim().ToUpperInvariant(),
+            Title = title.Trim(),
+            Reason = reason.Trim(),
+            Status = "ACTIVE",
+            EffectiveFrom = effectiveFrom,
+            ReleasedAt = null,
+            CreatedBy = createdBy,
+            ApprovedBy = approvedBy
+        };
+    }
+
+    public void Release(DateTimeOffset releasedAt)
+    {
+        Status = "RELEASED";
+        ReleasedAt = releasedAt;
+    }
 }
