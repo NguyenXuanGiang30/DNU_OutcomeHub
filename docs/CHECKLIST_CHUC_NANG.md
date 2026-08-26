@@ -23,8 +23,8 @@
 | 7 | **Cải tiến chất lượng (CQI)** (Mục 8.7) | `FR-CQI` | 6 | 6/6 | 100.0% |
 | 8 | **Chatbot và AI** (Mục 8.8) | `FR-AI` | 8 | 0/8 | 0% |
 | 9 | **Người dùng, quyền và cấu hình** (Mục 8.9) | `FR-ADM` | 8 | 8/8 | 100.0% |
-| 10 | **Tích hợp và API** (Mục 8.10) | `FR-INT` | 8 | 1/8 | 12.5% |
-| | **TỔNG CỘNG** | | **121** | **106 / 121** | **87.6%** |
+| 10 | **Tích hợp và API** (Mục 8.10) | `FR-INT` | 8 | 8/8 | 100.0% |
+| | **TỔNG CỘNG** | | **121** | **113 / 121** | **93.4%** |
 
 ---
 
@@ -179,10 +179,10 @@
 
 ## 8.10. Tích hợp và API (8 Yêu cầu)
 - [x] `[M]` **FR-INT-01:** Cung cấp API versioned `/api/v1`, OpenAPI, mã lỗi chuẩn và chính sách tương thích ngược.
-- [ ] `[M]` **FR-INT-02:** Tích hợp SIS/LMS cho SV, CTĐT, khóa, lớp, enrollment, điểm và trạng thái học.
-- [ ] `[M]` **FR-INT-03:** Hỗ trợ tải gia tăng theo updated_since/cursor, idempotency key, checksum và tải lại có kiểm soát.
-- [ ] `[M]` **FR-INT-04:** Staging/quality gate cách ly bản ghi lỗi; dashboard đối soát và quy trình sửa ở nguồn.
-- [ ] `[S]` **FR-INT-05:** Tích hợp DMS/Google Drive/SharePoint theo cấu hình; quyền tối thiểu, metadata và checksum.
-- [ ] `[S]` **FR-INT-06:** Xuất dữ liệu tổng hợp cho BI/kho dữ liệu; không cho truy vấn vượt scope hoặc nhóm quá nhỏ.
-- [ ] `[S]` **FR-INT-07:** Webhook/job bất đồng bộ cho chốt điểm, tính xong, công bố, lỗi đồng bộ và CQI quá hạn.
-- [ ] `[M]` **FR-INT-08:** Service account theo scope, rotation/revocation, rate limit, request ID, metrics và audit API.
+- [x] `[M]` **FR-INT-02:** Tích hợp SIS/LMS cho SV, CTĐT, khóa, lớp, enrollment, điểm và trạng thái học.
+- [x] `[M]` **FR-INT-03:** Hỗ trợ tải gia tăng theo updated_since/cursor, idempotency key, checksum và tải lại có kiểm soát.
+- [x] `[M]` **FR-INT-04:** Staging/quality gate cách ly bản ghi lỗi; dashboard đối soát và quy trình sửa ở nguồn.
+- [x] `[S]` **FR-INT-05:** Tích hợp DMS/Google Drive/SharePoint theo cấu hình; quyền tối thiểu, metadata và checksum.
+- [x] `[S]` **FR-INT-06:** Xuất dữ liệu tổng hợp cho BI/kho dữ liệu; không cho truy vấn vượt scope hoặc nhóm quá nhỏ.
+- [x] `[S]` **FR-INT-07:** Webhook/job bất đồng bộ cho chốt điểm, tính xong, công bố, lỗi đồng bộ và CQI quá hạn.
+- [x] `[M]` **FR-INT-08:** Service account theo scope, rotation/revocation, rate limit, request ID, metrics và audit API.
