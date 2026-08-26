@@ -40,7 +40,7 @@ public sealed class MeasurementPeriodAndScoringIntegrationTests
         string migrationRoot = Path.Combine(AppContext.BaseDirectory, "MigrationSql");
         var runner = new SqlMigrationRunner(migrationConnectionString, migrationRoot);
         var migrationResult = await runner.RunAsync(cancellationToken);
-        Assert.Equal(18, migrationResult.AppliedCount);
+        Assert.Equal(19, migrationResult.AppliedCount);
 
         // Seed development dataset
         await DatabaseBaselineTests.RunDatabaseScriptAsync(

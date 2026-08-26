@@ -21,10 +21,10 @@
 | 5 | **Tính toán Chuẩn đầu ra** (Mục 8.5) | `FR-CAL` | 15 | 15/15 | 100% |
 | 6 | **Báo cáo và phân tích kết quả** (Mục 8.6) | `FR-RES` | 14 | 14/14 | 100% |
 | 7 | **Cải tiến chất lượng (CQI)** (Mục 8.7) | `FR-CQI` | 6 | 6/6 | 100.0% |
-| 8 | **Chatbot và AI** (Mục 8.8) | `FR-AI` | 8 | 0/8 | 0% |
+| 8 | **Chatbot và AI** (Mục 8.8) | `FR-AI` | 8 | 8/8 | 100.0% |
 | 9 | **Người dùng, quyền và cấu hình** (Mục 8.9) | `FR-ADM` | 8 | 8/8 | 100.0% |
 | 10 | **Tích hợp và API** (Mục 8.10) | `FR-INT` | 8 | 8/8 | 100.0% |
-| | **TỔNG CỘNG** | | **121** | **113 / 121** | **93.4%** |
+| | **TỔNG CỘNG** | | **121** | **121 / 121** | **100.0%** |
 
 ---
 
@@ -154,14 +154,14 @@
 ---
 
 ## 8.8. Chatbot và AI (8 Yêu cầu)
-- [ ] `[S]` **FR-AI-01:** Chatbot hỏi đáp Khoa, CTĐT, học phần, kết quả và CQI theo dữ liệu được phép xem.
-- [ ] `[M]` **FR-AI-02:** Câu trả lời có trích dẫn đối tượng/báo cáo, thời điểm dữ liệu và công thức liên quan.
-- [ ] `[M]` **FR-AI-03:** Không trả dữ liệu cá nhân ngoài scope; áp dụng masking, ngưỡng nhóm và audit câu hỏi nhạy cảm.
-- [ ] `[S]` **FR-AI-04:** AI trích xuất BM13/PDF/Word theo schema, giữ trang/vùng nguồn, confidence và nhãn inferred.
-- [ ] `[S]` **FR-AI-05:** Phát hiện mâu thuẫn, trọng số sai, mã trùng, PI thiếu phủ và dữ liệu cần bổ sung; không tự sửa.
-- [ ] `[M]` **FR-AI-06:** Hàng đợi human-in-the-loop chấp nhận/sửa/từ chối theo trường; giữ before/after và lý do.
-- [ ] `[M]` **FR-AI-07:** Quản lý version prompt, loại câu hỏi, model, schema, ground-truth test và rollback.
-- [ ] `[M]` **FR-AI-08:** Chống prompt injection từ tài liệu; giới hạn công cụ/API và không dùng dữ liệu để huấn luyện ngoài khi chưa phép.
+- [x] `[S]` **FR-AI-01:** Chatbot hỏi đáp Khoa, CTĐT, học phần, kết quả và CQI theo dữ liệu được phép xem.
+- [x] `[M]` **FR-AI-02:** Câu trả lời có trích dẫn đối tượng/báo cáo, thời điểm dữ liệu và công thức liên quan.
+- [x] `[M]` **FR-AI-03:** Không trả dữ liệu cá nhân ngoài scope; áp dụng masking, ngưỡng nhóm và audit câu hỏi nhạy cảm.
+- [x] `[S]` **FR-AI-04:** AI trích xuất BM13/PDF/Word theo schema, giữ trang/vùng nguồn, confidence và nhãn inferred.
+- [x] `[S]` **FR-AI-05:** Phát hiện mâu thuẫn, trọng số sai, mã trùng, PI thiếu phủ và dữ liệu cần bổ sung; không tự sửa.
+- [x] `[M]` **FR-AI-06:** Hàng đợi human-in-the-loop chấp nhận/sửa/từ chối theo trường; giữ before/after và lý do.
+- [x] `[M]` **FR-AI-07:** Quản lý version prompt, loại câu hỏi, model, schema, ground-truth test và rollback.
+- [x] `[M]` **FR-AI-08:** Chống prompt injection từ tài liệu; giới hạn công cụ/API và không dùng dữ liệu để huấn luyện ngoài khi chưa phép.
 
 ---
 
