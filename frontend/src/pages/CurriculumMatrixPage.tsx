@@ -199,7 +199,7 @@ export const CurriculumMatrixPage: React.FC = () => {
               )}
               <button onClick={() => setIsAddCourseModalOpen(true)} className="btn btn-primary">
                 <Plus size={16} />
-                <span>+ Thêm Học Phần Vào Ma Trận</span>
+                <span>Thêm Học Phần Vào Ma Trận</span>
               </button>
             </>
           )}
@@ -207,7 +207,7 @@ export const CurriculumMatrixPage: React.FC = () => {
           {activeTab !== 'matrix' && (
             <button onClick={() => setIsModalOpen(true)} className="btn btn-primary">
               <Plus size={16} />
-              <span>+ Thêm Mới Dữ Liệu</span>
+              <span>Thêm Mới Dữ Liệu</span>
             </button>
           )}
 

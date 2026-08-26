@@ -159,7 +159,7 @@ export const MeasurementScoringPage: React.FC = () => {
           </button>
           <button onClick={() => setIsModalOpen(true)} className="btn btn-primary">
             <Plus size={16} />
-            <span>+ Thao Tác Thêm Mới</span>
+            <span>Thao Tác Thêm Mới</span>
           </button>
         </div>
       </div>

@@ -168,7 +168,7 @@ export const AcademicDataPage: React.FC = () => {
           </button>
           <button onClick={() => setIsModalOpen(true)} className="btn btn-primary">
             <Plus size={16} />
-            <span>+ Thêm Mới Dữ Liệu</span>
+            <span>Thêm Mới Dữ Liệu</span>
           </button>
         </div>
       </div>

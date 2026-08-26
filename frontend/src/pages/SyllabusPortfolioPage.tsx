@@ -95,7 +95,7 @@ export const SyllabusPortfolioPage: React.FC = () => {
         <div style={{ display: 'flex', gap: '0.75rem' }}>
           <button onClick={() => setIsModalOpen(true)} className="btn btn-primary">
             <Plus size={16} />
-            <span>+ Thêm Mới / Cập Nhật</span>
+            <span>Thêm Mới / Cập Nhật</span>
           </button>
           <button className="btn btn-secondary">
             <Download size={16} />

@@ -93,7 +93,7 @@ export const CqiImprovementPage: React.FC = () => {
 
         <button onClick={() => setIsModalOpen(true)} className="btn btn-primary">
           <Plus size={16} />
-          <span>+ Tạo Kế Hoạch CQI Mới</span>
+          <span>Tạo Kế Hoạch CQI Mới</span>
         </button>
       </div>
 

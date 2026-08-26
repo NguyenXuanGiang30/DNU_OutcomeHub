@@ -96,7 +96,7 @@ export const GovernanceIamPage: React.FC = () => {
 
         <button onClick={() => setIsModalOpen(true)} className="btn btn-primary">
           <Key size={16} />
-          <span>+ Thêm Người Dùng / Gán Quyền</span>
+          <span>Thêm Người Dùng / Gán Quyền</span>
         </button>
       </div>
 

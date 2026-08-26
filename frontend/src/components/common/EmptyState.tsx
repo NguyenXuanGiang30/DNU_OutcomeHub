@@ -11,7 +11,7 @@ interface EmptyStateProps {
 export const EmptyState: React.FC<EmptyStateProps> = ({
   title = 'Chưa có dữ liệu',
   description = 'Hiện tại chưa có bản ghi nào trong hệ thống. Nhấn nút bên dưới để thêm mới.',
-  actionLabel = '+ Thêm Mới Ngay',
+  actionLabel = 'Thêm Mới Ngay',
   onAction,
 }) => {
   return (
@@ -28,7 +28,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
       {onAction && (
         <button onClick={onAction} className="btn btn-primary" style={{ margin: '0 auto' }}>
           <Plus size={16} />
-          <span>{actionLabel}</span>
+          <span>{actionLabel.replace(/^\+\s*/, '')}</span>
         </button>
       )}
     </div>
