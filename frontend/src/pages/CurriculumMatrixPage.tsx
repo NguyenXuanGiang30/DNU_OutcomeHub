@@ -18,13 +18,18 @@ import {
   Plus,
   X,
   Save,
+  Edit3,
+  Check,
+  RotateCcw,
 } from 'lucide-react';
+
+type MappingLevel = 'I' | 'R' | 'M' | 'A' | 'RA' | 'MA' | '-';
 
 interface MatrixCell {
   courseCode: string;
   courseName: string;
   semester: number;
-  plos: Record<string, 'I' | 'R' | 'M' | 'A' | 'RA' | 'MA' | '-'>;
+  plos: Record<string, MappingLevel>;
 }
 
 export const CurriculumMatrixPage: React.FC = () => {
@@ -44,26 +49,12 @@ export const CurriculumMatrixPage: React.FC = () => {
 
   const [activeTab, setActiveTab] = useState<string>(getSubSection());
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAddCourseModalOpen, setIsAddCourseModalOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [isEditingMatrix, setIsEditingMatrix] = useState<boolean>(false);
 
-  useEffect(() => {
-    setActiveTab(getSubSection());
-  }, [location.pathname]);
-
-  const handleTabClick = (key: string) => {
-    setActiveTab(key);
-    navigate(`/curriculum/${key}`);
-  };
-
-  const handleSaveModal = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsModalOpen(false);
-    setToastMessage('✓ Đã cập nhật thành công chuẩn đầu ra / ma trận!');
-    setTimeout(() => setToastMessage(null), 3000);
-  };
-
-  // Matrix Sample Dataset
-  const matrixData: MatrixCell[] = [
+  // Matrix State (Editable in real-time)
+  const [matrixData, setMatrixData] = useState<MatrixCell[]>([
     { courseCode: 'IT1101', courseName: 'Nhập môn Lập trình', semester: 1, plos: { PLO1: 'I', PLO2: 'I', PLO3: 'I', PLO4: '-', PLO5: '-', PLO6: 'I' } },
     { courseCode: 'IT2102', courseName: 'Cấu trúc Dữ liệu & Giải thuật', semester: 2, plos: { PLO1: 'R', PLO2: 'R', PLO3: 'R', PLO4: '-', PLO5: 'I', PLO6: '-' } },
     { courseCode: 'IT3101', courseName: 'Cơ sở Dữ liệu & SQL', semester: 3, plos: { PLO1: 'R', PLO2: 'R', PLO3: 'R', PLO4: 'I', PLO5: 'I', PLO6: '-' } },
@@ -71,7 +62,67 @@ export const CurriculumMatrixPage: React.FC = () => {
     { courseCode: 'IT4101', courseName: 'Lập trình .NET Nâng cao', semester: 5, plos: { PLO1: 'M', PLO2: 'M', PLO3: 'A', PLO4: 'R', PLO5: 'RA', PLO6: 'R' } },
     { courseCode: 'IT4205', courseName: 'Kiểm thử Phần mềm & QA', semester: 6, plos: { PLO1: 'M', PLO2: 'R', PLO3: 'R', PLO4: 'R', PLO5: 'MA', PLO6: 'R' } },
     { courseCode: 'IT4999', courseName: 'Khóa luận Tốt nghiệp', semester: 8, plos: { PLO1: 'A', PLO2: 'A', PLO3: 'MA', PLO4: 'MA', PLO5: 'MA', PLO6: 'MA' } },
-  ];
+  ]);
+
+  const [newCourseCode, setNewCourseCode] = useState('IT4301');
+  const [newCourseName, setNewCourseName] = useState('Lập trình Ứng dụng Di động Flutter');
+  const [newCourseSemester, setNewCourseSemester] = useState(6);
+
+  useEffect(() => {
+    setActiveTab(getSubSection());
+  }, [location.pathname]);
+
+  const handleCellChange = (courseCode: string, plo: string, newLevel: MappingLevel) => {
+    setMatrixData((prev) =>
+      prev.map((row) => {
+        if (row.courseCode === courseCode) {
+          return {
+            ...row,
+            plos: {
+              ...row.plos,
+              [plo]: newLevel,
+            },
+          };
+        }
+        return row;
+      })
+    );
+  };
+
+  const handleCycleCell = (courseCode: string, plo: string) => {
+    const cycleOrder: MappingLevel[] = ['-', 'I', 'R', 'M', 'A', 'RA', 'MA'];
+    const currentRow = matrixData.find((r) => r.courseCode === courseCode);
+    const currentVal = (currentRow?.plos[plo] || '-') as MappingLevel;
+    const nextIdx = (cycleOrder.indexOf(currentVal) + 1) % cycleOrder.length;
+    handleCellChange(courseCode, plo, cycleOrder[nextIdx]);
+  };
+
+  const handleSaveMatrix = () => {
+    setIsEditingMatrix(false);
+    setToastMessage('✓ Đã lưu thành công các thay đổi trong Ma trận liên kết CĐR!');
+    setTimeout(() => setToastMessage(null), 3000);
+  };
+
+  const handleAddCourseToMatrix = (e: React.FormEvent) => {
+    e.preventDefault();
+    const newRow: MatrixCell = {
+      courseCode: newCourseCode,
+      courseName: newCourseName,
+      semester: Number(newCourseSemester),
+      plos: { PLO1: 'R', PLO2: 'R', PLO3: 'M', PLO4: '-', PLO5: '-', PLO6: '-' },
+    };
+    setMatrixData([...matrixData, newRow]);
+    setIsAddCourseModalOpen(false);
+    setToastMessage(`✓ Đã thêm học phần ${newCourseCode} vào ma trận liên kết!`);
+    setTimeout(() => setToastMessage(null), 3000);
+  };
+
+  const handleSaveModal = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsModalOpen(false);
+    setToastMessage('✓ Đã cập nhật thành công chuẩn đầu ra / chỉ số PI!');
+    setTimeout(() => setToastMessage(null), 3000);
+  };
 
   return (
     <div className="animate-fade-in">
@@ -98,18 +149,40 @@ export const CurriculumMatrixPage: React.FC = () => {
             {activeTab === 'pis' && 'Chỉ Báo Thực Hiện (Performance Indicators - PI)'}
             {activeTab === 'weight-a' && 'Trọng Số Đo Trực Tiếp A Theo CTĐT (100%)'}
             {activeTab === 'clos' && 'Chuẩn Đầu Ra Học Phần (CLO)'}
-            {activeTab === 'prerequisites' && 'Sơ Đồ Đồ Thị Tiên Quyết (DAG)'}
           </h2>
         </div>
 
         <div style={{ display: 'flex', gap: '0.75rem' }}>
+          {activeTab === 'matrix' && (
+            <>
+              {isEditingMatrix ? (
+                <button onClick={handleSaveMatrix} className="btn btn-primary" style={{ backgroundColor: 'var(--emerald-600)' }}>
+                  <Save size={16} />
+                  <span>Lưu Ma Trận</span>
+                </button>
+              ) : (
+                <button onClick={() => setIsEditingMatrix(true)} className="btn btn-secondary">
+                  <Edit3 size={16} />
+                  <span>Chỉnh Sửa Ma Trận</span>
+                </button>
+              )}
+              <button onClick={() => setIsAddCourseModalOpen(true)} className="btn btn-primary">
+                <Plus size={16} />
+                <span>+ Thêm Học Phần Vào Ma Trận</span>
+              </button>
+            </>
+          )}
+
+          {activeTab !== 'matrix' && (
+            <button onClick={() => setIsModalOpen(true)} className="btn btn-primary">
+              <Plus size={16} />
+              <span>+ Tạo Mới / Cập Nhật</span>
+            </button>
+          )}
+
           <button className="btn btn-secondary">
             <Download size={16} />
-            <span>Xuất Ma Trận Excel</span>
-          </button>
-          <button onClick={() => setIsModalOpen(true)} className="btn btn-primary">
-            <Plus size={16} />
-            <span>+ Tạo Mới / Cập Nhật CĐR</span>
+            <span>Xuất Excel</span>
           </button>
         </div>
       </div>
@@ -133,9 +206,15 @@ export const CurriculumMatrixPage: React.FC = () => {
             </select>
           </div>
           <div>
-            <span className="form-label">Trạng Thái CTĐT</span>
+            <span className="form-label">Chế Độ Thao Tác</span>
             <div style={{ marginTop: '0.5rem' }}>
-              <span className="badge badge-success">ĐANG ÁP DỤNG (ACTIVE & LOCKED)</span>
+              {isEditingMatrix ? (
+                <span className="badge badge-warning" style={{ fontWeight: 800 }}>
+                  ● ĐANG Ở CHẾ ĐỘ CHỈNH SỬA (CLICK Ô HOẶC CHỌN ĐỂ ĐỔI MỨC)
+                </span>
+              ) : (
+                <span className="badge badge-success">CHẾ ĐỘ XEM (VIEW MODE)</span>
+              )}
             </div>
           </div>
         </div>
@@ -148,14 +227,17 @@ export const CurriculumMatrixPage: React.FC = () => {
             <div>
               <h3 className="glass-card-title">Ma Trận Đóng Góp CĐR Của Các Học Phần (CTĐT K17 - 145 Tín chỉ)</h3>
               <p className="glass-card-subtitle">
-                Quy ước: <strong>I</strong> = Introduce, <strong>R</strong> = Reinforce, <strong>M</strong> = Master, <strong>A</strong> = Direct Assessment (Đo trực tiếp)
+                {isEditingMatrix
+                  ? '👉 Bạn đang ở chế độ chỉnh sửa: Bạn có thể chọn trực tiếp mức độ đóng góp (I, R, M, A, RA, MA) cho từng học phần.'
+                  : 'Quy ước chuẩn OBE: I (Introduce) ➔ R (Reinforce) ➔ M (Master) ➔ A (Direct Assessment - Đo trực tiếp)'}
               </p>
             </div>
-            <div style={{ display: 'flex', gap: '0.5rem' }}>
+            <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
               <span className="badge badge-primary">I: Giới thiệu</span>
               <span className="badge badge-cyan">R: Củng cố</span>
               <span className="badge badge-success">M: Thuần thục</span>
               <span className="badge badge-danger">A: Đo trực tiếp</span>
+              <span className="badge badge-danger">RA / MA: Kết hợp đo</span>
             </div>
           </div>
 
@@ -165,11 +247,11 @@ export const CurriculumMatrixPage: React.FC = () => {
                 <tr>
                   <th>Mã Môn</th>
                   <th>Tên Học Phần</th>
-                  <th>Học Kỳ</th>
+                  <th style={{ width: '90px' }}>Học Kỳ</th>
                   <th style={{ textAlign: 'center' }}>PLO1 (Kiến thức)</th>
                   <th style={{ textAlign: 'center' }}>PLO2 (Thiết kế)</th>
                   <th style={{ textAlign: 'center' }}>PLO3 (Lập trình)</th>
-                  <th style={{ textAlign: 'center' }}>PLO4 (Kỹ năng mềm)</th>
+                  <th style={{ textAlign: 'center' }}>PLO4 (Kỹ năng)</th>
                   <th style={{ textAlign: 'center' }}>PLO5 (Kiểm thử)</th>
                   <th style={{ textAlign: 'center' }}>PLO6 (Đạo đức)</th>
                 </tr>
@@ -181,7 +263,7 @@ export const CurriculumMatrixPage: React.FC = () => {
                     <td style={{ fontWeight: 600 }}>{row.courseName}</td>
                     <td>HK {row.semester}</td>
                     {['PLO1', 'PLO2', 'PLO3', 'PLO4', 'PLO5', 'PLO6'].map((plo) => {
-                      const val = row.plos[plo] || '-';
+                      const val = (row.plos[plo] || '-') as MappingLevel;
                       let badgeClass = 'badge-secondary';
                       if (val.includes('A')) badgeClass = 'badge-danger';
                       else if (val === 'M') badgeClass = 'badge-success';
@@ -190,12 +272,44 @@ export const CurriculumMatrixPage: React.FC = () => {
 
                       return (
                         <td key={plo} style={{ textAlign: 'center' }}>
-                          {val !== '-' ? (
-                            <span className={`badge ${badgeClass}`} style={{ minWidth: '38px', justifyContent: 'center', fontWeight: 800 }}>
-                              {val}
-                            </span>
+                          {isEditingMatrix ? (
+                            <select
+                              value={val}
+                              onChange={(e) => handleCellChange(row.courseCode, plo, e.target.value as MappingLevel)}
+                              className="form-select"
+                              style={{
+                                width: '76px',
+                                padding: '0.2rem 0.4rem',
+                                fontSize: '0.8rem',
+                                fontWeight: 800,
+                                textAlign: 'center',
+                                borderColor: val.includes('A') ? 'var(--rose-500)' : val === 'M' ? 'var(--emerald-500)' : 'var(--border-medium)',
+                                backgroundColor: val.includes('A') ? 'rgba(244,63,94,0.15)' : 'var(--bg-surface-elevated)',
+                              }}
+                            >
+                              <option value="-">- (Không)</option>
+                              <option value="I">I (Intro)</option>
+                              <option value="R">R (Reinforce)</option>
+                              <option value="M">M (Master)</option>
+                              <option value="A">A (Assess)</option>
+                              <option value="RA">RA (R + A)</option>
+                              <option value="MA">MA (M + A)</option>
+                            </select>
                           ) : (
-                            <span style={{ color: 'var(--text-muted)' }}>-</span>
+                            <button
+                              type="button"
+                              onClick={() => handleCycleCell(row.courseCode, plo)}
+                              title="Nhấp để đổi nhanh mức độ I/R/M/A"
+                              style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+                            >
+                              {val !== '-' ? (
+                                <span className={`badge ${badgeClass}`} style={{ minWidth: '38px', justifyContent: 'center', fontWeight: 800 }}>
+                                  {val}
+                                </span>
+                              ) : (
+                                <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>-</span>
+                              )}
+                            </button>
                           )}
                         </td>
                       );
@@ -204,6 +318,34 @@ export const CurriculumMatrixPage: React.FC = () => {
                 ))}
               </tbody>
             </table>
+          </div>
+
+          {/* Matrix Analytics & Rule Verification Bar */}
+          <div style={{ marginTop: '1.25rem', padding: '1rem 1.25rem', backgroundColor: 'var(--bg-surface-elevated)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-medium)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+            <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
+              <div>
+                <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Tổng số học phần trong ma trận:</span>
+                <div style={{ fontWeight: 800, color: 'var(--text-primary)' }}>{matrixData.length} Môn học</div>
+              </div>
+              <div>
+                <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Độ phủ đo trực tiếp (A):</span>
+                <div style={{ fontWeight: 800, color: 'var(--emerald-400)' }}>6 / 6 PLO đều có học phần đo A (100%)</div>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', gap: '0.75rem' }}>
+              {isEditingMatrix ? (
+                <button onClick={handleSaveMatrix} className="btn btn-primary">
+                  <Check size={16} />
+                  <span>Hoàn Tất & Lưu Ma Trận</span>
+                </button>
+              ) : (
+                <button onClick={() => setIsEditingMatrix(true)} className="btn btn-secondary">
+                  <Edit3 size={16} />
+                  <span>Bật Chế Độ Sửa Ma Trận</span>
+                </button>
+              )}
+            </div>
           </div>
         </div>
       )}
@@ -508,13 +650,49 @@ export const CurriculumMatrixPage: React.FC = () => {
         </div>
       )}
 
-      {/* MODAL DIALOG */}
+      {/* ADD COURSE TO MATRIX MODAL */}
+      {isAddCourseModalOpen && (
+        <div style={{ position: 'fixed', inset: 0, zIndex: 80, backgroundColor: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
+          <div className="glass-card animate-fade-in" style={{ width: '500px', maxWidth: '100%' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '0.75rem' }}>
+              <h3 style={{ fontSize: '1.125rem', fontWeight: 800, color: 'var(--text-primary)' }}>
+                Thêm Học Phần Vào Ma Trận CĐR
+              </h3>
+              <button onClick={() => setIsAddCourseModalOpen(false)} className="btn btn-secondary btn-icon"><X size={16} /></button>
+            </div>
+
+            <form onSubmit={handleAddCourseToMatrix}>
+              <div className="form-group">
+                <label className="form-label">Mã Học Phần</label>
+                <input required type="text" value={newCourseCode} onChange={(e) => setNewCourseCode(e.target.value)} className="form-input" />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Tên Học Phần</label>
+                <input required type="text" value={newCourseName} onChange={(e) => setNewCourseName(e.target.value)} className="form-input" />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Học Kỳ Trong CTĐT (1 - 8)</label>
+                <input required type="number" min="1" max="8" value={newCourseSemester} onChange={(e) => setNewCourseSemester(Number(e.target.value))} className="form-input" />
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', marginTop: '1.5rem', borderTop: '1px solid var(--border-subtle)', paddingTop: '1rem' }}>
+                <button type="button" onClick={() => setIsAddCourseModalOpen(false)} className="btn btn-secondary">Hủy Bỏ</button>
+                <button type="submit" className="btn btn-primary"><Plus size={16} /><span>Thêm Vào Ma Trận</span></button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* GENERAL CREATE / EDIT MODAL */}
       {isModalOpen && (
         <div style={{ position: 'fixed', inset: 0, zIndex: 80, backgroundColor: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
           <div className="glass-card animate-fade-in" style={{ width: '540px', maxWidth: '100%', maxHeight: '90vh', overflowY: 'auto' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '0.75rem' }}>
               <h3 style={{ fontSize: '1.125rem', fontWeight: 800, color: 'var(--text-primary)' }}>
-                Thêm Mới / Cập Nhật: {activeTab === 'pos' ? 'Mục Tiêu PO' : activeTab === 'plos' ? 'Chuẩn Đầu Ra PLO' : activeTab === 'pis' ? 'Chỉ Báo PI' : activeTab === 'clos' ? 'Chuẩn Đầu Ra CLO' : 'Phiên Bản CTĐT'}
+                Thêm Mới / Cập Nhật: {activeTab === 'pos' ? 'Mục Tiêu PO' : activeTab === 'plos' ? 'Chuẩn Đầu Ra PLO' : activeTab === 'pis' ? 'Chỉ Báo PI' : 'Chuẩn Đầu Ra CLO'}
               </h3>
               <button onClick={() => setIsModalOpen(false)} className="btn btn-secondary btn-icon"><X size={16} /></button>
             </div>
