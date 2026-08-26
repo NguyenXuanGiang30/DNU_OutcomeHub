@@ -10,6 +10,7 @@ import { ReportsAccreditationPage } from './pages/ReportsAccreditationPage';
 import { CqiImprovementPage } from './pages/CqiImprovementPage';
 import { AiAssistantPage } from './pages/AiAssistantPage';
 import { GovernanceIamPage } from './pages/GovernanceIamPage';
+import { StudentManagementPage } from './pages/StudentManagementPage';
 
 export const App: React.FC = () => {
   return (
@@ -23,7 +24,8 @@ export const App: React.FC = () => {
           <Route path="data/org-units" element={<AcademicDataPage />} />
           <Route path="data/programs" element={<AcademicDataPage />} />
           <Route path="data/cohorts" element={<AcademicDataPage />} />
-          <Route path="data/students" element={<AcademicDataPage />} />
+          <Route path="data/students" element={<StudentManagementPage />} />
+          <Route path="students" element={<StudentManagementPage />} />
           <Route path="data/courses" element={<AcademicDataPage />} />
 
           {/* 3. Chương trình và chuẩn đầu ra */}
