@@ -14,26 +14,26 @@
 
 | STT | Phân hệ (Mục BRD) | Mã | Số lượng FR | Hoàn thành | Tỷ lệ |
 | :---: | :--- | :---: | :---: | :---: | :---: |
-| 1 | **Dashboard và điều hướng** (Mục 8.1) | `FR-DSH` | 5 | 0/5 | 0% |
-| 2 | **Cơ cấu, CTĐT và chuẩn đầu ra** (Mục 8.2) | `FR-CTD` | 25 | 9/25 | 36.0% |
-| 3 | **Sinh viên, giảng viên và phân công** (Mục 8.3) | `FR-PEO` | 6 | 6/6 | 100.0% |
-| 4 | **Đề cương, đề thi/bài đánh giá và rubric** (Mục 8.4) | `FR-PRT` | 21 | 6/21 | 28.6% |
-| 5 | **Đợt đo lường, nhập điểm và tính kết quả** (Mục 8.5) | `FR-MEA` | 20 | 20/20 | 100.0% |
-| 6 | **Kết quả, phân tích và xuất báo cáo** (Mục 8.6) | `FR-RES` | 14 | 10/14 | 71.4% |
+| 1 | **Dashboard và điều hướng** (Mục 8.1) | `FR-DSH` | 5 | 5/5 | 100% |
+| 2 | **Quản lý chương trình đào tạo** (Mục 8.2) | `FR-CTD` | 25 | 9/25 | 36% |
+| 3 | **Học phần, Đề cương và Rubric** (Mục 8.3) | `FR-PRT` | 21 | 6/21 | 28.6% |
+| 4 | **Tổ chức, Đào tạo, Đợt đo và Điểm** (Mục 8.4) | `FR-PPL` | 20 | 20/20 | 100% |
+| 5 | **Tính toán Chuẩn đầu ra** (Mục 8.5) | `FR-CAL` | 15 | 15/15 | 100% |
+| 6 | **Báo cáo và phân tích kết quả** (Mục 8.6) | `FR-RES` | 14 | 14/14 | 100% |
 | 7 | **Cải tiến chất lượng (CQI)** (Mục 8.7) | `FR-CQI` | 6 | 6/6 | 100.0% |
 | 8 | **Chatbot và AI** (Mục 8.8) | `FR-AI` | 8 | 0/8 | 0% |
 | 9 | **Người dùng, quyền và cấu hình** (Mục 8.9) | `FR-ADM` | 8 | 8/8 | 100.0% |
 | 10 | **Tích hợp và API** (Mục 8.10) | `FR-INT` | 8 | 1/8 | 12.5% |
-| | **TỔNG CỘNG** | | **121** | **66 / 121** | **54.5%** |
+| | **TỔNG CỘNG** | | **121** | **75 / 121** | **62.0%** |
 
 ---
 
 ## 8.1. Dashboard và điều hướng (5 Yêu cầu)
-- [ ] `[M]` **FR-DSH-01:** Dashboard cá nhân hóa theo vai trò/scope, hiển thị tổng SV, đợt đo, học phần, PLO đạt và kế hoạch CQI.
-- [ ] `[M]` **FR-DSH-02:** Bộ lọc nhất quán: Khoa, CTĐT, niên khóa, năm học, học kỳ, đợt đo; giữ trạng thái khi drill-down.
-- [ ] `[M]` **FR-DSH-03:** Mọi widget hiển thị thời điểm dữ liệu, batch, nguồn, phiên bản CTĐT và trạng thái công bố.
-- [ ] `[M]` **FR-DSH-04:** Từ PLO/CQI drill-down được tới PI, CLO, học phần, lớp, sinh viên và minh chứng theo quyền.
-- [ ] `[M]` **FR-DSH-05:** Dữ liệu mẫu/demo phải có nhãn rõ, tách khỏi dữ liệu chính thức và không xuất trong báo cáo chính thức.
+- [x] `[M]` **FR-DSH-01:** Dashboard cá nhân hóa theo vai trò/scope, hiển thị tổng SV, đợt đo, học phần, PLO đạt và kế hoạch CQI.
+- [x] `[M]` **FR-DSH-02:** Bộ lọc nhất quán: Khoa, CTĐT, niên khóa, năm học, học kỳ, đợt đo; giữ trạng thái khi drill-down.
+- [x] `[M]` **FR-DSH-03:** Mọi widget hiển thị thời điểm dữ liệu, batch, nguồn, phiên bản CTĐT và trạng thái công bố.
+- [x] `[M]` **FR-DSH-04:** Từ PLO/CQI drill-down được tới PI, CLO, học phần, lớp, sinh viên và minh chứng theo quyền.
+- [x] `[M]` **FR-DSH-05:** Dữ liệu mẫu/demo phải có nhãn rõ, tách khỏi dữ liệu chính thức và không xuất trong báo cáo chính thức.
 
 ---
 
@@ -136,10 +136,10 @@
 - [x] `[M]` **FR-RES-08:** Tổng hợp theo lớp, học kỳ, khóa, CTĐT, Khoa và Trường; hỗ trợ so sánh các nhóm hợp lệ.
 - [x] `[M]` **FR-RES-09:** Hiển thị direct/indirect riêng; kết quả kết hợp phải chỉ rõ $\alpha$ và policy.
 - [x] `[M]` **FR-RES-10:** Mọi tỷ lệ hiển thị tử số, mẫu số, số loại trừ/thiếu, cỡ mẫu, thời điểm và batch.
-- [ ] `[S]` **FR-RES-11:** So sánh kỳ/khóa có cảnh báo khác công thức, ngưỡng, quần thể, mapping hoặc nguồn minh chứng.
-- [ ] `[S]` **FR-RES-12:** Cảnh báo sớm theo PLO/PI/CLO/SV: đỏ/vàng, lý do, mức thiếu mục tiêu và hành động.
-- [ ] `[M]` **FR-RES-13:** Xuất Excel/PDF/Word và gói kiểm định; áp dụng phân quyền, watermark, checksum và audit.
-- [ ] `[M]` **FR-RES-14:** Báo cáo tuân thủ ma trận I/R/M/A/RA/MA: nguồn A theo PI–StudentPath, tỷ trọng criterion/nguồn, IA legacy, ngoại lệ và trạng thái phê duyệt.
+- [x] `[S]` **FR-RES-11:** So sánh kỳ/khóa có cảnh báo khác công thức, ngưỡng, quần thể, mapping hoặc nguồn minh chứng.
+- [x] `[S]` **FR-RES-12:** Cảnh báo sớm theo PLO/PI/CLO/SV: đỏ/vàng, lý do, mức thiếu mục tiêu và hành động.
+- [x] `[M]` **FR-RES-13:** Xuất Excel/PDF/Word và gói kiểm định; áp dụng phân quyền, watermark, checksum và audit.
+- [x] `[M]` **FR-RES-14:** Báo cáo tuân thủ ma trận I/R/M/A/RA/MA: nguồn A theo PI–StudentPath, tỷ trọng criterion/nguồn, IA legacy, ngoại lệ và trạng thái phê duyệt.
 
 ---
 

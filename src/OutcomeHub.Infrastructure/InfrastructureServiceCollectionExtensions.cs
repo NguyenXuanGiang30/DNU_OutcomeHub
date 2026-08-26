@@ -40,6 +40,10 @@ public static class InfrastructureServiceCollectionExtensions
         services.AddScoped<IIamRepository, Persistence.Repositories.Iam.IamRepository>();
         services.AddScoped<IAuditRepository, Persistence.Repositories.Audit.AuditRepository>();
         services.AddScoped<Application.Interfaces.Services.IIamService, Services.IamService>();
+        services.AddScoped<IDashboardRepository, Persistence.Repositories.Analytics.DashboardRepository>();
+        services.AddScoped<IAccreditationReportRepository, Persistence.Repositories.Analytics.AccreditationReportRepository>();
+        services.AddScoped<Application.Interfaces.Services.IDashboardService, Services.DashboardService>();
+        services.AddScoped<Application.Interfaces.Services.IAccreditationReportService, Services.AccreditationReportService>();
 
         services.AddDbContext<OutcomeHubDbContext>((serviceProvider, options) =>
         {

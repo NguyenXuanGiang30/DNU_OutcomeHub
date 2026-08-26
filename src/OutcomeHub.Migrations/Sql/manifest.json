@@ -201,6 +201,20 @@
       "postcondition_checksum": "a04704f04f0423421ca1b8b727e2579dceb9a6f013945a37844692b4a371e26d",
       "timeout_seconds": 120,
       "retry_policy": "ATOMIC"
+    },
+    {
+      "sequence": 15,
+      "id": "90000000-0000-7000-8000-000000000015",
+      "migration_name": "0015_dashboard_analytics_grants",
+      "transaction_mode": "TRANSACTIONAL",
+      "script": "transactional/0015_dashboard_analytics_grants.sql",
+      "precondition": "checks/0015_dashboard_analytics_grants_pre.sql",
+      "postcondition": "checks/0015_dashboard_analytics_grants_post.sql",
+      "script_checksum": "4715930ddb2f320ca2fc6eefc0a3bb0314455be7926acebaac9ca0a3a5989218",
+      "precondition_checksum": "8b6f0e442bab99d08dac61eb2c8322a2baa9c69fd25e8bec4a4b43f0ec7db70c",
+      "postcondition_checksum": "abca0ffc5950c9afda81b3fc16479c603276323bcc7695d3036a28a27a35310b",
+      "timeout_seconds": 120,
+      "retry_policy": "ATOMIC"
     }
   ]
 }
