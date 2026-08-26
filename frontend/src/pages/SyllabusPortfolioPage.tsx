@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   BookOpen,
   FileSpreadsheet,
@@ -10,13 +10,16 @@ import {
   CheckCircle2,
   ShieldCheck,
   ClipboardList,
-  FileText,
-  Clock,
   UserCheck,
+  Plus,
+  X,
+  Save,
+  CheckCircle,
 } from 'lucide-react';
 
 export const SyllabusPortfolioPage: React.FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const getSubSection = () => {
     if (location.pathname.includes('/syllabus/plans')) return 'plans';
@@ -28,14 +31,40 @@ export const SyllabusPortfolioPage: React.FC = () => {
   };
 
   const [activeTab, setActiveTab] = useState<string>(getSubSection());
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    setActiveTab(getSubSection());
+  }, [location.pathname]);
+
+  const handleTabClick = (key: string) => {
+    setActiveTab(key);
+    navigate(`/syllabus/${key}`);
+  };
+
+  const handleSaveModal = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsModalOpen(false);
+    setToastMessage('✓ Đã cập nhật thành công đề cương / rubric!');
+    setTimeout(() => setToastMessage(null), 3000);
+  };
 
   return (
     <div className="animate-fade-in">
+      {/* Toast Alert */}
+      {toastMessage && (
+        <div style={{ position: 'fixed', top: '85px', right: '2rem', zIndex: 100, backgroundColor: 'var(--emerald-500)', color: '#fff', padding: '0.75rem 1.25rem', borderRadius: 'var(--radius-md)', boxShadow: 'var(--glass-shadow)', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 600 }}>
+          <CheckCircle size={18} />
+          <span>{toastMessage}</span>
+        </div>
+      )}
+
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
         <div>
           <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
-            Đề Cương & Đánh Giá Học Phần (Mục 8.3)
+            Đề Cương & Đánh Giá Học Phần
           </h2>
           <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', marginTop: '0.25rem' }}>
             Quản lý Đề cương BM13, Kế hoạch đánh giá, Ma trận đề thi (Blueprint), Rubric và Quy trình phê duyệt số hóa.
@@ -47,9 +76,9 @@ export const SyllabusPortfolioPage: React.FC = () => {
             <Download size={16} />
             <span>Xuất Gói Portfolio (.ZIP)</span>
           </button>
-          <button className="btn btn-primary">
-            <CheckCircle2 size={16} />
-            <span>Ban Hành Đề Cương</span>
+          <button onClick={() => setIsModalOpen(true)} className="btn btn-primary">
+            <Plus size={16} />
+            <span>+ Thêm Mới / Cập Nhật</span>
           </button>
         </div>
       </div>
@@ -57,23 +86,21 @@ export const SyllabusPortfolioPage: React.FC = () => {
       {/* Navigation Sub-Tabs */}
       <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', borderBottom: '1px solid var(--border-medium)', paddingBottom: '0.5rem', overflowX: 'auto' }}>
         {[
-          { key: 'bm13', label: 'Đề Cương Chi Tiết (Mẫu BM13)', icon: BookOpen },
-          { key: 'plans', label: 'Kế Hoạch Đánh Giá (A1, A2, A3)', icon: ClipboardList },
-          { key: 'blueprints', label: 'Ma Trận Đề Thi (Exam Blueprint)', icon: FileCheck },
-          { key: 'rubrics', label: 'Tiêu Chí Chấm Rubric', icon: Layers },
-          { key: 'table832', label: 'Bảng 8.3.2 (Tỷ Trọng PI 100%)', icon: FileSpreadsheet, badge: 'Cốt Lõi' },
-          { key: 'approvals', label: 'Phê Duyệt Đề Cương', icon: UserCheck },
-          { key: 'exam-approvals', label: 'Phê Duyệt Đề Thi', icon: ShieldCheck },
+          { key: 'bm13', label: '1. Đề Cương Chi Tiết (BM13)', icon: BookOpen },
+          { key: 'plans', label: '2. Kế Hoạch Đánh Giá (A1, A2, A3)', icon: ClipboardList },
+          { key: 'blueprints', label: '3. Đề Thi – Bài Đánh Giá (Blueprint)', icon: FileCheck },
+          { key: 'rubrics', label: '4. Tiêu Chí Chấm Rubric', icon: Layers },
+          { key: 'approvals', label: '5. Phê Duyệt Đề Cương', icon: UserCheck },
+          { key: 'exam-approvals', label: '6. Phê Duyệt Đề Thi', icon: ShieldCheck },
         ].map((tab) => (
           <button
             key={tab.key}
-            onClick={() => setActiveTab(tab.key)}
+            onClick={() => handleTabClick(tab.key)}
             className={`btn ${activeTab === tab.key ? 'btn-primary' : 'btn-secondary'}`}
             style={{ fontSize: '0.8125rem' }}
           >
             <tab.icon size={16} />
             <span>{tab.label}</span>
-            {tab.badge && <span className="badge badge-bloom badge-cyan">{tab.badge}</span>}
           </button>
         ))}
       </div>
@@ -131,42 +158,6 @@ export const SyllabusPortfolioPage: React.FC = () => {
                 Học phần cung cấp kiến thức chuyên sâu về nền tảng .NET 8 / C#, xây dựng RESTful Web API an toàn, tích hợp cơ sở dữ liệu với Entity Framework Core, áp dụng kiến trúc Clean Architecture, viết Unit Test tự động và triển khai ứng dụng lên Cloud Docker.
               </p>
             </div>
-
-            <div style={{ padding: '1rem', backgroundColor: 'var(--bg-surface-elevated)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-medium)' }}>
-              <h4 style={{ color: 'var(--primary-400)', fontSize: '0.95rem', marginBottom: '0.5rem' }}>3. Chuẩn đầu ra học phần (CLO) & Ánh xạ CĐR</h4>
-              <div className="table-container">
-                <table className="data-table">
-                  <thead>
-                    <tr>
-                      <th>Mã CLO</th>
-                      <th>Nội Dung Chuẩn Đầu Ra</th>
-                      <th>Mức Bloom</th>
-                      <th>Ánh Xạ PI (CTĐT)</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><strong className="badge badge-cyan">CLO1</strong></td>
-                      <td>Xây dựng RESTful API chuẩn và tích hợp Entity Framework Core</td>
-                      <td><span className="badge badge-bloom badge-cyan">APPLY (Mức 3)</span></td>
-                      <td><strong>PI 3.1</strong> (Hiện thực giải pháp)</td>
-                    </tr>
-                    <tr>
-                      <td><strong className="badge badge-cyan">CLO2</strong></td>
-                      <td>Áp dụng Clean Architecture và phân lớp Dependency Injection</td>
-                      <td><span className="badge badge-bloom badge-cyan">ANALYZE (Mức 4)</span></td>
-                      <td><strong>PI 2.1</strong> (Phân tích thiết kế)</td>
-                    </tr>
-                    <tr>
-                      <td><strong className="badge badge-cyan">CLO3</strong></td>
-                      <td>Kiểm thử Unit Test và đánh giá an toàn bảo mật API</td>
-                      <td><span className="badge badge-bloom badge-cyan">EVALUATE (Mức 5)</span></td>
-                      <td><strong>PI 5.1</strong> (Kiểm thử phần mềm)</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
           </div>
         </div>
       )}
@@ -179,7 +170,7 @@ export const SyllabusPortfolioPage: React.FC = () => {
               <h3 className="glass-card-title">Kế Hoạch Đánh Giá Học Phần (A1, A2, A3)</h3>
               <p className="glass-card-subtitle">Phân bổ tỷ trọng điểm môn học theo quy định khảo thí (Tổng 100%)</p>
             </div>
-            <span className="badge badge-success">Tổng: 100.0% Hợp lệ</span>
+            <button onClick={() => setIsModalOpen(true)} className="btn btn-sm btn-primary">+ Thêm Bài Đánh Giá</button>
           </div>
 
           <div className="table-container">
@@ -225,89 +216,36 @@ export const SyllabusPortfolioPage: React.FC = () => {
         </div>
       )}
 
-      {/* TAB 3: BẢNG 8.3.2 (TỶ TRỌNG TRỰC TIẾP PI 100%) */}
-      {activeTab === 'table832' && (
+      {/* TAB 3: ĐỀ THI & BLUEPRINT */}
+      {activeTab === 'blueprints' && (
         <div className="glass-card">
           <div className="glass-card-header">
             <div>
-              <h3 className="glass-card-title">
-                <Layers size={20} className="text-emerald-400" />
-                Bảng 8.3.2: Phân Bổ Tỷ Trọng Trực Tiếp Từng Tiêu Chí Trong PI (Tổng Đúng 100%)
-              </h3>
-              <p className="glass-card-subtitle">
-                Đảm nhận đo trực tiếp: <strong>PI 3.1, PI 5.1</strong>
-              </p>
+              <h3 className="glass-card-title">Ma Trận Đề Thi & Ngân Hàng Câu Hỏi (Exam Blueprint)</h3>
+              <p className="glass-card-subtitle">Phân bổ câu hỏi theo chuẩn năng lực Bloom</p>
             </div>
-            <span className="badge badge-success">Kiểm tra hợp lệ 100%</span>
+            <button onClick={() => setIsModalOpen(true)} className="btn btn-sm btn-primary">+ Tạo Cấu Trúc Đề Thi</button>
           </div>
 
-          <div className="table-container">
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>Chỉ Số PI Giao Đo (A)</th>
-                  <th>Bài Đánh Giá</th>
-                  <th>Mã Tiêu Chí Rubric</th>
-                  <th>Nội Dung Tiêu Chí Đánh Giá</th>
-                  <th>CLO</th>
-                  <th>Điểm Tối Đa</th>
-                  <th style={{ textAlign: 'center' }}>Tỷ Trọng Trong PI (%)</th>
-                  <th style={{ textAlign: 'center' }}>Trạng Thái Tổng</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td rowSpan={2} style={{ fontWeight: 800, color: 'var(--primary-400)', verticalAlign: 'middle', borderRight: '1px solid var(--border-subtle)' }}>
-                    PI 3.1
-                  </td>
-                  <td><span className="badge badge-secondary">A2</span></td>
-                  <td><code>CRIT-3.1-A</code></td>
-                  <td>Thiết kế và xây dựng RESTful Web API an toàn</td>
-                  <td><span className="badge badge-cyan">CLO1</span></td>
-                  <td>10.0</td>
-                  <td style={{ textAlign: 'center', fontWeight: 700 }}>40.0%</td>
-                  <td rowSpan={2} style={{ textAlign: 'center', verticalAlign: 'middle', borderLeft: '1px solid var(--border-subtle)' }}>
-                    <span className="badge badge-success">Tổng: 100.0% ✓</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td><span className="badge badge-secondary">A3</span></td>
-                  <td><code>CRIT-3.1-B</code></td>
-                  <td>Tích hợp cơ sở dữ liệu và triển khai hệ thống hoàn chỉnh</td>
-                  <td><span className="badge badge-cyan">CLO2</span></td>
-                  <td>10.0</td>
-                  <td style={{ textAlign: 'center', fontWeight: 700 }}>60.0%</td>
-                </tr>
-
-                <tr>
-                  <td rowSpan={2} style={{ fontWeight: 800, color: 'var(--primary-400)', verticalAlign: 'middle', borderRight: '1px solid var(--border-subtle)' }}>
-                    PI 5.1
-                  </td>
-                  <td><span className="badge badge-secondary">A2</span></td>
-                  <td><code>CRIT-5.1-A</code></td>
-                  <td>Viết Unit Test & Tích hợp kiểm thử tự động CI/CD</td>
-                  <td><span className="badge badge-cyan">CLO3</span></td>
-                  <td>10.0</td>
-                  <td style={{ textAlign: 'center', fontWeight: 700 }}>50.0%</td>
-                  <td rowSpan={2} style={{ textAlign: 'center', verticalAlign: 'middle', borderLeft: '1px solid var(--border-subtle)' }}>
-                    <span className="badge badge-success">Tổng: 100.0% ✓</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td><span className="badge badge-secondary">A3</span></td>
-                  <td><code>CRIT-5.1-B</code></td>
-                  <td>Báo cáo kiểm thử bảo mật và hiệu năng tải</td>
-                  <td><span className="badge badge-cyan">CLO3</span></td>
-                  <td>10.0</td>
-                  <td style={{ textAlign: 'center', fontWeight: 700 }}>50.0%</td>
-                </tr>
-              </tbody>
-            </table>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
+            {[
+              { section: 'Phần 1: Trắc nghiệm Kiến thức', items: '10 Câu (3.0 Điểm)', bloom: 'REMEMBER / UNDERSTAND' },
+              { section: 'Phần 2: Viết Code Xử Lý', items: '2 Bài tập (4.0 Điểm)', bloom: 'APPLY (Mức 3)' },
+              { section: 'Phần 3: Thiết Kế & Tối Ưu', items: '1 Bài toán (3.0 Điểm)', bloom: 'ANALYZE (Mức 4)' },
+            ].map((s, i) => (
+              <div key={i} style={{ padding: '1.25rem', backgroundColor: 'var(--bg-surface-elevated)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-medium)' }}>
+                <strong style={{ color: 'var(--text-primary)' }}>{s.section}</strong>
+                <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '0.5rem' }}>
+                  • Điểm số: <strong>{s.items}</strong><br />
+                  • Mức Bloom: <span className="badge badge-bloom badge-cyan">{s.bloom}</span>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       )}
 
-      {/* TAB 4: RUBRICS */}
+      {/* TAB 4: RUBRIC */}
       {activeTab === 'rubrics' && (
         <div className="glass-card">
           <div className="glass-card-header">
@@ -315,7 +253,7 @@ export const SyllabusPortfolioPage: React.FC = () => {
               <h3 className="glass-card-title">Tiêu Chí Chấm Điểm Rubric Định Lượng</h3>
               <p className="glass-card-subtitle">4 mức đánh giá: Xuất sắc (8.5-10), Đạt tốt (7.0-8.4), Đạt (6.0-6.9), Chưa đạt (&lt;6.0)</p>
             </div>
-            <button className="btn btn-sm btn-primary">+ Thêm Tiêu Chí Rubric</button>
+            <button onClick={() => setIsModalOpen(true)} className="btn btn-sm btn-primary">+ Thêm Tiêu Chí Rubric</button>
           </div>
 
           <div className="table-container">
@@ -339,14 +277,6 @@ export const SyllabusPortfolioPage: React.FC = () => {
                   <td>Đủ CRUD cơ bản, chưa có xác thực JWT</td>
                   <td>Không chạy được API hoặc thiếu hơn 50% tính năng</td>
                 </tr>
-                <tr>
-                  <td><strong>CRIT-5.1-A</strong></td>
-                  <td>Unit Test & Code Coverage</td>
-                  <td>Độ bao phủ code $\ge 80\%$, kiểm thử đầy đủ các ca ngoại lệ</td>
-                  <td>Độ bao phủ $60\% - 79\%$, có kiểm thử các hàm chính</td>
-                  <td>Độ bao phủ $50\% - 59\%$, kiểm thử cơ bản</td>
-                  <td>Độ bao phủ $&lt; 50\%$ hoặc test bị fail</td>
-                </tr>
               </tbody>
             </table>
           </div>
@@ -358,9 +288,10 @@ export const SyllabusPortfolioPage: React.FC = () => {
         <div className="glass-card">
           <div className="glass-card-header">
             <div>
-              <h3 className="glass-card-title">Quy Trình Ký Duyệt Số Hóa Đề Cương BM13</h3>
-              <p className="glass-card-subtitle">Tách biệt nhiệm vụ SoD: Tác giả soạn thảo ➔ Trưởng BM thẩm định ➔ Trưởng Khoa phê duyệt</p>
+              <h3 className="glass-card-title">Quy Trình Phê Duyệt Số Hóa Đề Cương BM13</h3>
+              <p className="glass-card-subtitle">Tuân thủ nghiêm ngặt quy định Tách biệt nhiệm vụ SoD 3 cấp</p>
             </div>
+            <button className="btn btn-sm btn-primary"><CheckCircle2 size={14} /> Ký Duyệt Cấp Khoa</button>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -386,10 +317,10 @@ export const SyllabusPortfolioPage: React.FC = () => {
         <div className="glass-card">
           <div className="glass-card-header">
             <div>
-              <h3 className="glass-card-title">Phê Duyệt Đề Thi & Đáp Án Thang Điểm (Exam Blueprint Approval)</h3>
-              <p className="glass-card-subtitle">Hội đồng khảo thí và Trưởng bộ môn kiểm tra độ tương thích chuẩn Bloom</p>
+              <h3 className="glass-card-title">Phê Duyệt Đề Thi & Đáp Án Thang Điểm (Exam Blueprint)</h3>
+              <p className="glass-card-subtitle">Hội đồng khảo thí kiểm tra độ khớp ngân hàng câu hỏi</p>
             </div>
-            <button className="btn btn-sm btn-primary">+ Nộp Đề Thi Mới</button>
+            <button onClick={() => setIsModalOpen(true)} className="btn btn-sm btn-primary">+ Nộp Đề Thi Mới</button>
           </div>
 
           <div className="table-container">
@@ -413,16 +344,47 @@ export const SyllabusPortfolioPage: React.FC = () => {
                   <td><span className="badge badge-success">Khớp 100% Blueprint</span></td>
                   <td><span className="badge badge-success">ĐÃ DUYỆT (CHỜ THI)</span></td>
                 </tr>
-                <tr>
-                  <td><strong>EXAM-IT2102-2023-01</strong></td>
-                  <td>IT2102: Cấu trúc Dữ liệu</td>
-                  <td>Cuối kỳ HK1 (2023 - 2024)</td>
-                  <td>ThS. Nguyễn Văn Toàn</td>
-                  <td><span className="badge badge-success">Khớp 100% Blueprint</span></td>
-                  <td><span className="badge badge-success">ĐÃ DUYỆT (CHỜ THI)</span></td>
-                </tr>
               </tbody>
             </table>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL DIALOG */}
+      {isModalOpen && (
+        <div style={{ position: 'fixed', inset: 0, zIndex: 80, backgroundColor: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
+          <div className="glass-card animate-fade-in" style={{ width: '540px', maxWidth: '100%', maxHeight: '90vh', overflowY: 'auto' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '0.75rem' }}>
+              <h3 style={{ fontSize: '1.125rem', fontWeight: 800, color: 'var(--text-primary)' }}>
+                Thao Tác: {activeTab === 'plans' ? 'Thêm Bài Đánh Giá' : activeTab === 'rubrics' ? 'Tiêu Chí Rubric' : 'Đề Cương & Đề Thi'}
+              </h3>
+              <button onClick={() => setIsModalOpen(false)} className="btn btn-secondary btn-icon"><X size={16} /></button>
+            </div>
+
+            <form onSubmit={handleSaveModal}>
+              <div className="form-group">
+                <label className="form-label">Tên Bài / Tiêu Chí</label>
+                <input required type="text" placeholder="Nhập tên..." className="form-input" defaultValue="Bài thực hành kiểm thử tự động" />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Tỷ Trọng Điểm (%)</label>
+                <input required type="number" step="5" defaultValue="30" className="form-input" />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">CLO Đảm Nhận</label>
+                <select className="form-select">
+                  <option>CLO1 - Xây dựng RESTful API</option>
+                  <option>CLO3 - Kiểm thử Unit Test</option>
+                </select>
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', marginTop: '1.5rem', borderTop: '1px solid var(--border-subtle)', paddingTop: '1rem' }}>
+                <button type="button" onClick={() => setIsModalOpen(false)} className="btn btn-secondary">Hủy Bỏ</button>
+                <button type="submit" className="btn btn-primary"><Save size={16} /><span>Lưu Thay Đổi</span></button>
+              </div>
+            </form>
           </div>
         </div>
       )}

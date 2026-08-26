@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   Database,
   Building2,
@@ -9,17 +9,18 @@ import {
   BookOpen,
   Plus,
   Search,
-  Filter,
   Download,
   Edit2,
   Trash2,
+  X,
+  Save,
   CheckCircle,
 } from 'lucide-react';
 
 export const AcademicDataPage: React.FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
 
-  // Determine active sub-item from path or default to org-units
   const getSubSection = () => {
     if (location.pathname.includes('/data/programs')) return 'programs';
     if (location.pathname.includes('/data/cohorts')) return 'cohorts';
@@ -28,18 +29,43 @@ export const AcademicDataPage: React.FC = () => {
     return 'org-units';
   };
 
-  const [activeTab, setActiveTab] = useState<'org-units' | 'programs' | 'cohorts' | 'students' | 'courses'>(
-    getSubSection() as any
-  );
+  const [activeTab, setActiveTab] = useState<string>(getSubSection());
   const [searchTerm, setSearchTerm] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  // Sync state whenever URL pathname changes
+  useEffect(() => {
+    setActiveTab(getSubSection());
+  }, [location.pathname]);
+
+  const handleTabClick = (key: string) => {
+    setActiveTab(key);
+    navigate(`/data/${key}`);
+  };
+
+  const handleSaveModal = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsModalOpen(false);
+    setToastMessage('✓ Đã lưu thành công dữ liệu vào hệ thống!');
+    setTimeout(() => setToastMessage(null), 3000);
+  };
 
   return (
     <div className="animate-fade-in">
+      {/* Toast Alert */}
+      {toastMessage && (
+        <div style={{ position: 'fixed', top: '85px', right: '2rem', zIndex: 100, backgroundColor: 'var(--emerald-500)', color: '#fff', padding: '0.75rem 1.25rem', borderRadius: 'var(--radius-md)', boxShadow: 'var(--glass-shadow)', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 600 }}>
+          <CheckCircle size={18} />
+          <span>{toastMessage}</span>
+        </div>
+      )}
+
       {/* Page Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
         <div>
           <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
-            Quản Lý Dữ Liệu Đào Tạo Cơ Sở (Mục 8.2)
+            Quản Lý Dữ Liệu Đào Tạo Cơ Sở
           </h2>
           <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', marginTop: '0.25rem' }}>
             Quản lý danh mục Khoa/Viện, Ngành đào tạo, Khóa tuyển sinh, Danh sách sinh viên và Học phần.
@@ -51,7 +77,7 @@ export const AcademicDataPage: React.FC = () => {
             <Download size={16} />
             <span>Xuất Excel</span>
           </button>
-          <button className="btn btn-primary">
+          <button onClick={() => setIsModalOpen(true)} className="btn btn-primary">
             <Plus size={16} />
             <span>+ Thêm Mới Dữ Liệu</span>
           </button>
@@ -61,15 +87,15 @@ export const AcademicDataPage: React.FC = () => {
       {/* Navigation Sub-Tabs */}
       <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', borderBottom: '1px solid var(--border-medium)', paddingBottom: '0.5rem', overflowX: 'auto' }}>
         {[
-          { key: 'org-units', label: 'Đơn Vị – Khoa / Viện', icon: Building2 },
-          { key: 'programs', label: 'Ngành Đào Tạo', icon: GraduationCap },
-          { key: 'cohorts', label: 'Khóa Tuyển Sinh (K15 - K18)', icon: Calendar },
-          { key: 'students', label: 'Danh Sách Sinh Viên', icon: Users },
-          { key: 'courses', label: 'Danh Mục Học Phần', icon: BookOpen },
+          { key: 'org-units', label: '1. Đơn Vị – Khoa / Viện', icon: Building2 },
+          { key: 'programs', label: '2. Ngành Đào Tạo', icon: GraduationCap },
+          { key: 'cohorts', label: '3. Khóa Tuyển Sinh (K15 - K18)', icon: Calendar },
+          { key: 'students', label: '4. Danh Sách Sinh Viên', icon: Users },
+          { key: 'courses', label: '5. Danh Mục Học Phần', icon: BookOpen },
         ].map((tab) => (
           <button
             key={tab.key}
-            onClick={() => setActiveTab(tab.key as any)}
+            onClick={() => handleTabClick(tab.key)}
             className={`btn ${activeTab === tab.key ? 'btn-primary' : 'btn-secondary'}`}
             style={{ fontSize: '0.8125rem' }}
           >
@@ -144,7 +170,7 @@ export const AcademicDataPage: React.FC = () => {
                     <td><span className="badge badge-cyan">{row.count}</span></td>
                     <td><span className="badge badge-success">{row.status}</span></td>
                     <td style={{ textAlign: 'right' }}>
-                      <button className="btn btn-sm btn-secondary" style={{ marginRight: '0.35rem' }}><Edit2 size={12} /></button>
+                      <button onClick={() => setIsModalOpen(true)} className="btn btn-sm btn-secondary" style={{ marginRight: '0.35rem' }}><Edit2 size={12} /></button>
                       <button className="btn btn-sm btn-secondary"><Trash2 size={12} /></button>
                     </td>
                   </tr>
@@ -163,7 +189,7 @@ export const AcademicDataPage: React.FC = () => {
               <h3 className="glass-card-title">Danh Mục Ngành Đào Tạo Trực Thuộc</h3>
               <p className="glass-card-subtitle">Quản lý mã ngành chuẩn Bộ GD&ĐT và số tín chỉ yêu cầu</p>
             </div>
-            <button className="btn btn-sm btn-primary">+ Thêm Ngành Mới</button>
+            <button onClick={() => setIsModalOpen(true)} className="btn btn-sm btn-primary">+ Thêm Ngành Mới</button>
           </div>
 
           <div className="table-container">
@@ -210,7 +236,7 @@ export const AcademicDataPage: React.FC = () => {
               <h3 className="glass-card-title">Danh Sách Khóa Tuyển Sinh & Khung Thời Gian Áp Dụng</h3>
               <p className="glass-card-subtitle">Mỗi khóa tuyển sinh được gán đúng phiên bản CTĐT riêng biệt</p>
             </div>
-            <button className="btn btn-sm btn-primary">+ Khởi Tạo Khóa Tuyển Sinh</button>
+            <button onClick={() => setIsModalOpen(true)} className="btn btn-sm btn-primary">+ Khởi Tạo Khóa Tuyển Sinh</button>
           </div>
 
           <div className="table-container">
@@ -257,7 +283,7 @@ export const AcademicDataPage: React.FC = () => {
               <h3 className="glass-card-title">Hồ Sơ Sinh Viên & Định Tuyến CTĐT Theo Khóa</h3>
               <p className="glass-card-subtitle">Đồng bộ tự động từ hệ thống Quản lý Đào tạo SIS</p>
             </div>
-            <button className="btn btn-sm btn-secondary">Đồng Bộ Lại Với SIS</button>
+            <button onClick={() => setIsModalOpen(true)} className="btn btn-sm btn-primary">+ Thêm Sinh Viên</button>
           </div>
 
           <div className="table-container">
@@ -310,7 +336,7 @@ export const AcademicDataPage: React.FC = () => {
               <h3 className="glass-card-title">Danh Mục Học Phần Trong Toàn Trường</h3>
               <p className="glass-card-subtitle">Mỗi học phần có thể gắn với nhiều phiên bản Đề cương BM13 của từng CTĐT</p>
             </div>
-            <button className="btn btn-sm btn-primary">+ Thêm Học Phần</button>
+            <button onClick={() => setIsModalOpen(true)} className="btn btn-sm btn-primary">+ Thêm Học Phần</button>
           </div>
 
           <div className="table-container">
@@ -350,6 +376,50 @@ export const AcademicDataPage: React.FC = () => {
                 ))}
               </tbody>
             </table>
+          </div>
+        </div>
+      )}
+
+      {/* CREATE / EDIT MODAL DIALOG */}
+      {isModalOpen && (
+        <div style={{ position: 'fixed', inset: 0, zIndex: 80, backgroundColor: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
+          <div className="glass-card animate-fade-in" style={{ width: '540px', maxWidth: '100%', maxHeight: '90vh', overflowY: 'auto' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '0.75rem' }}>
+              <h3 style={{ fontSize: '1.125rem', fontWeight: 800, color: 'var(--text-primary)' }}>
+                Thêm Mới / Cập Nhật: {activeTab === 'org-units' ? 'Đơn Vị - Khoa' : activeTab === 'programs' ? 'Ngành Đào Tạo' : activeTab === 'cohorts' ? 'Khóa Tuyển Sinh' : activeTab === 'students' ? 'Hồ Sơ Sinh Viên' : 'Học Phần'}
+              </h3>
+              <button onClick={() => setIsModalOpen(false)} className="btn btn-secondary btn-icon"><X size={16} /></button>
+            </div>
+
+            <form onSubmit={handleSaveModal}>
+              <div className="form-group">
+                <label className="form-label">Mã Định Danh (Code)</label>
+                <input required type="text" placeholder="Ví dụ: IT4101, K17, 7480201..." className="form-input" defaultValue="IT_NEW_01" />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Tên Gọi Đầy Đủ</label>
+                <input required type="text" placeholder="Nhập tên đối tượng..." className="form-input" defaultValue="Lập trình Cloud Native & Kubernetes" />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Khoa / Đơn Vị Phụ Trách</label>
+                <select className="form-select">
+                  <option>Khoa Công nghệ Thông tin</option>
+                  <option>Khoa Quản trị Kinh doanh</option>
+                </select>
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Ghi Chú & Mô Tả</label>
+                <textarea rows={3} className="form-textarea" placeholder="Mô tả bổ sung nếu có..." defaultValue="Áp dụng từ năm học 2023-2024" />
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', marginTop: '1.5rem', borderTop: '1px solid var(--border-subtle)', paddingTop: '1rem' }}>
+                <button type="button" onClick={() => setIsModalOpen(false)} className="btn btn-secondary">Hủy Bỏ</button>
+                <button type="submit" className="btn btn-primary"><Save size={16} /><span>Lưu Dữ Liệu</span></button>
+              </div>
+            </form>
           </div>
         </div>
       )}

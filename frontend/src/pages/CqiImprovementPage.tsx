@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   RefreshCw,
   Plus,
@@ -10,6 +10,9 @@ import {
   ShieldCheck,
   FileCheck,
   TrendingUp,
+  X,
+  Save,
+  CheckCircle,
 } from 'lucide-react';
 
 interface CqiPlanItem {
@@ -26,8 +29,25 @@ interface CqiPlanItem {
 
 export const CqiImprovementPage: React.FC = () => {
   const location = useLocation();
-  const isMonitoringView = location.pathname.includes('/cqi/monitoring');
-  const [activeTab, setActiveTab] = useState<'action-plans' | 'monitoring'>(isMonitoringView ? 'monitoring' : 'action-plans');
+  const navigate = useNavigate();
+
+  const getSubSection = () => {
+    if (location.pathname.includes('/cqi/monitoring')) return 'monitoring';
+    return 'action-plans';
+  };
+
+  const [activeTab, setActiveTab] = useState<string>(getSubSection());
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    setActiveTab(getSubSection());
+  }, [location.pathname]);
+
+  const handleTabClick = (key: string) => {
+    setActiveTab(key);
+    navigate(`/cqi/${key}`);
+  };
 
   const [plans, setPlans] = useState<CqiPlanItem[]>([
     {
@@ -65,42 +85,57 @@ export const CqiImprovementPage: React.FC = () => {
     },
   ]);
 
+  const handleCreateCqiPlan = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsModalOpen(false);
+    setToastMessage('✓ Đã tạo thành công Kế hoạch cải tiến CQI mới!');
+    setTimeout(() => setToastMessage(null), 3000);
+  };
+
   return (
     <div className="animate-fade-in">
+      {/* Toast Alert */}
+      {toastMessage && (
+        <div style={{ position: 'fixed', top: '85px', right: '2rem', zIndex: 100, backgroundColor: 'var(--emerald-500)', color: '#fff', padding: '0.75rem 1.25rem', borderRadius: 'var(--radius-md)', boxShadow: 'var(--glass-shadow)', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 600 }}>
+          <CheckCircle size={18} />
+          <span>{toastMessage}</span>
+        </div>
+      )}
+
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
         <div>
           <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
-            Cải Tiến Chất Lượng Liên Tục (CQI Management - Mục 8.7)
+            Cải Tiến Chất Lượng Liên Tục (CQI Management)
           </h2>
           <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', marginTop: '0.25rem' }}>
             Quản lý vòng lặp khép kín: Phát hiện vấn đề ➔ Phân tích nguyên nhân 5-Why ➔ Kế hoạch hành động ➔ Đo lường lại ➔ Nghiệm thu đóng.
           </p>
         </div>
 
-        <button className="btn btn-primary">
+        <button onClick={() => setIsModalOpen(true)} className="btn btn-primary">
           <Plus size={16} />
-          <span>Tạo Kế Hoạch CQI Mới</span>
+          <span>+ Tạo Kế Hoạch CQI Mới</span>
         </button>
       </div>
 
       {/* Sub Tabs */}
       <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', borderBottom: '1px solid var(--border-medium)', paddingBottom: '0.5rem' }}>
         <button
-          onClick={() => setActiveTab('action-plans')}
+          onClick={() => handleTabClick('action-plans')}
           className={`btn ${activeTab === 'action-plans' ? 'btn-primary' : 'btn-secondary'}`}
           style={{ fontSize: '0.8125rem' }}
         >
           <RefreshCw size={16} />
-          <span>Bảng Kế Hoạch Cải Tiến (Kanban)</span>
+          <span>1. Bảng Kế Hoạch Cải Tiến (Kanban)</span>
         </button>
         <button
-          onClick={() => setActiveTab('monitoring')}
+          onClick={() => handleTabClick('monitoring')}
           className={`btn ${activeTab === 'monitoring' ? 'btn-primary' : 'btn-secondary'}`}
           style={{ fontSize: '0.8125rem' }}
         >
           <TrendingUp size={16} />
-          <span>Theo Dõi Tiến Độ & Đo Lường Lại</span>
+          <span>2. Theo Dõi Tiến Độ & Đo Lường Lại</span>
         </button>
       </div>
 
@@ -211,6 +246,57 @@ export const CqiImprovementPage: React.FC = () => {
                 </tr>
               </tbody>
             </table>
+          </div>
+        </div>
+      )}
+
+      {/* CREATE CQI MODAL DIALOG */}
+      {isModalOpen && (
+        <div style={{ position: 'fixed', inset: 0, zIndex: 80, backgroundColor: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
+          <div className="glass-card animate-fade-in" style={{ width: '560px', maxWidth: '100%', maxHeight: '90vh', overflowY: 'auto' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '0.75rem' }}>
+              <h3 style={{ fontSize: '1.125rem', fontWeight: 800, color: 'var(--text-primary)' }}>
+                Khởi Tạo Kế Hoạch Cải Tiến Chất Lượng (CQI Plan)
+              </h3>
+              <button onClick={() => setIsModalOpen(false)} className="btn btn-secondary btn-icon"><X size={16} /></button>
+            </div>
+
+            <form onSubmit={handleCreateCqiPlan}>
+              <div className="form-group">
+                <label className="form-label">Tiêu Đề Kế Hoạch Cải Tiến</label>
+                <input required type="text" placeholder="Nhập tiêu đề..." className="form-input" defaultValue="Bổ sung chuyên đề thực hành Unit Test tự động" />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Chuẩn Đầu Ra / Chỉ Số Mục Tiêu</label>
+                <select className="form-select">
+                  <option>PLO5 (Kiểm thử phần mềm & QA)</option>
+                  <option>PLO2 (Phân tích thiết kế hệ thống)</option>
+                  <option>PLO4 (Làm việc nhóm & Giao tiếp)</option>
+                </select>
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Phân Tích Nguyên Nhân Gốc (5-Why Analysis)</label>
+                <textarea required rows={3} placeholder="Ghi nhận nguyên nhân chưa đạt..." className="form-textarea" defaultValue="Sinh viên chưa có môi trường thực hành CI/CD và viết Unit Test tự động trên lớp." />
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                <div className="form-group">
+                  <label className="form-label">Giảng Viên Phụ Trách</label>
+                  <input required type="text" className="form-input" defaultValue="TS. Lê Hải Nam" />
+                </div>
+                <div className="form-group">
+                  <label className="form-label">Hạn Chót Nghiệm Thu (Deadline)</label>
+                  <input required type="date" className="form-input" defaultValue="2024-06-30" />
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', marginTop: '1.5rem', borderTop: '1px solid var(--border-subtle)', paddingTop: '1rem' }}>
+                <button type="button" onClick={() => setIsModalOpen(false)} className="btn btn-secondary">Hủy Bỏ</button>
+                <button type="submit" className="btn btn-primary"><Save size={16} /><span>Lưu Kế Hoạch CQI</span></button>
+              </div>
+            </form>
           </div>
         </div>
       )}

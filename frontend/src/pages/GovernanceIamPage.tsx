@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   ShieldCheck,
   Lock,
@@ -12,12 +12,14 @@ import {
   Users,
   Settings,
   Zap,
-  Database,
-  RefreshCw,
+  Plus,
+  X,
+  Save,
 } from 'lucide-react';
 
 export const GovernanceIamPage: React.FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const getSubSection = () => {
     if (location.pathname.includes('/governance/users')) return 'users';
@@ -25,27 +27,53 @@ export const GovernanceIamPage: React.FC = () => {
     if (location.pathname.includes('/governance/sis-lms-integration')) return 'integration';
     if (location.pathname.includes('/governance/audit-logs')) return 'audit';
     if (location.pathname.includes('/governance/system-config')) return 'config';
-    return 'audit';
+    return 'users';
   };
 
   const [activeTab, setActiveTab] = useState<string>(getSubSection());
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    setActiveTab(getSubSection());
+  }, [location.pathname]);
+
+  const handleTabClick = (key: string) => {
+    setActiveTab(key);
+    navigate(`/governance/${key}`);
+  };
+
+  const handleSaveModal = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsModalOpen(false);
+    setToastMessage('✓ Đã cập nhật thành công phân quyền người dùng!');
+    setTimeout(() => setToastMessage(null), 3000);
+  };
 
   return (
     <div className="animate-fade-in">
+      {/* Toast Alert */}
+      {toastMessage && (
+        <div style={{ position: 'fixed', top: '85px', right: '2rem', zIndex: 100, backgroundColor: 'var(--emerald-500)', color: '#fff', padding: '0.75rem 1.25rem', borderRadius: 'var(--radius-md)', boxShadow: 'var(--glass-shadow)', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 600 }}>
+          <CheckCircle size={18} />
+          <span>{toastMessage}</span>
+        </div>
+      )}
+
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
         <div>
           <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
-            Quản Trị Hệ Thống, Phân Quyền & Audit Trail (Mục 8.9 & 8.10)
+            Quản Trị Hệ Thống, Phân Quyền & Audit Trail
           </h2>
           <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', marginTop: '0.25rem' }}>
             Quản lý tài khoản người dùng, phân quyền theo Scope, tích hợp SIS/LMS, kiểm toán bất biến và cấu hình tham số hệ thống.
           </p>
         </div>
 
-        <button className="btn btn-primary">
+        <button onClick={() => setIsModalOpen(true)} className="btn btn-primary">
           <Key size={16} />
-          <span>Gán Quyền Mới Theo Scope</span>
+          <span>+ Gán Quyền Mới Theo Scope</span>
         </button>
       </div>
 
@@ -53,34 +81,33 @@ export const GovernanceIamPage: React.FC = () => {
       <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', borderBottom: '1px solid var(--border-medium)', paddingBottom: '0.5rem', overflowX: 'auto' }}>
         {[
           { key: 'users', label: '1. Người Dùng Hệ Thống', icon: Users },
-          { key: 'roles', label: '2. Vai Trò & Phân Quyền Scope', icon: UserCheck },
+          { key: 'roles-scopes', label: '2. Vai Trò & Phân Quyền Scope', icon: UserCheck },
           { key: 'sod', label: '3. Tách Biệt Nhiệm Vụ (SoD)', icon: Lock },
-          { key: 'integration', label: '4. Tích Hợp SIS/LMS & Webhook', icon: Zap },
-          { key: 'audit', label: '5. Nhật Ký Kiểm Toán (Hash Chain)', icon: History, badge: 'SHA-256' },
-          { key: 'config', label: '6. Cấu Hình Hệ Thống', icon: Settings },
+          { key: 'sis-lms-integration', label: '4. Tích Hợp SIS/LMS & Webhook', icon: Zap },
+          { key: 'audit-logs', label: '5. Nhật Ký Kiểm Toán (Hash Chain)', icon: History, badge: 'SHA-256' },
+          { key: 'system-config', label: '6. Cấu Hình Hệ Thống', icon: Settings },
         ].map((tab) => (
           <button
             key={tab.key}
-            onClick={() => setActiveTab(tab.key)}
-            className={`btn ${activeTab === tab.key ? 'btn-primary' : 'btn-secondary'}`}
+            onClick={() => handleTabClick(tab.key)}
+            className={`btn ${activeTab === tab.key || (activeTab === 'roles' && tab.key === 'roles-scopes') || (activeTab === 'integration' && tab.key === 'sis-lms-integration') || (activeTab === 'audit' && tab.key === 'audit-logs') || (activeTab === 'config' && tab.key === 'system-config') ? 'btn-primary' : 'btn-secondary'}`}
             style={{ fontSize: '0.8125rem' }}
           >
             <tab.icon size={16} />
             <span>{tab.label}</span>
-            {tab.badge && <span className="badge badge-bloom badge-cyan">{tab.badge}</span>}
           </button>
         ))}
       </div>
 
       {/* TAB 1: USERS */}
-      {activeTab === 'users' && (
+      {(activeTab === 'users') && (
         <div className="glass-card">
           <div className="glass-card-header">
             <div>
               <h3 className="glass-card-title">Danh Sách Người Dùng & Trạng Thái Xác Thực</h3>
               <p className="glass-card-subtitle">Hỗ trợ SSO Microsoft 365 và Tài khoản cục bộ</p>
             </div>
-            <button className="btn btn-sm btn-primary">+ Thêm Người Dùng</button>
+            <button onClick={() => setIsModalOpen(true)} className="btn btn-sm btn-primary">+ Thêm Người Dùng</button>
           </div>
 
           <div className="table-container">
@@ -117,13 +144,14 @@ export const GovernanceIamPage: React.FC = () => {
       )}
 
       {/* TAB 2: ROLES & SCOPES */}
-      {activeTab === 'roles' && (
+      {(activeTab === 'roles' || activeTab === 'roles-scopes') && (
         <div className="glass-card">
           <div className="glass-card-header">
             <div>
               <h3 className="glass-card-title">Phân Quyền Ma Trận Vai Trò Theo Scope (Khoa - CTĐT - Lớp - Đợt)</h3>
               <p className="glass-card-subtitle">Server-side RLS enforcement đảm bảo không rò rỉ dữ liệu ngoài thẩm quyền</p>
             </div>
+            <button onClick={() => setIsModalOpen(true)} className="btn btn-sm btn-primary">+ Gán Vai Trò Mới</button>
           </div>
 
           <div className="table-container">
@@ -202,14 +230,14 @@ export const GovernanceIamPage: React.FC = () => {
       )}
 
       {/* TAB 4: INTEGRATION SIS/LMS */}
-      {activeTab === 'integration' && (
+      {(activeTab === 'integration' || activeTab === 'sis-lms-integration') && (
         <div className="glass-card">
           <div className="glass-card-header">
             <div>
               <h3 className="glass-card-title">Tích Hợp Đồng Bộ Ngoại Vi SIS / LMS & Webhooks</h3>
               <p className="glass-card-subtitle">Đồng bộ gia tăng và quản lý cổng gửi Webhook bảo mật</p>
             </div>
-            <button className="btn btn-sm btn-primary">Đồng Bộ Tức Thời SIS</button>
+            <button onClick={() => { setToastMessage('✓ Đang kích hoạt đồng bộ tức thời với SIS...'); setTimeout(() => setToastMessage(null), 3000); }} className="btn btn-sm btn-primary">Đồng Bộ Tức Thời SIS</button>
           </div>
 
           <div className="table-container">
@@ -245,13 +273,13 @@ export const GovernanceIamPage: React.FC = () => {
       )}
 
       {/* TAB 5: AUDIT LOGS */}
-      {activeTab === 'audit' && (
+      {(activeTab === 'audit' || activeTab === 'audit-logs') && (
         <div className="glass-card">
           <div className="glass-card-header">
             <div>
               <h3 className="glass-card-title">
                 <History size={20} className="text-emerald-400" />
-                Chuỗi Nhật Ký Kiểm Toán Bất Biến (Immutable Hash Chain - FR-ADM-05)
+                Chuỗi Nhật Ký Kiểm Toán Bất Biến (Immutable Hash Chain)
               </h3>
               <p className="glass-card-subtitle">
                 Mỗi hành động thay đổi cấu hình, nhập/xuất điểm hoặc phê duyệt đều được gắn mã băm liên kết không thể sửa xóa
@@ -294,14 +322,14 @@ export const GovernanceIamPage: React.FC = () => {
       )}
 
       {/* TAB 6: CONFIG */}
-      {activeTab === 'config' && (
+      {(activeTab === 'config' || activeTab === 'system-config') && (
         <div className="glass-card">
           <div className="glass-card-header">
             <div>
               <h3 className="glass-card-title">Cấu Hình Tham Số Hệ Thống OBE Toàn Trường</h3>
               <p className="glass-card-subtitle">Thiết lập ngưỡng mặc định và tham số thuật toán</p>
             </div>
-            <button className="btn btn-sm btn-primary">Lưu Cấu Hình</button>
+            <button onClick={handleSaveModal} className="btn btn-sm btn-primary">Lưu Cấu Hình</button>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.25rem' }}>
@@ -313,6 +341,50 @@ export const GovernanceIamPage: React.FC = () => {
               <label className="form-label">Ngưỡng Đạt Chuẩn Của Khóa Mặc Định (θ_coh)</label>
               <input type="number" step="1" defaultValue="80" className="form-input" />
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL DIALOG */}
+      {isModalOpen && (
+        <div style={{ position: 'fixed', inset: 0, zIndex: 80, backgroundColor: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
+          <div className="glass-card animate-fade-in" style={{ width: '540px', maxWidth: '100%', maxHeight: '90vh', overflowY: 'auto' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '0.75rem' }}>
+              <h3 style={{ fontSize: '1.125rem', fontWeight: 800, color: 'var(--text-primary)' }}>
+                {activeTab === 'users' ? 'Thêm Người Dùng Mới' : 'Phân Quyền Scope Cho Tài Khoản'}
+              </h3>
+              <button onClick={() => setIsModalOpen(false)} className="btn btn-secondary btn-icon"><X size={16} /></button>
+            </div>
+
+            <form onSubmit={handleSaveModal}>
+              <div className="form-group">
+                <label className="form-label">Email Cán Bộ / Giảng Viên</label>
+                <input required type="email" placeholder="example@dnu.edu.vn" className="form-input" defaultValue="giangvien@dnu.edu.vn" />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Vai Trò Hệ Thống</label>
+                <select className="form-select">
+                  <option>LECTURER (Giảng viên bộ môn)</option>
+                  <option>DEAN (Trưởng Khoa / Viện)</option>
+                  <option>ADMIN (Quản trị viên)</option>
+                </select>
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Phạm Vi Scope Dữ Liệu</label>
+                <select className="form-select">
+                  <option>Khoa Công nghệ Thông tin</option>
+                  <option>Ngành Kỹ thuật Phần mềm</option>
+                  <option>Toàn Trường</option>
+                </select>
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', marginTop: '1.5rem', borderTop: '1px solid var(--border-subtle)', paddingTop: '1rem' }}>
+                <button type="button" onClick={() => setIsModalOpen(false)} className="btn btn-secondary">Hủy Bỏ</button>
+                <button type="submit" className="btn btn-primary"><Save size={16} /><span>Lưu Quyền</span></button>
+              </div>
+            </form>
           </div>
         </div>
       )}

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   FileBarChart,
   Download,
@@ -10,7 +10,6 @@ import {
   FileText,
   AlertTriangle,
   Layers,
-  ChevronRight,
 } from 'lucide-react';
 import {
   ResponsiveContainer,
@@ -25,6 +24,7 @@ import {
 
 export const ReportsAccreditationPage: React.FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const getSubSection = () => {
     if (location.pathname.includes('/results/clo')) return 'clo';
@@ -36,6 +36,21 @@ export const ReportsAccreditationPage: React.FC = () => {
 
   const [activeTab, setActiveTab] = useState<string>(getSubSection());
   const [selectedStandard, setSelectedStandard] = useState<'AUN-QA' | 'ABET' | 'MOET'>('AUN-QA');
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    setActiveTab(getSubSection());
+  }, [location.pathname]);
+
+  const handleTabClick = (key: string) => {
+    setActiveTab(key);
+    navigate(`/results/${key}`);
+  };
+
+  const handleExport = (type: string) => {
+    setToastMessage(`✓ Đang xuất ${type}... File sẽ được tải xuống tự động.`);
+    setTimeout(() => setToastMessage(null), 3000);
+  };
 
   const cohortTrendData = [
     { ploCode: 'PLO1', k15: 82.0, k16: 85.5, k17: 88.5 },
@@ -48,11 +63,19 @@ export const ReportsAccreditationPage: React.FC = () => {
 
   return (
     <div className="animate-fade-in">
+      {/* Toast Alert */}
+      {toastMessage && (
+        <div style={{ position: 'fixed', top: '85px', right: '2rem', zIndex: 100, backgroundColor: 'var(--emerald-500)', color: '#fff', padding: '0.75rem 1.25rem', borderRadius: 'var(--radius-md)', boxShadow: 'var(--glass-shadow)', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 600 }}>
+          <CheckCircle size={18} />
+          <span>{toastMessage}</span>
+        </div>
+      )}
+
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
         <div>
           <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
-            Kết Quả Chuẩn Đầu Ra & Báo Cáo Kiểm Định (Mục 8.6)
+            Kết Quả Chuẩn Đầu Ra & Báo Cáo Kiểm Định
           </h2>
           <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', marginTop: '0.25rem' }}>
             Xem chi tiết kết quả CLO, PI, PLO, cảnh báo sinh viên chưa đạt và xuất báo cáo tự đánh giá AUN-QA / ABET / MOET.
@@ -60,11 +83,11 @@ export const ReportsAccreditationPage: React.FC = () => {
         </div>
 
         <div style={{ display: 'flex', gap: '0.75rem' }}>
-          <button className="btn btn-secondary">
+          <button onClick={() => handleExport('Gói Hồ Sơ Minh Chứng (.ZIP)')} className="btn btn-secondary">
             <Download size={16} />
             <span>Xuất Hồ Sơ Minh Chứng (.ZIP)</span>
           </button>
-          <button className="btn btn-primary">
+          <button onClick={() => handleExport('Báo Cáo Tự Đánh Giá (PDF)')} className="btn btn-primary">
             <FileText size={16} />
             <span>Xuất Báo Cáo Tự Đánh Giá (PDF)</span>
           </button>
@@ -74,15 +97,15 @@ export const ReportsAccreditationPage: React.FC = () => {
       {/* Navigation Sub-Tabs */}
       <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', borderBottom: '1px solid var(--border-medium)', paddingBottom: '0.5rem', overflowX: 'auto' }}>
         {[
-          { key: 'summary-reports', label: 'Báo Cáo Tổng Hợp Kiểm Định', icon: FileBarChart },
-          { key: 'plo', label: 'Kết Quả CĐR (PLO)', icon: Award },
-          { key: 'pi', label: 'Kết Quả Chỉ Báo (PI)', icon: Layers },
-          { key: 'clo', label: 'Kết Quả Môn Học (CLO)', icon: FileCheck2 },
-          { key: 'warnings', label: 'Cảnh Báo Chưa Đạt', icon: AlertTriangle },
+          { key: 'summary-reports', label: '1. Báo Cáo Tổng Hợp Kiểm Định', icon: FileBarChart },
+          { key: 'plo', label: '2. Kết Quả CĐR (PLO)', icon: Award },
+          { key: 'pi', label: '3. Kết Quả Chỉ Báo (PI)', icon: Layers },
+          { key: 'clo', label: '4. Kết Quả Môn Học (CLO)', icon: FileCheck2 },
+          { key: 'warnings', label: '5. Cảnh Báo Chưa Đạt', icon: AlertTriangle },
         ].map((tab) => (
           <button
             key={tab.key}
-            onClick={() => setActiveTab(tab.key)}
+            onClick={() => handleTabClick(tab.key)}
             className={`btn ${activeTab === tab.key ? 'btn-primary' : 'btn-secondary'}`}
             style={{ fontSize: '0.8125rem' }}
           >
@@ -92,7 +115,7 @@ export const ReportsAccreditationPage: React.FC = () => {
         ))}
       </div>
 
-      {/* TAB: BÁO CÁO TỔNG HỢP (SUMMARY-REPORTS) */}
+      {/* TAB: BÁO CÁO TỔNG HỢP */}
       {activeTab === 'summary-reports' && (
         <>
           <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1.25rem' }}>
@@ -289,7 +312,7 @@ export const ReportsAccreditationPage: React.FC = () => {
         </div>
       )}
 
-      {/* TAB: CẢNH BÁO CHƯA ĐẠT (WARNINGS) */}
+      {/* TAB: CẢNH BÁO CHƯA ĐẠT */}
       {activeTab === 'warnings' && (
         <div className="glass-card">
           <div className="glass-card-header">
@@ -306,7 +329,7 @@ export const ReportsAccreditationPage: React.FC = () => {
               </div>
               <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>• Nguyên nhân: Điểm bài thực hành Unit Test dưới 6.0/10.</p>
               <div style={{ marginTop: '0.75rem', display: 'flex', gap: '0.5rem' }}>
-                <button className="btn btn-sm btn-primary">Khởi Tạo Kế Hoạch CQI Cho Lớp</button>
+                <button onClick={() => navigate('/cqi/action-plans')} className="btn btn-sm btn-primary">Khởi Tạo Kế Hoạch CQI Cho Lớp</button>
                 <button className="btn btn-sm btn-secondary">Xem Danh Sách 6 Sinh Viên</button>
               </div>
             </div>

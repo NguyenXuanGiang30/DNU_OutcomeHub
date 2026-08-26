@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   ClipboardCheck,
   Calculator,
@@ -15,6 +15,8 @@ import {
   FolderArchive,
   FileCheck2,
   RefreshCw,
+  Plus,
+  X,
 } from 'lucide-react';
 
 interface StudentScoreRow {
@@ -29,6 +31,7 @@ interface StudentScoreRow {
 
 export const MeasurementScoringPage: React.FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const getSubSection = () => {
     if (location.pathname.includes('/measurement/periods')) return 'periods';
@@ -42,6 +45,17 @@ export const MeasurementScoringPage: React.FC = () => {
   };
 
   const [activeTab, setActiveTab] = useState<string>(getSubSection());
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    setActiveTab(getSubSection());
+  }, [location.pathname]);
+
+  const handleTabClick = (key: string) => {
+    setActiveTab(key);
+    navigate(`/measurement/${key}`);
+  };
 
   const [scores, setScores] = useState<StudentScoreRow[]>([
     { studentCode: '20230001', fullName: 'Nguyễn Văn An', crit1: 8.5, crit2: 9.0, crit3: 8.0, finalScore: 8.5, piAttainment: 'MET' },
@@ -60,16 +74,34 @@ export const MeasurementScoringPage: React.FC = () => {
     setScores(updated);
   };
 
+  const handleSaveScores = () => {
+    setToastMessage('✓ Đã lưu thành công điểm Rubric vào hệ thống!');
+    setTimeout(() => setToastMessage(null), 3000);
+  };
+
+  const handleRunCalculation = () => {
+    setToastMessage('✓ Động cơ tính toán OBE đã cập nhật xong kết quả đạt CĐR toàn trường!');
+    setTimeout(() => setToastMessage(null), 3500);
+  };
+
   const metCount = scores.filter((s) => s.piAttainment === 'MET').length;
   const attainmentRate = Math.round((metCount / scores.length) * 100);
 
   return (
     <div className="animate-fade-in">
+      {/* Toast Alert */}
+      {toastMessage && (
+        <div style={{ position: 'fixed', top: '85px', right: '2rem', zIndex: 100, backgroundColor: 'var(--emerald-500)', color: '#fff', padding: '0.75rem 1.25rem', borderRadius: 'var(--radius-md)', boxShadow: 'var(--glass-shadow)', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 600 }}>
+          <CheckCircle size={18} />
+          <span>{toastMessage}</span>
+        </div>
+      )}
+
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
         <div>
           <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
-            Đo Lường Chuẩn Đầu Ra (Mục 8.4 & 8.5)
+            Đo Lường Chuẩn Đầu Ra
           </h2>
           <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', marginTop: '0.25rem' }}>
             Quản lý đợt đo, nguồn đo PI, phân công chấm, chấm Rubric theo tiêu chí, kiểm tra dữ liệu và tính toán CĐR.
@@ -77,13 +109,13 @@ export const MeasurementScoringPage: React.FC = () => {
         </div>
 
         <div style={{ display: 'flex', gap: '0.75rem' }}>
-          <button className="btn btn-secondary">
-            <Upload size={16} />
-            <span>Nhập Điểm Excel</span>
+          <button onClick={handleRunCalculation} className="btn btn-secondary">
+            <Calculator size={16} />
+            <span>Chạy Tính Toán CĐR</span>
           </button>
-          <button className="btn btn-primary">
-            <Lock size={16} />
-            <span>Đóng Băng & Chốt Đợt Đo</span>
+          <button onClick={() => setIsModalOpen(true)} className="btn btn-primary">
+            <Plus size={16} />
+            <span>+ Tạo Đợt Đo / Nguồn Đo</span>
           </button>
         </div>
       </div>
@@ -102,7 +134,7 @@ export const MeasurementScoringPage: React.FC = () => {
         ].map((tab) => (
           <button
             key={tab.key}
-            onClick={() => setActiveTab(tab.key)}
+            onClick={() => handleTabClick(tab.key)}
             className={`btn ${activeTab === tab.key ? 'btn-primary' : 'btn-secondary'}`}
             style={{ fontSize: '0.8125rem' }}
           >
@@ -156,7 +188,7 @@ export const MeasurementScoringPage: React.FC = () => {
               <h3 className="glass-card-title">Danh Sách Các Đợt Đo Lường Chuẩn Đầu Ra (Measurement Periods)</h3>
               <p className="glass-card-subtitle">Mỗi đợt đo liên kết với Khóa tuyển sinh, CTĐT và ngưỡng đánh giá cụ thể</p>
             </div>
-            <button className="btn btn-sm btn-primary">+ Tạo Đợt Đo Lường Mới</button>
+            <button onClick={() => setIsModalOpen(true)} className="btn btn-sm btn-primary">+ Tạo Đợt Đo Lường Mới</button>
           </div>
 
           <div className="table-container">
@@ -182,15 +214,6 @@ export const MeasurementScoringPage: React.FC = () => {
                   <td><code>θ_coh ≥ 80%</code></td>
                   <td><span className="badge badge-success">ĐANG THU THẬP ĐIỂM</span></td>
                 </tr>
-                <tr>
-                  <td><strong>PERIOD-2022-HK2</strong></td>
-                  <td>Đo Lường CĐR Học Kỳ 2 (2022 - 2023)</td>
-                  <td>2022-2023 (HK2)</td>
-                  <td><span className="badge badge-primary">Khóa K16</span></td>
-                  <td><code>θ_ind ≥ 6.0/10</code></td>
-                  <td><code>θ_coh ≥ 80%</code></td>
-                  <td><span className="badge badge-secondary">ĐÃ KHÓA & BÁO CÁO</span></td>
-                </tr>
               </tbody>
             </table>
           </div>
@@ -205,6 +228,7 @@ export const MeasurementScoringPage: React.FC = () => {
               <h3 className="glass-card-title">Danh Mục Nguồn Đo Trực Tiếp PI (A Sources)</h3>
               <p className="glass-card-subtitle">Các bài đánh giá và học phần được chỉ định đo CĐR trong học kỳ</p>
             </div>
+            <button onClick={() => setIsModalOpen(true)} className="btn btn-sm btn-primary">+ Thêm Nguồn Đo A</button>
           </div>
 
           <div className="table-container">
@@ -250,6 +274,7 @@ export const MeasurementScoringPage: React.FC = () => {
               <h3 className="glass-card-title">Phân Công Giảng Viên Chấm Điểm Rubric Theo Lớp Học Phần</h3>
               <p className="glass-card-subtitle">Đảm bảo đúng thẩm quyền Scope chấm thi</p>
             </div>
+            <button onClick={() => setIsModalOpen(true)} className="btn btn-sm btn-primary">+ Phân Công Cán Bộ Chấm</button>
           </div>
 
           <div className="table-container">
@@ -273,14 +298,6 @@ export const MeasurementScoringPage: React.FC = () => {
                   <td>40 SV</td>
                   <td><span className="badge badge-success">Đã nhập 40/40 (100%)</span></td>
                 </tr>
-                <tr>
-                  <td><code>IT4101_02</code></td>
-                  <td>Lập trình .NET Nâng cao</td>
-                  <td>ThS. Nguyễn Văn Toàn</td>
-                  <td><strong>ThS. Nguyễn Văn Toàn (GV002)</strong></td>
-                  <td>38 SV</td>
-                  <td><span className="badge badge-warning">Đang chấm 25/38</span></td>
-                </tr>
               </tbody>
             </table>
           </div>
@@ -295,14 +312,14 @@ export const MeasurementScoringPage: React.FC = () => {
               <h3 className="glass-card-title">Nhập & Đồng Bộ Điểm Quá Trình Từ SIS / LMS</h3>
               <p className="glass-card-subtitle">Nạp điểm tự động qua API hoặc tải lên bảng điểm Excel chuẩn</p>
             </div>
-            <button className="btn btn-sm btn-primary">Kích Hoạt Đồng Bộ LMS Canvas</button>
+            <button onClick={handleSaveScores} className="btn btn-sm btn-primary">Đồng Bộ LMS Canvas</button>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             <div style={{ padding: '1.5rem', backgroundColor: 'var(--bg-surface-elevated)', borderRadius: 'var(--radius-md)', border: '2px dashed var(--border-strong)', textAlign: 'center' }}>
               <Upload size={36} style={{ color: 'var(--primary-400)', margin: '0 auto 0.5rem auto' }} />
               <h4 style={{ color: 'var(--text-primary)', marginBottom: '0.25rem' }}>Kéo thả file Excel bảng điểm vào đây hoặc nhấn để chọn file</h4>
-              <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Hỗ trợ file .xlsx, .csv theo mẫu chuẩn BM13 (Tự động đối chiếu mã sinh viên)</p>
+              <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Hỗ trợ file .xlsx, .csv theo mẫu chuẩn BM13</p>
             </div>
           </div>
         </div>
@@ -321,9 +338,9 @@ export const MeasurementScoringPage: React.FC = () => {
                 Ngưỡng cá nhân đạt chuẩn (θ_ind): <strong>≥ 6.0 / 10</strong>
               </p>
             </div>
-            <button className="btn btn-sm btn-primary">
+            <button onClick={handleSaveScores} className="btn btn-sm btn-primary">
               <Save size={14} />
-              <span>Lưu Tạm Bảng Điểm</span>
+              <span>Lưu Điểm Vào Cơ Sở Dữ Liệu</span>
             </button>
           </div>
 
@@ -397,7 +414,7 @@ export const MeasurementScoringPage: React.FC = () => {
         </div>
       )}
 
-      {/* TAB 6: KIỂM TRA DỮ LIỆU (DATA-VALIDATION) */}
+      {/* TAB 6: KIỂM TRA DỮ LIỆU */}
       {activeTab === 'data-validation' && (
         <div className="glass-card">
           <div className="glass-card-header">
@@ -416,18 +433,11 @@ export const MeasurementScoringPage: React.FC = () => {
               </div>
               <span className="badge badge-success">HỢP LỆ</span>
             </div>
-            <div style={{ padding: '1rem', backgroundColor: 'var(--bg-surface-elevated)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-medium)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <div>
-                <strong style={{ color: 'var(--text-primary)' }}>2. Kiểm tra thang điểm và trọng số</strong>
-                <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Tất cả điểm nằm trong khoảng 0.0 - 10.0; Tổng trọng số đúng 100%</p>
-              </div>
-              <span className="badge badge-success">HỢP LỆ</span>
-            </div>
           </div>
         </div>
       )}
 
-      {/* TAB 7: TÍNH TOÁN KẾT QUẢ (CALCULATION) */}
+      {/* TAB 7: TÍNH TOÁN KẾT QUẢ */}
       {activeTab === 'calculation' && (
         <div className="glass-card">
           <div className="glass-card-header">
@@ -435,7 +445,7 @@ export const MeasurementScoringPage: React.FC = () => {
               <h3 className="glass-card-title">Động Cơ Tính Toán Kết Quả Đạt CĐR (Calculation Engine)</h3>
               <p className="glass-card-subtitle">Kích hoạt động cơ tính điểm chuẩn đầu ra theo công thức chuẩn OBE</p>
             </div>
-            <button className="btn btn-primary">
+            <button onClick={handleRunCalculation} className="btn btn-primary">
               <Calculator size={16} />
               <span>Chạy Tính Toán CĐR Toàn Bộ Đợt Đo</span>
             </button>
@@ -447,13 +457,12 @@ export const MeasurementScoringPage: React.FC = () => {
               <div>• Tổng số sinh viên đã tính: <strong>1,248 SV</strong></div>
               <div>• Tỷ lệ đạt PI 3.1: <strong style={{ color: 'var(--emerald-400)' }}>89.2% (Vượt ngưỡng 80%)</strong></div>
               <div>• Tỷ lệ đạt PI 5.1: <strong style={{ color: 'var(--amber-400)' }}>74.5% (Cần kích hoạt CQI)</strong></div>
-              <div>• Thời gian xử lý: <strong>120ms</strong></div>
             </div>
           </div>
         </div>
       )}
 
-      {/* TAB 8: MINH CHỨNG ĐO LƯỜNG (EVIDENCE) */}
+      {/* TAB 8: MINH CHỨNG */}
       {activeTab === 'evidence' && (
         <div className="glass-card">
           <div className="glass-card-header">
@@ -461,7 +470,7 @@ export const MeasurementScoringPage: React.FC = () => {
               <h3 className="glass-card-title">Minh Chứng Đo Lường & Bài Làm Sinh Viên (Evidence Archive)</h3>
               <p className="glass-card-subtitle">Lưu trữ bài làm mẫu (Giỏi, Khá, Yếu) có bảo vệ mã băm SHA-256</p>
             </div>
-            <button className="btn btn-sm btn-primary">+ Tải Lên Minh Chứng</button>
+            <button onClick={() => setIsModalOpen(true)} className="btn btn-sm btn-primary">+ Tải Lên Minh Chứng</button>
           </div>
 
           <div className="table-container">
@@ -485,16 +494,42 @@ export const MeasurementScoringPage: React.FC = () => {
                   <td><code>a1b2...9f8e</code></td>
                   <td><button className="btn btn-sm btn-secondary">Xem</button></td>
                 </tr>
-                <tr>
-                  <td><strong>BaiLam_A2_MauYeu_20230003.pdf</strong></td>
-                  <td><span className="badge badge-danger">Mẫu Chưa Đạt (Điểm 5.0)</span></td>
-                  <td>IT4101 .NET</td>
-                  <td>PI 5.1</td>
-                  <td><code>c3d4...12ab</code></td>
-                  <td><button className="btn btn-sm btn-secondary">Xem</button></td>
-                </tr>
               </tbody>
             </table>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL DIALOG */}
+      {isModalOpen && (
+        <div style={{ position: 'fixed', inset: 0, zIndex: 80, backgroundColor: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
+          <div className="glass-card animate-fade-in" style={{ width: '540px', maxWidth: '100%', maxHeight: '90vh', overflowY: 'auto' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '0.75rem' }}>
+              <h3 style={{ fontSize: '1.125rem', fontWeight: 800, color: 'var(--text-primary)' }}>
+                Tạo Mới / Cập Nhật: {activeTab === 'periods' ? 'Đợt Đo Lường' : activeTab === 'sources' ? 'Nguồn Đo PI' : 'Minh Chứng'}
+              </h3>
+              <button onClick={() => setIsModalOpen(false)} className="btn btn-secondary btn-icon"><X size={16} /></button>
+            </div>
+
+            <form onSubmit={(e) => { e.preventDefault(); setIsModalOpen(false); handleSaveScores(); }}>
+              <div className="form-group">
+                <label className="form-label">Tên Đợt Đo / Nguồn Đo</label>
+                <input required type="text" placeholder="Nhập tên..." className="form-input" defaultValue="Đợt Đo CĐR Học Kỳ 2 (2023-2024)" />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Khóa Tuyển Sinh Đối Tượng</label>
+                <select className="form-select">
+                  <option>Khóa K17 (2023 - 2027)</option>
+                  <option>Khóa K16 (2022 - 2026)</option>
+                </select>
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', marginTop: '1.5rem', borderTop: '1px solid var(--border-subtle)', paddingTop: '1rem' }}>
+                <button type="button" onClick={() => setIsModalOpen(false)} className="btn btn-secondary">Hủy Bỏ</button>
+                <button type="submit" className="btn btn-primary"><Save size={16} /><span>Lưu Dữ Liệu</span></button>
+              </div>
+            </form>
           </div>
         </div>
       )}

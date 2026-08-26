@@ -193,7 +193,7 @@ export const DashboardPage: React.FC = () => {
             <div>
               <h3 className="glass-card-title">
                 <AlertTriangle size={20} className="text-amber-400" />
-                Cảnh Báo Sớm & Drill-Down Truy Vết (FR-DSH-04)
+                Cảnh Báo Sớm & Drill-Down Truy Vết
               </h3>
               <p className="glass-card-subtitle">
                 Nhấp vào từng nhóm hoặc PLO để truy vết chi tiết tới PI, CLO và sinh viên

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   Network,
   GitBranch,
@@ -15,6 +15,9 @@ import {
   Hash,
   Scale,
   FileCheck2,
+  Plus,
+  X,
+  Save,
 } from 'lucide-react';
 
 interface MatrixCell {
@@ -26,6 +29,7 @@ interface MatrixCell {
 
 export const CurriculumMatrixPage: React.FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const getSubSection = () => {
     if (location.pathname.includes('/curriculum/programs')) return 'programs';
@@ -39,6 +43,24 @@ export const CurriculumMatrixPage: React.FC = () => {
   };
 
   const [activeTab, setActiveTab] = useState<string>(getSubSection());
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    setActiveTab(getSubSection());
+  }, [location.pathname]);
+
+  const handleTabClick = (key: string) => {
+    setActiveTab(key);
+    navigate(`/curriculum/${key}`);
+  };
+
+  const handleSaveModal = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsModalOpen(false);
+    setToastMessage('✓ Đã cập nhật thành công chuẩn đầu ra / ma trận!');
+    setTimeout(() => setToastMessage(null), 3000);
+  };
 
   // Matrix Sample Dataset
   const matrixData: MatrixCell[] = [
@@ -53,11 +75,19 @@ export const CurriculumMatrixPage: React.FC = () => {
 
   return (
     <div className="animate-fade-in">
+      {/* Toast Alert */}
+      {toastMessage && (
+        <div style={{ position: 'fixed', top: '85px', right: '2rem', zIndex: 100, backgroundColor: 'var(--emerald-500)', color: '#fff', padding: '0.75rem 1.25rem', borderRadius: 'var(--radius-md)', boxShadow: 'var(--glass-shadow)', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 600 }}>
+          <CheckCircle size={18} />
+          <span>{toastMessage}</span>
+        </div>
+      )}
+
       {/* Header Banner */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
         <div>
           <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
-            Chương Trình Đào Tạo & Chuẩn Đầu Ra (Mục 8.2)
+            Chương Trình Đào Tạo & Chuẩn Đầu Ra
           </h2>
           <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', marginTop: '0.25rem' }}>
             Quản lý cấu trúc PO, PLO, PI, Trọng số A, CLO và Ma trận 2 chiều I/R/M/A theo từng phiên bản CTĐT & Khóa.
@@ -69,9 +99,9 @@ export const CurriculumMatrixPage: React.FC = () => {
             <Download size={16} />
             <span>Xuất Ma Trận Excel</span>
           </button>
-          <button className="btn btn-primary">
-            <Sparkles size={16} />
-            <span>AI Chẩn Đoán Ma Trận</span>
+          <button onClick={() => setIsModalOpen(true)} className="btn btn-primary">
+            <Plus size={16} />
+            <span>+ Tạo Mới / Cập Nhật CĐR</span>
           </button>
         </div>
       </div>
@@ -79,18 +109,18 @@ export const CurriculumMatrixPage: React.FC = () => {
       {/* Navigation Sub-Tabs */}
       <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', borderBottom: '1px solid var(--border-medium)', paddingBottom: '0.5rem', overflowX: 'auto' }}>
         {[
-          { key: 'matrix', label: 'Ma Trận Liên Kết (I/R/M/A)', icon: Network },
-          { key: 'versions', label: 'Phiên Bản CTĐT', icon: BookOpen },
-          { key: 'pos', label: 'Mục Tiêu Đào Tạo (PO)', icon: Target },
-          { key: 'plos', label: 'Chuẩn Đầu Ra (PLO1 - PLO9)', icon: Award },
-          { key: 'pis', label: 'Chỉ Báo Thực Hiện (PI)', icon: Hash },
-          { key: 'weight-a', label: 'Trọng Số Đo Trực Tiếp A', icon: Scale },
-          { key: 'clos', label: 'Chuẩn Đầu Ra Học Phần (CLO)', icon: FileCheck2 },
-          { key: 'prerequisites', label: 'Cây Tiên Quyết (DAG)', icon: GitBranch },
+          { key: 'matrix', label: '1. Ma Trận Liên Kết (I/R/M/A)', icon: Network },
+          { key: 'programs', label: '2. Chương Trình Đào Tạo', icon: BookOpen },
+          { key: 'versions', label: '3. Phiên Bản CTĐT', icon: BookOpen },
+          { key: 'pos', label: '4. Mục Tiêu Đào Tạo (PO)', icon: Target },
+          { key: 'plos', label: '5. Chuẩn Đầu Ra (PLO1 - PLO9)', icon: Award },
+          { key: 'pis', label: '6. Chỉ Báo Thực Hiện (PI)', icon: Hash },
+          { key: 'weight-a', label: '7. Trọng Số Đo Trực Tiếp A', icon: Scale },
+          { key: 'clos', label: '8. Chuẩn Đầu Ra Học Phần (CLO)', icon: FileCheck2 },
         ].map((tab) => (
           <button
             key={tab.key}
-            onClick={() => setActiveTab(tab.key)}
+            onClick={() => handleTabClick(tab.key)}
             className={`btn ${activeTab === tab.key ? 'btn-primary' : 'btn-secondary'}`}
             style={{ fontSize: '0.8125rem' }}
           >
@@ -194,7 +224,45 @@ export const CurriculumMatrixPage: React.FC = () => {
         </div>
       )}
 
-      {/* TAB 2: PHIÊN BẢN CTĐT */}
+      {/* TAB 2: CHƯƠNG TRÌNH ĐÀO TẠO */}
+      {activeTab === 'programs' && (
+        <div className="glass-card">
+          <div className="glass-card-header">
+            <div>
+              <h3 className="glass-card-title">Chương Trình Đào Tạo Trực Thuộc Khoa CNTT</h3>
+              <p className="glass-card-subtitle">Định hướng nghề nghiệp và cấu trúc tổng thể</p>
+            </div>
+            <button onClick={() => setIsModalOpen(true)} className="btn btn-sm btn-primary">+ Tạo CTĐT Mới</button>
+          </div>
+
+          <div className="table-container">
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>Mã Ngành</th>
+                  <th>Tên Chương Trình</th>
+                  <th>Số Tín Chỉ</th>
+                  <th>Chuẩn Kiểm Định</th>
+                  <th>Trưởng Chương Trình</th>
+                  <th>Trạng Thái</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>7480201</strong></td>
+                  <td style={{ fontWeight: 700, color: 'var(--primary-400)' }}>Kỹ thuật Phần mềm</td>
+                  <td>145 TC</td>
+                  <td><span className="badge badge-primary">ABET CAC / AUN-QA</span></td>
+                  <td>TS. Lê Hải Nam</td>
+                  <td><span className="badge badge-success">ĐANG ÁP DỤNG</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* TAB 3: PHIÊN BẢN CTĐT */}
       {activeTab === 'versions' && (
         <div className="glass-card">
           <div className="glass-card-header">
@@ -202,7 +270,7 @@ export const CurriculumMatrixPage: React.FC = () => {
               <h3 className="glass-card-title">Quản Lý Lịch Sử Các Phiên Bản CTĐT Ngành KTPM</h3>
               <p className="glass-card-subtitle">Hỗ trợ áp dụng độc lập cho từng Khóa mà không bị xung đột</p>
             </div>
-            <button className="btn btn-sm btn-primary">+ Tạo Phiên Bản CTĐT Mới</button>
+            <button onClick={() => setIsModalOpen(true)} className="btn btn-sm btn-primary">+ Tạo Phiên Bản CTĐT Mới</button>
           </div>
 
           <div className="table-container">
@@ -248,7 +316,7 @@ export const CurriculumMatrixPage: React.FC = () => {
         </div>
       )}
 
-      {/* TAB 3: MỤC TIÊU ĐÀO TẠO (PO) */}
+      {/* TAB 4: MỤC TIÊU ĐÀO TẠO (PO) */}
       {activeTab === 'pos' && (
         <div className="glass-card">
           <div className="glass-card-header">
@@ -256,7 +324,7 @@ export const CurriculumMatrixPage: React.FC = () => {
               <h3 className="glass-card-title">Mục Tiêu Đào Tạo (Program Objectives - PO)</h3>
               <p className="glass-card-subtitle">Định hướng năng lực sinh viên sau 3 - 5 năm tốt nghiệp</p>
             </div>
-            <button className="btn btn-sm btn-primary">+ Thêm Mục Tiêu PO</button>
+            <button onClick={() => setIsModalOpen(true)} className="btn btn-sm btn-primary">+ Thêm Mục Tiêu PO</button>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -277,7 +345,7 @@ export const CurriculumMatrixPage: React.FC = () => {
         </div>
       )}
 
-      {/* TAB 4: CHUẨN ĐẦU RA (PLO1 - PLO9) */}
+      {/* TAB 5: CHUẨN ĐẦU RA (PLO1 - PLO9) */}
       {activeTab === 'plos' && (
         <div className="glass-card">
           <div className="glass-card-header">
@@ -285,6 +353,7 @@ export const CurriculumMatrixPage: React.FC = () => {
               <h3 className="glass-card-title">Hệ Thống Chuẩn Đầu Ra (PLO1 – PLO4 Cấp Trường, PLO5 – PLO9 Cấp Ngành)</h3>
               <p className="glass-card-subtitle">Tuân thủ nghiêm ngặt theo Khung chuẩn đầu ra ĐH Đại Nam và chuẩn kiểm định ABET</p>
             </div>
+            <button onClick={() => setIsModalOpen(true)} className="btn btn-sm btn-primary">+ Thêm Chuẩn Đầu Ra PLO</button>
           </div>
 
           <div className="table-container">
@@ -323,7 +392,7 @@ export const CurriculumMatrixPage: React.FC = () => {
         </div>
       )}
 
-      {/* TAB 5: CHỈ BÁO THỰC HIỆN (PI) */}
+      {/* TAB 6: CHỈ BÁO THỰC HIỆN (PI) */}
       {activeTab === 'pis' && (
         <div className="glass-card">
           <div className="glass-card-header">
@@ -331,7 +400,7 @@ export const CurriculumMatrixPage: React.FC = () => {
               <h3 className="glass-card-title">Danh Mục Chỉ Báo Thực Hiện (Performance Indicators - PI)</h3>
               <p className="glass-card-subtitle">Mỗi PLO được phân rã thành các chỉ báo hành vi có thể đo lường trực tiếp</p>
             </div>
-            <button className="btn btn-sm btn-primary">+ Thêm Chỉ Báo PI</button>
+            <button onClick={() => setIsModalOpen(true)} className="btn btn-sm btn-primary">+ Thêm Chỉ Báo PI</button>
           </div>
 
           <div className="table-container">
@@ -366,7 +435,7 @@ export const CurriculumMatrixPage: React.FC = () => {
         </div>
       )}
 
-      {/* TAB 6: TRỌNG SỐ A */}
+      {/* TAB 7: TRỌNG SỐ A */}
       {activeTab === 'weight-a' && (
         <div className="glass-card">
           <div className="glass-card-header">
@@ -406,30 +475,13 @@ export const CurriculumMatrixPage: React.FC = () => {
                   <td>50.0%</td>
                   <td><strong>40.0%</strong></td>
                 </tr>
-
-                <tr>
-                  <td rowSpan={2} style={{ verticalAlign: 'middle', fontWeight: 800, color: 'var(--primary-400)' }}>PI 5.1</td>
-                  <td>IT4101: Lập trình .NET</td>
-                  <td>A2: Unit Testing Module</td>
-                  <td>50.0%</td>
-                  <td><strong>50.0%</strong></td>
-                  <td rowSpan={2} style={{ verticalAlign: 'middle', textAlign: 'center' }}>
-                    <span className="badge badge-success">Tổng: 100.0% ✓</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>IT4205: Kiểm thử Phần mềm</td>
-                  <td>A3: Báo cáo Kiểm thử Tự động</td>
-                  <td>50.0%</td>
-                  <td><strong>50.0%</strong></td>
-                </tr>
               </tbody>
             </table>
           </div>
         </div>
       )}
 
-      {/* TAB 7: CHUẨN ĐẦU RA HỌC PHẦN (CLO) */}
+      {/* TAB 8: CHUẨN ĐẦU RA HỌC PHẦN (CLO) */}
       {activeTab === 'clos' && (
         <div className="glass-card">
           <div className="glass-card-header">
@@ -437,10 +489,7 @@ export const CurriculumMatrixPage: React.FC = () => {
               <h3 className="glass-card-title">Danh Mục Chuẩn Đầu Ra Học Phần (CLO)</h3>
               <p className="glass-card-subtitle">Ánh xạ từ CLO môn học lên chỉ số PI và PLO của chương trình</p>
             </div>
-            <select className="form-select" style={{ width: '260px' }}>
-              <option>IT4101 - Lập trình .NET Nâng cao</option>
-              <option>IT2102 - Cấu trúc Dữ liệu & Giải thuật</option>
-            </select>
+            <button onClick={() => setIsModalOpen(true)} className="btn btn-sm btn-primary">+ Thêm CLO</button>
           </div>
 
           <div className="table-container">
@@ -469,50 +518,51 @@ export const CurriculumMatrixPage: React.FC = () => {
                   <td><strong>PI 2.1</strong></td>
                   <td>Đồ Án A3</td>
                 </tr>
-                <tr>
-                  <td><strong className="badge badge-cyan">CLO3</strong></td>
-                  <td>Viết Unit Test và kiểm thử bảo mật cho các API endpoint</td>
-                  <td><span className="badge badge-bloom badge-cyan">EVALUATE (Mức 5)</span></td>
-                  <td><strong>PI 5.1</strong></td>
-                  <td>Bài Thực Hành A2 & Đồ Án A3</td>
-                </tr>
               </tbody>
             </table>
           </div>
         </div>
       )}
 
-      {/* TAB 8: CÂY TIÊN QUYẾT (DAG) */}
-      {activeTab === 'prerequisites' && (
-        <div className="glass-card">
-          <div className="glass-card-header">
-            <div>
-              <h3 className="glass-card-title">Sơ Đồ Đồ Thị Tiên Quyết Học Phần (Prerequisite DAG)</h3>
-              <p className="glass-card-subtitle">Đường găng dẫn đến Khóa luận Tốt nghiệp</p>
+      {/* MODAL DIALOG */}
+      {isModalOpen && (
+        <div style={{ position: 'fixed', inset: 0, zIndex: 80, backgroundColor: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
+          <div className="glass-card animate-fade-in" style={{ width: '540px', maxWidth: '100%', maxHeight: '90vh', overflowY: 'auto' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '0.75rem' }}>
+              <h3 style={{ fontSize: '1.125rem', fontWeight: 800, color: 'var(--text-primary)' }}>
+                Thêm Mới / Cập Nhật: {activeTab === 'pos' ? 'Mục Tiêu PO' : activeTab === 'plos' ? 'Chuẩn Đầu Ra PLO' : activeTab === 'pis' ? 'Chỉ Báo PI' : activeTab === 'clos' ? 'Chuẩn Đầu Ra CLO' : 'Phiên Bản CTĐT'}
+              </h3>
+              <button onClick={() => setIsModalOpen(false)} className="btn btn-secondary btn-icon"><X size={16} /></button>
             </div>
-          </div>
 
-          <div style={{ padding: '2rem', backgroundColor: 'var(--bg-surface-elevated)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-medium)', textAlign: 'center' }}>
-            <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '1.5rem' }}>
-              <div style={{ padding: '0.75rem 1.25rem', backgroundColor: 'rgba(99, 102, 241, 0.2)', border: '1px solid var(--primary-500)', borderRadius: 'var(--radius-md)' }}>
-                <strong>IT1101</strong><br /><span style={{ fontSize: '0.75rem' }}>Nhập môn Lập trình</span>
+            <form onSubmit={handleSaveModal}>
+              <div className="form-group">
+                <label className="form-label">Mã Chuẩn / Chỉ Báo (Code)</label>
+                <input required type="text" placeholder="Ví dụ: PLO7, PI 3.2, CLO4..." className="form-input" defaultValue="PLO7" />
               </div>
-              <span style={{ color: 'var(--primary-400)', fontWeight: 800 }}>➔</span>
-              <div style={{ padding: '0.75rem 1.25rem', backgroundColor: 'rgba(6, 182, 212, 0.2)', border: '1px solid var(--cyan-500)', borderRadius: 'var(--radius-md)' }}>
-                <strong>IT2102</strong><br /><span style={{ fontSize: '0.75rem' }}>Cấu trúc Dữ liệu</span>
+
+              <div className="form-group">
+                <label className="form-label">Mô Tả Năng Lực</label>
+                <textarea required rows={3} placeholder="Nhập nội dung mô tả..." className="form-textarea" defaultValue="Làm chủ công nghệ Cloud Native và Microservices." />
               </div>
-              <span style={{ color: 'var(--primary-400)', fontWeight: 800 }}>➔</span>
-              <div style={{ padding: '0.75rem 1.25rem', backgroundColor: 'rgba(16, 185, 129, 0.2)', border: '1px solid var(--emerald-500)', borderRadius: 'var(--radius-md)' }}>
-                <strong>IT4101</strong><br /><span style={{ fontSize: '0.75rem' }}>Lập trình .NET</span>
+
+              <div className="form-group">
+                <label className="form-label">Bậc Năng Lực Bloom</label>
+                <select className="form-select">
+                  <option>Mức 1: Remember (Nhận biết)</option>
+                  <option>Mức 2: Understand (Thông hiểu)</option>
+                  <option>Mức 3: Apply (Vận dụng)</option>
+                  <option>Mức 4: Analyze (Phân tích)</option>
+                  <option>Mức 5: Evaluate (Đánh giá)</option>
+                  <option>Mức 6: Create (Sáng tạo)</option>
+                </select>
               </div>
-              <span style={{ color: 'var(--primary-400)', fontWeight: 800 }}>➔</span>
-              <div style={{ padding: '0.75rem 1.25rem', backgroundColor: 'rgba(244, 63, 94, 0.2)', border: '1px solid var(--rose-500)', borderRadius: 'var(--radius-md)' }}>
-                <strong>IT4999</strong><br /><span style={{ fontSize: '0.75rem' }}>Khóa luận Tốt nghiệp</span>
+
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', marginTop: '1.5rem', borderTop: '1px solid var(--border-subtle)', paddingTop: '1rem' }}>
+                <button type="button" onClick={() => setIsModalOpen(false)} className="btn btn-secondary">Hủy Bỏ</button>
+                <button type="submit" className="btn btn-primary"><Save size={16} /><span>Lưu Thay Đổi</span></button>
               </div>
-            </div>
-            <p style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)' }}>
-              Đường găng: <strong>IT1101 ➔ IT2102 ➔ IT4101 ➔ IT4999</strong> (Tổng 4 học kỳ tích lũy).
-            </p>
+            </form>
           </div>
         </div>
       )}

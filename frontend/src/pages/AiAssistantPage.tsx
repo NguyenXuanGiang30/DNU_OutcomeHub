@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   Sparkles,
   Bot,
@@ -10,8 +10,6 @@ import {
   FileSearch,
   CheckCircle,
   TrendingUp,
-  Cpu,
-  Layers,
 } from 'lucide-react';
 import { aiApi, AiCitationDto } from '../api/aiApi';
 
@@ -27,6 +25,7 @@ interface Message {
 
 export const AiAssistantPage: React.FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const getSubSection = () => {
     if (location.pathname.includes('/ai/analytics')) return 'analytics';
@@ -35,6 +34,15 @@ export const AiAssistantPage: React.FC = () => {
   };
 
   const [activeTab, setActiveTab] = useState<string>(getSubSection());
+
+  useEffect(() => {
+    setActiveTab(getSubSection());
+  }, [location.pathname]);
+
+  const handleTabClick = (key: string) => {
+    setActiveTab(key);
+    navigate(`/ai/${key}`);
+  };
 
   // Chatbot state
   const [messages, setMessages] = useState<Message[]>([
@@ -94,7 +102,7 @@ export const AiAssistantPage: React.FC = () => {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
         <div>
           <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
-            Trợ Lý Dữ Liệu Học Thuật & AI OBE (Mục 8.8)
+            Trợ Lý Dữ Liệu Học Thuật & AI OBE
           </h2>
           <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', marginTop: '0.25rem' }}>
             Trợ lý hỏi đáp RAG có trích dẫn nguồn, động cơ phân tích xu hướng học thuật và chẩn đoán mâu thuẫn ma trận CĐR.
@@ -105,13 +113,13 @@ export const AiAssistantPage: React.FC = () => {
       {/* Navigation Sub-Tabs */}
       <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', borderBottom: '1px solid var(--border-medium)', paddingBottom: '0.5rem', overflowX: 'auto' }}>
         {[
-          { key: 'chatbot', label: 'Chatbot Truy Vấn CĐR (RAG)', icon: Bot },
-          { key: 'analytics', label: 'Phân Tích & Chẩn Đoán Dữ Liệu', icon: TrendingUp },
-          { key: 'early-warnings', label: 'Cảnh Báo Sớm Nguy Cơ & Anomaly', icon: AlertTriangle },
+          { key: 'chatbot', label: '1. Chatbot Truy Vấn CĐR (RAG)', icon: Bot },
+          { key: 'analytics', label: '2. Phân Tích & Chẩn Đoán Dữ Liệu', icon: TrendingUp },
+          { key: 'early-warnings', label: '3. Cảnh Báo Sớm Nguy Cơ & Anomaly', icon: AlertTriangle },
         ].map((tab) => (
           <button
             key={tab.key}
-            onClick={() => setActiveTab(tab.key)}
+            onClick={() => handleTabClick(tab.key)}
             className={`btn ${activeTab === tab.key ? 'btn-primary' : 'btn-secondary'}`}
             style={{ fontSize: '0.8125rem' }}
           >
@@ -252,14 +260,6 @@ export const AiAssistantPage: React.FC = () => {
                   <td><strong>PI 5.1 (Unit Testing)</strong></td>
                   <td><span className="badge badge-danger">RỦI RO CAO (85%)</span></td>
                   <td>Gửi thông báo phụ đạo chuyên đề Unit Test bổ sung 2 buổi</td>
-                </tr>
-                <tr>
-                  <td><code>20230018</code></td>
-                  <td>Đỗ Thị Hoa</td>
-                  <td>17IT02</td>
-                  <td><strong>PI 2.1 (Phân tích UML)</strong></td>
-                  <td><span className="badge badge-warning">CẢNH BÁO (65%)</span></td>
-                  <td>Đề xuất trợ giảng hướng dẫn vẽ biểu đồ tuần tự</td>
                 </tr>
               </tbody>
             </table>
